@@ -24,21 +24,9 @@
         
         <maps-model.version>1.0.0</maps-model.version>
         
-        <parking-gear.version>1.0.0</parking-gear.version>
-        
-        <flexicore-security-service.version>1.0.5</flexicore-security-service.version>
-        
-        <organization-model.version>3.0.1</organization-model.version>
-        
-        <parking-pricing-model.version>1.0.0</parking-pricing-model.version>
-        
         <flexicore-security-service.version>1.1.1</flexicore-security-service.version>
         
-        <organization-service.version>3.0.2</organization-service.version>
-        
-        <parking-subscription-model.version>1.0.0</parking-subscription-model.version>
-        
-        <parking-pricing-service.version>1.0.0</parking-pricing-service.version>
+        <parking-gear.version>1.0.0</parking-gear.version>
         
     </properties>
     
@@ -154,65 +142,17 @@
         
 
             <dependency>
+                <groupId>com.wizzdi</groupId>
+                <artifactId>flexicore-security-service</artifactId>
+                <version>${flexicore-security-service.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        
+
+            <dependency>
                 <groupId>com.viewpark</groupId>
                 <artifactId>parking-gear</artifactId>
                 <version>${parking-gear.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.wizzdi</groupId>
-                <artifactId>flexicore-security-service</artifactId>
-                <version>${flexicore-security-service.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.wizzdi</groupId>
-                <artifactId>organization-model</artifactId>
-                <version>${organization-model.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.viewpark</groupId>
-                <artifactId>parking-pricing-model</artifactId>
-                <version>${parking-pricing-model.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.wizzdi</groupId>
-                <artifactId>flexicore-security-service</artifactId>
-                <version>${flexicore-security-service.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.wizzdi</groupId>
-                <artifactId>organization-service</artifactId>
-                <version>${organization-service.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.viewpark</groupId>
-                <artifactId>parking-subscription-model</artifactId>
-                <version>${parking-subscription-model.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.viewpark</groupId>
-                <artifactId>parking-pricing-service</artifactId>
-                <version>${parking-pricing-service.version}</version>
                 <scope>provided</scope>
             </dependency>
         
@@ -319,15 +259,6 @@
                                                     <manifestEntries>
                                                         <Plugin-Id>${artifactId}</Plugin-Id>
                                                         <Plugin-Version>${version}</Plugin-Version>
-                                                        
-                                                            <!--suppress UnresolvedMavenProperty -->
-                                                            <Plugin-Dependencies>
-                                                                
-                                                                    organization-service@&gt;=${organization-service.version},
-                                                                
-                                                                    parking-pricing-service@&gt;=${parking-pricing-service.version}
-                                                                
-                                                            </Plugin-Dependencies>
                                                         
                                                     </manifestEntries>
                                                 </transformer>
