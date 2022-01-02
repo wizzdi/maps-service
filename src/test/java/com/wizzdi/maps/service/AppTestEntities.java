@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service;
+package com.wizzdi.maps.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Baselink;

@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service;
+package com.wizzdi.maps.service;
 
 import com.flexicore.security.SecurityContextBase;
 import org.springframework.beans.factory.annotation.Autowired;

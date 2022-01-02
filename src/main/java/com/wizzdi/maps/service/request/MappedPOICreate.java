@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service.request;
+package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;

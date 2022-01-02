@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service.controller;
+package com.wizzdi.maps.service.controller;
 
 import com.flexicore.annotations.OperationsInside;
 import com.flexicore.security.SecurityContextBase;
@@ -6,10 +6,10 @@ import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.MappedPOI_;
-import com.wizzdi.maps.model.service.request.MappedPOICreate;
-import com.wizzdi.maps.model.service.request.MappedPOIFilter;
-import com.wizzdi.maps.model.service.request.MappedPOIUpdate;
-import com.wizzdi.maps.model.service.service.MappedPOIService;
+import com.wizzdi.maps.service.request.MappedPOICreate;
+import com.wizzdi.maps.service.request.MappedPOIFilter;
+import com.wizzdi.maps.service.request.MappedPOIUpdate;
+import com.wizzdi.maps.service.service.MappedPOIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.pf4j.Extension;

@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service.data;
+package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
@@ -11,7 +11,7 @@ import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.MappedPOI_;
-import com.wizzdi.maps.model.service.request.MappedPOIFilter;
+import com.wizzdi.maps.service.request.MappedPOIFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

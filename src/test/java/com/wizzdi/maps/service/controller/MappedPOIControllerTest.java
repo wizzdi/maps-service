@@ -1,13 +1,13 @@
-package com.wizzdi.maps.model.service.controller;
+package com.wizzdi.maps.service.controller;
 
 import com.flexicore.request.AuthenticationRequest;
 import com.flexicore.response.AuthenticationResponse;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.service.App;
-import com.wizzdi.maps.model.service.request.MappedPOICreate;
-import com.wizzdi.maps.model.service.request.MappedPOIFilter;
-import com.wizzdi.maps.model.service.request.MappedPOIUpdate;
+import com.wizzdi.maps.service.App;
+import com.wizzdi.maps.service.request.MappedPOICreate;
+import com.wizzdi.maps.service.request.MappedPOIFilter;
+import com.wizzdi.maps.service.request.MappedPOIUpdate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;

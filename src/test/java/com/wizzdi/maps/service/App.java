@@ -1,4 +1,4 @@
-package com.wizzdi.maps.model.service;
+package com.wizzdi.maps.service;
 
 import com.flexicore.annotations.EnableFlexiCoreBaseServices;
 import com.wizzdi.flexicore.boot.base.annotations.plugins.EnableFlexiCorePlugins;

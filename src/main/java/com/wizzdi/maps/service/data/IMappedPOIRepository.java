@@ -1,10 +1,10 @@
-package com.wizzdi.maps.model.service.data;
+package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.service.request.MappedPOIFilter;
+import com.wizzdi.maps.service.request.MappedPOIFilter;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.criteria.*;
