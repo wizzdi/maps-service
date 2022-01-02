@@ -25,44 +25,45 @@ import org.springframework.web.server.ResponseStatusException;
 @OperationsInside
 public class MappedPOIController implements Plugin {
 
-  @Autowired private MappedPOIService mappedPOIService;
+    @Autowired
+    private MappedPOIService mappedPOIService;
 
-  @PostMapping("createMappedPOI")
-  @Operation(summary = "createMappedPOI", description = "Creates MappedPOI")
-  public MappedPOI createMappedPOI(
-      @RequestHeader("authenticationKey") String authenticationKey,
-      @RequestBody MappedPOICreate mappedPOICreate,
-      @RequestAttribute SecurityContextBase securityContext) {
-    mappedPOIService.validate(mappedPOICreate, securityContext);
-    return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
-  }
-
-  @Operation(summary = "updateMappedPOI", description = "Updates MappedPOI")
-  @PutMapping("updateMappedPOI")
-  public MappedPOI updateMappedPOI(
-      @RequestHeader("authenticationKey") String authenticationKey,
-      @RequestBody MappedPOIUpdate mappedPOIUpdate,
-      @RequestAttribute SecurityContextBase securityContext) {
-    String mappedPOIId = mappedPOIUpdate.getId();
-    MappedPOI mappedPOI =
-        mappedPOIService.getByIdOrNull(
-            mappedPOIId, MappedPOI.class, MappedPOI_.security, securityContext);
-    if (mappedPOI == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
+    @PostMapping("createMappedPOI")
+    @Operation(summary = "createMappedPOI", description = "Creates MappedPOI")
+    public MappedPOI createMappedPOI(
+            @RequestHeader("authenticationKey") String authenticationKey,
+            @RequestBody MappedPOICreate mappedPOICreate,
+            @RequestAttribute SecurityContextBase securityContext) {
+        mappedPOIService.validate(mappedPOICreate, securityContext);
+        return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
     }
-    mappedPOIUpdate.setMappedPOI(mappedPOI);
-    mappedPOIService.validate(mappedPOIUpdate, securityContext);
-    return mappedPOIService.updateMappedPOI(mappedPOIUpdate, securityContext);
-  }
 
-  @Operation(summary = "getAllMappedPOIs", description = "Gets All MappedPOIs Filtered")
-  @PostMapping("getAllMappedPOIs")
-  public PaginationResponse<MappedPOI> getAllMappedPOIs(
-      @RequestHeader("authenticationKey") String authenticationKey,
-      @RequestBody MappedPOIFilter mappedPOIFilter,
-      @RequestAttribute SecurityContextBase securityContext) {
-    mappedPOIService.validate(mappedPOIFilter, securityContext);
-    return mappedPOIService.getAllMappedPOIs(mappedPOIFilter, securityContext);
-  }
+    @Operation(summary = "updateMappedPOI", description = "Updates MappedPOI")
+    @PutMapping("updateMappedPOI")
+    public MappedPOI updateMappedPOI(
+            @RequestHeader("authenticationKey") String authenticationKey,
+            @RequestBody MappedPOIUpdate mappedPOIUpdate,
+            @RequestAttribute SecurityContextBase securityContext) {
+        String mappedPOIId = mappedPOIUpdate.getId();
+        MappedPOI mappedPOI =
+                mappedPOIService.getByIdOrNull(
+                        mappedPOIId, MappedPOI.class, MappedPOI_.security, securityContext);
+        if (mappedPOI == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
+        }
+        mappedPOIUpdate.setMappedPOI(mappedPOI);
+        mappedPOIService.validate(mappedPOIUpdate, securityContext);
+        return mappedPOIService.updateMappedPOI(mappedPOIUpdate, securityContext);
+    }
+
+    @Operation(summary = "getAllMappedPOIs", description = "Gets All MappedPOIs Filtered")
+    @PostMapping("getAllMappedPOIs")
+    public PaginationResponse<MappedPOI> getAllMappedPOIs(
+            @RequestHeader("authenticationKey") String authenticationKey,
+            @RequestBody MappedPOIFilter mappedPOIFilter,
+            @RequestAttribute SecurityContextBase securityContext) {
+        mappedPOIService.validate(mappedPOIFilter, securityContext);
+        return mappedPOIService.getAllMappedPOIs(mappedPOIFilter, securityContext);
+    }
 }
