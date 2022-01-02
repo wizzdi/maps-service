@@ -69,13 +69,6 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
       Join<T, Address> join = r.join(MappedPOI_.address);
       preds.add(join.get(Basic_.id).in(ids));
     }
-
-    if (filtering.getIcon() != null && !filtering.getIcon().isEmpty()) {
-      Set<String> ids =
-          filtering.getIcon().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, FileResource> join = r.join(MappedPOI_.icon);
-      preds.add(join.get(Basic_.id).in(ids));
-    }
   }
   /**
    * @param filtering
