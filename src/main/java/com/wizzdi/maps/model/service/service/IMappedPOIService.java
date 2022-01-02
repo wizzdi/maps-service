@@ -97,7 +97,7 @@ public interface IMappedPOIService {
 
   <T> T findByIdOrNull(Class<T> type, String id);
 
-  void merge(Object base);
+  void merge(java.lang.Object base);
 
   void massMerge(List<?> toMerge);
 }

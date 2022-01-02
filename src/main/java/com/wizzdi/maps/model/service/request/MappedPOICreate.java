@@ -39,12 +39,6 @@ public class MappedPOICreate extends BasicCreate {
 
   private Double x;
 
-  private String test;
-
-  private String test1;
-
-  private String test2;
-
   @JsonIgnore private Address address;
 
   @JsonIgnore private FileResource icon;
@@ -196,33 +190,6 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setX(Double x) {
     this.x = x;
-    return (T) this;
-  }
-
-  public String getTest() {
-    return this.test;
-  }
-
-  public <T extends MappedPOICreate> T setTest(String test) {
-    this.test = test;
-    return (T) this;
-  }
-
-  public String getTest1() {
-    return this.test1;
-  }
-
-  public <T extends MappedPOICreate> T setTest1(String test1) {
-    this.test1 = test1;
-    return (T) this;
-  }
-
-  public String getTest2() {
-    return this.test2;
-  }
-
-  public <T extends MappedPOICreate> T setTest2(String test2) {
-    this.test2 = test2;
     return (T) this;
   }
 

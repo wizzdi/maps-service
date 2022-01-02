@@ -26,8 +26,6 @@
         
         <flexicore-security-service.version>1.1.1</flexicore-security-service.version>
         
-        <parking-gear.version>1.0.0</parking-gear.version>
-        
     </properties>
     
 
@@ -145,14 +143,6 @@
                 <groupId>com.wizzdi</groupId>
                 <artifactId>flexicore-security-service</artifactId>
                 <version>${flexicore-security-service.version}</version>
-                <scope>provided</scope>
-            </dependency>
-        
-
-            <dependency>
-                <groupId>com.viewpark</groupId>
-                <artifactId>parking-gear</artifactId>
-                <version>${parking-gear.version}</version>
                 <scope>provided</scope>
             </dependency>
         

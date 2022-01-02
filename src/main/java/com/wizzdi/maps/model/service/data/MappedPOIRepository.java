@@ -142,7 +142,7 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
 
   @Override
   @Transactional
-  public void merge(Object base) {
+  public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 

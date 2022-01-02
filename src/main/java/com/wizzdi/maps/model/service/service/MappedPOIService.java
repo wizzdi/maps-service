@@ -190,24 +190,6 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       update = true;
     }
 
-    if (mappedPOICreate.getTest() != null
-        && (!mappedPOICreate.getTest().equals(mappedPOI.getTest()))) {
-      mappedPOI.setTest(mappedPOICreate.getTest());
-      update = true;
-    }
-
-    if (mappedPOICreate.getTest1() != null
-        && (!mappedPOICreate.getTest1().equals(mappedPOI.getTest1()))) {
-      mappedPOI.setTest1(mappedPOICreate.getTest1());
-      update = true;
-    }
-
-    if (mappedPOICreate.getTest2() != null
-        && (!mappedPOICreate.getTest2().equals(mappedPOI.getTest2()))) {
-      mappedPOI.setTest2(mappedPOICreate.getTest2());
-      update = true;
-    }
-
     return update;
   }
   /**
@@ -258,21 +240,6 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mappedPOIFilter, securityContext);
 
-    Set<String> addressIds =
-        mappedPOIFilter.getAddressIds() == null ? new HashSet<>() : mappedPOIFilter.getAddressIds();
-    Map<String, Address> address =
-        addressIds.isEmpty()
-            ? new HashMap<>()
-            : repository
-                .listByIds(Address.class, addressIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    addressIds.removeAll(address.keySet());
-    if (!addressIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No Address with ids " + addressIds);
-    }
-    mappedPOIFilter.setAddress(new ArrayList<>(address.values()));
     Set<String> iconIds =
         mappedPOIFilter.getIconIds() == null ? new HashSet<>() : mappedPOIFilter.getIconIds();
     Map<String, FileResource> icon =
@@ -288,6 +255,21 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
           HttpStatus.BAD_REQUEST, "No FileResource with ids " + iconIds);
     }
     mappedPOIFilter.setIcon(new ArrayList<>(icon.values()));
+    Set<String> addressIds =
+        mappedPOIFilter.getAddressIds() == null ? new HashSet<>() : mappedPOIFilter.getAddressIds();
+    Map<String, Address> address =
+        addressIds.isEmpty()
+            ? new HashMap<>()
+            : repository
+                .listByIds(Address.class, addressIds, SecuredBasic_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+    addressIds.removeAll(address.keySet());
+    if (!addressIds.isEmpty()) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No Address with ids " + addressIds);
+    }
+    mappedPOIFilter.setAddress(new ArrayList<>(address.values()));
   }
 
   /**
@@ -370,7 +352,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   }
 
   @Override
-  public void merge(Object base) {
+  public void merge(java.lang.Object base) {
     repository.merge(base);
   }
 

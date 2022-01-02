@@ -41,17 +41,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import parking.gear.model.Building;
-import parking.gear.model.BuildingFloor;
-import parking.gear.model.Camera;
-import parking.gear.model.Gate;
-import parking.gear.model.LPREngine;
-import parking.gear.model.Lane;
-import parking.gear.model.ParkingArea;
-import parking.gear.model.ParkingLot;
-import parking.gear.model.ParkingSpace;
-import parking.gear.model.ParkingSpaceState;
-import parking.gear.model.ParkingSpaceToParkingSpaceState;
 
 @Configuration
 public class AppTestEntities {
@@ -62,50 +51,39 @@ public class AppTestEntities {
     return new EntitiesHolder(
         new HashSet<>(
             Arrays.asList(
-                Building.class,
                 Neighbourhood.class,
                 Street.class,
                 State.class,
                 City.class,
                 Address.class,
-                ParkingSpace.class,
-                ParkingArea.class,
-                ParkingLot.class,
                 MappedPOI.class,
-                Lane.class,
-                Camera.class,
                 Country.class,
-                BuildingFloor.class,
-                Gate.class,
-                ParkingSpaceToParkingSpaceState.class,
-                ParkingSpaceState.class,
-                Baseclass.class,
-                LPREngine.class,
-                OperationToClazz.class,
-                SecurityTenant.class,
-                PermissionGroup.class,
-                UserToBaseClass.class,
-                FileResource.class,
-                ZipFile.class,
-                SecurityWildcard.class,
-                PermissionGroupToBaseclass.class,
-                SecurityOperation.class,
                 Baselink.class,
-                OperationCategory.class,
-                TenantToUser.class,
-                RoleToBaseclass.class,
-                SecurityUser.class,
-                RoleToUser.class,
-                Clazz.class,
-                Role.class,
-                SecurityEntity.class,
-                ZipFileToFileResource.class,
-                SecurityLink.class,
-                TenantToBaseClassPremission.class,
                 SecurityPolicy.class,
                 ClazzLink.class,
-                SecuredBasic.class,
+                RoleToBaseclass.class,
+                Clazz.class,
+                SecurityEntity.class,
+                Baseclass.class,
+                PermissionGroup.class,
+                UserToBaseClass.class,
+                SecurityUser.class,
                 Basic.class,
+                SecurityLink.class,
+                OperationToClazz.class,
+                SecurityOperation.class,
+                TenantToBaseClassPremission.class,
+                SecurityTenant.class,
+                PermissionGroupToBaseclass.class,
+                RoleToUser.class,
+                Role.class,
+                SecurityWildcard.class,
+                TenantToUser.class,
+                OperationCategory.class,
+                SecuredBasic.class,
+                FileResource.class,
+                ZipFile.class,
+                ZipFileToFileResource.class,
                 FileResource.class,
                 JsonConverter.class,
                 SecuredBasic.class)));

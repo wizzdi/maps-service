@@ -85,12 +85,6 @@ public class MappedPOIControllerTest {
 
     request.setX(10D);
 
-    request.setTest("test-string");
-
-    request.setTest1("test-string");
-
-    request.setTest2("test-string");
-
     request.setGeoHash12("test-string");
 
     request.setLon(10D);
@@ -194,21 +188,6 @@ public class MappedPOIControllerTest {
     if (request.getX() != null) {
 
       Assertions.assertEquals(request.getX(), testMappedPOI.getX());
-    }
-
-    if (request.getTest() != null) {
-
-      Assertions.assertEquals(request.getTest(), testMappedPOI.getTest());
-    }
-
-    if (request.getTest1() != null) {
-
-      Assertions.assertEquals(request.getTest1(), testMappedPOI.getTest1());
-    }
-
-    if (request.getTest2() != null) {
-
-      Assertions.assertEquals(request.getTest2(), testMappedPOI.getTest2());
     }
 
     if (request.getGeoHash12() != null) {
