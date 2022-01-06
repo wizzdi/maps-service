@@ -5,7 +5,10 @@ import com.flexicore.model.territories.Address;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
+import com.wizzdi.maps.model.Room;
 
+import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.model.Room;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +19,9 @@ public class MappedPOIFilter extends PaginationFilter {
   private List<Address> address;
   private BasicPropertiesFilter basicPropertiesFilter;
   private LocationArea locationArea;
+  @JsonIgnore private List<Room> room;
+  private Set<String> roomIds;
+
 
 
   public Set<String> getAddressIds() {
@@ -26,7 +32,23 @@ public class MappedPOIFilter extends PaginationFilter {
     this.addressIds = addressIds;
     return (T) this;
   }
+  @JsonIgnore
+  public List<Room> getRoom() {
+    return this.room;
+  }
 
+  public <T extends MappedPOIFilter> T setRoom(List<Room> room) {
+    this.room = room;
+    return (T) this;
+  }
+  public Set<String> getRoomIds() {
+    return this.roomIds;
+  }
+
+  public <T extends MappedPOIFilter> T setRoomIds(Set<String> roomIds) {
+    this.roomIds = roomIds;
+    return (T) this;
+  }
 
   @JsonIgnore
   public List<Address> getAddress() {

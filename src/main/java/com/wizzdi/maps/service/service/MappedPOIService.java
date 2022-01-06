@@ -12,6 +12,7 @@ import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.data.MappedPOIRepository;
 import com.wizzdi.maps.service.request.GeoHashRequest;
 import com.wizzdi.maps.service.request.MappedPOICreate;
@@ -137,6 +138,12 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
             mappedPOI.setMapIcon(mappedPOICreate.getMapIcon());
             update = true;
         }
+        if (mappedPOICreate.getRoom() != null
+                && (mappedPOI.getRoom() == null
+                || !mappedPOICreate.getRoom().getId().equals(mappedPOI.getRoom().getId()))) {
+            mappedPOI.setRoom(mappedPOICreate.getRoom());
+            update = true;
+        }
         if (updateLocation) {
             generateGeoHash(mappedPOI);
         }
@@ -233,6 +240,20 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
                     HttpStatus.BAD_REQUEST, "No Address with ids " + addressIds);
         }
         mappedPOIFilter.setAddress(new ArrayList<>(address.values()));
+        Set<String> roomIds =
+                mappedPOIFilter.getRoomIds() == null ? new HashSet<>() : mappedPOIFilter.getRoomIds();
+        Map<String, Room> room =
+                roomIds.isEmpty()
+                        ? new HashMap<>()
+                        : this.repository
+                        .listByIds(Room.class, roomIds, SecuredBasic_.security, securityContext)
+                        .parallelStream()
+                        .collect(Collectors.toMap(f -> f.getId(), f -> f));
+        roomIds.removeAll(room.keySet());
+        if (!roomIds.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with ids " + roomIds);
+        }
+        mappedPOIFilter.setRoom(new ArrayList<>(room.values()));
     }
 
     /**
@@ -265,6 +286,17 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with id " + addressId);
         }
         mappedPOICreate.setAddress(address);
+
+        String roomId = mappedPOICreate.getRoomId();
+        Room room =
+                roomId == null
+                        ? null
+                        : this.repository.getByIdOrNull(
+                        roomId, Room.class, SecuredBasic_.security, securityContext);
+        if (roomId != null && room == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
+        }
+        mappedPOICreate.setRoom(room);
     }
 
     @Override

@@ -3,16 +3,14 @@ package com.wizzdi.maps.service.data;
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
 import com.flexicore.model.Basic_;
-import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.MappedPOI_;
+import com.wizzdi.maps.model.Building;
 import com.wizzdi.maps.model.Room;
-import com.wizzdi.maps.service.request.MappedPOIFilter;
+import com.wizzdi.maps.model.Room_;
+import com.wizzdi.maps.service.request.RoomFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,32 +27,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
+public class RoomRepository implements Plugin, IRoomRepository {
   @PersistenceContext private EntityManager em;
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
-   * @param filtering
+   * @param filtering Object Used to List Room
    * @param securityContext
-   * @return List of MappedPOI
+   * @return List of Room
    */
   @Override
-  public List<MappedPOI> listAllMappedPOIs(
-      MappedPOIFilter filtering, SecurityContextBase securityContext) {
+  public List<Room> listAllRooms(RoomFilter filtering, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
-    CriteriaQuery<MappedPOI> q = cb.createQuery(MappedPOI.class);
-    Root<MappedPOI> r = q.from(MappedPOI.class);
+    CriteriaQuery<Room> q = cb.createQuery(Room.class);
+    Root<Room> r = q.from(Room.class);
     List<Predicate> preds = new ArrayList<>();
-    addMappedPOIPredicate(filtering, cb, q, r, preds, securityContext);
+    addRoomPredicate(filtering, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
-    TypedQuery<MappedPOI> query = em.createQuery(q);
+    TypedQuery<Room> query = em.createQuery(q);
     BasicRepository.addPagination(filtering, query);
     return query.getResultList();
   }
 
   @Override
-  public <T extends MappedPOI> void addMappedPOIPredicate(
-      MappedPOIFilter filtering,
+  public <T extends Room> void addRoomPredicate(
+      RoomFilter filtering,
       CriteriaBuilder cb,
       CommonAbstractCriteria q,
       From<?, T> r,
@@ -64,32 +61,25 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     this.securedBasicRepository.addSecuredBasicPredicates(
         filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getAddress() != null && !filtering.getAddress().isEmpty()) {
+    if (filtering.getBuilding() != null && !filtering.getBuilding().isEmpty()) {
       Set<String> ids =
-          filtering.getAddress().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, Address> join = r.join(MappedPOI_.address);
-      preds.add(join.get(Basic_.id).in(ids));
-    }
-
-    if (filtering.getRoom() != null && !filtering.getRoom().isEmpty()) {
-      Set<String> ids =
-          filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, Room> join = r.join(MappedPOI_.room);
+          filtering.getBuilding().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+      Join<T, Building> join = r.join(Room_.building);
       preds.add(join.get(Basic_.id).in(ids));
     }
   }
   /**
-   * @param filtering
+   * @param filtering Object Used to List Room
    * @param securityContext
-   * @return count of MappedPOI
+   * @return count of Room
    */
   @Override
-  public Long countAllMappedPOIs(MappedPOIFilter filtering, SecurityContextBase securityContext) {
+  public Long countAllRooms(RoomFilter filtering, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
-    Root<MappedPOI> r = q.from(MappedPOI.class);
+    Root<Room> r = q.from(Room.class);
     List<Predicate> preds = new ArrayList<>();
-    addMappedPOIPredicate(filtering, cb, q, r, preds, securityContext);
+    addRoomPredicate(filtering, cb, q, r, preds, securityContext);
     q.select(cb.count(r)).where(preds.toArray(new Predicate[0]));
     TypedQuery<Long> query = em.createQuery(q);
     return query.getSingleResult();
