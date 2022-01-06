@@ -96,6 +96,12 @@ public class RoomService implements Plugin, IRoomService {
       update = true;
     }
 
+    if (roomCreate.getExternalId() != null
+        && (!roomCreate.getExternalId().equals(room.getExternalId()))) {
+      room.setExternalId(roomCreate.getExternalId());
+      update = true;
+    }
+
     return update;
   }
   /**

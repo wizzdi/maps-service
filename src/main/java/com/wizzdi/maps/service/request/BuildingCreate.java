@@ -10,6 +10,8 @@ public class BuildingCreate extends BasicCreate {
 
   private String mappedPOIId;
 
+  private String externalId;
+
   @JsonIgnore
   public MappedPOI getMappedPOI() {
     return this.mappedPOI;
@@ -26,6 +28,15 @@ public class BuildingCreate extends BasicCreate {
 
   public <T extends BuildingCreate> T setMappedPOIId(String mappedPOIId) {
     this.mappedPOIId = mappedPOIId;
+    return (T) this;
+  }
+
+  public String getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends BuildingCreate> T setExternalId(String externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 }

@@ -12,6 +12,8 @@ public class RoomCreate extends BasicCreate {
 
   private Double x;
 
+  private String externalId;
+
   private Double y;
 
   private String buildingId;
@@ -41,6 +43,15 @@ public class RoomCreate extends BasicCreate {
 
   public <T extends RoomCreate> T setX(Double x) {
     this.x = x;
+    return (T) this;
+  }
+
+  public String getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends RoomCreate> T setExternalId(String externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 

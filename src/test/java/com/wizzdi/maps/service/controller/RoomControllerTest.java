@@ -64,6 +64,8 @@ public class RoomControllerTest {
 
     request.setX(10D);
 
+    request.setExternalId("test-string");
+
     request.setY(10D);
 
     request.setBuildingId(this.building.getId());
@@ -103,6 +105,11 @@ public class RoomControllerTest {
     if (request.getX() != null) {
 
       Assertions.assertEquals(request.getX(), testRoom.getX());
+    }
+
+    if (request.getExternalId() != null) {
+
+      Assertions.assertEquals(request.getExternalId(), testRoom.getExternalId());
     }
 
     if (request.getY() != null) {

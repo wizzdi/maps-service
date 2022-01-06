@@ -15,6 +15,8 @@ public class RoomFilter extends PaginationFilter {
 
   private Set<Double> x;
 
+  private Set<String> externalId;
+
   private Set<Double> y;
 
   private BasicPropertiesFilter basicPropertiesFilter;
@@ -46,6 +48,15 @@ public class RoomFilter extends PaginationFilter {
 
   public <T extends RoomFilter> T setX(Set<Double> x) {
     this.x = x;
+    return (T) this;
+  }
+
+  public Set<String> getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends RoomFilter> T setExternalId(Set<String> externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 

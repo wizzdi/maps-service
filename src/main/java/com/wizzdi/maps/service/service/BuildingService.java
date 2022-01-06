@@ -83,6 +83,12 @@ public class BuildingService implements Plugin, IBuildingService {
       update = true;
     }
 
+    if (buildingCreate.getExternalId() != null
+        && (!buildingCreate.getExternalId().equals(building.getExternalId()))) {
+      building.setExternalId(buildingCreate.getExternalId());
+      update = true;
+    }
+
     return update;
   }
   /**
