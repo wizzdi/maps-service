@@ -34,8 +34,10 @@ import com.wizzdi.flexicore.boot.jpa.service.EntitiesHolder;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.file.model.ZipFile;
 import com.wizzdi.flexicore.file.model.ZipFileToFileResource;
+import com.wizzdi.maps.model.Building;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.Room;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -85,7 +87,9 @@ public class AppTestEntities {
                 FileResource.class,
                 ZipFile.class,
                 ZipFileToFileResource.class,
+                Room.class,
                 MapIcon.class,
+                Building.class,
                 FileResource.class,
                 JsonConverter.class,
                 SecuredBasic.class)));

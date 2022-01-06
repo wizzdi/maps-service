@@ -5,6 +5,7 @@ import com.flexicore.model.territories.Address;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
 import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.model.Room;
 import java.util.List;
 import java.util.Set;
 
@@ -40,9 +41,13 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash9;
 
+  @JsonIgnore private List<Room> room;
+
   private Set<Double> lat;
 
   private Set<Double> x;
+
+  private Set<String> roomIds;
 
   @JsonIgnore private List<Address> address;
 
@@ -190,6 +195,16 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
+  @JsonIgnore
+  public List<Room> getRoom() {
+    return this.room;
+  }
+
+  public <T extends MappedPOIFilter> T setRoom(List<Room> room) {
+    this.room = room;
+    return (T) this;
+  }
+
   public Set<Double> getLat() {
     return this.lat;
   }
@@ -205,6 +220,15 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setX(Set<Double> x) {
     this.x = x;
+    return (T) this;
+  }
+
+  public Set<String> getRoomIds() {
+    return this.roomIds;
+  }
+
+  public <T extends MappedPOIFilter> T setRoomIds(Set<String> roomIds) {
+    this.roomIds = roomIds;
     return (T) this;
   }
 

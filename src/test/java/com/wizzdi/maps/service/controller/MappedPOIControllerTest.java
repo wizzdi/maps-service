@@ -5,6 +5,7 @@ import com.flexicore.response.AuthenticationResponse;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.App;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
@@ -33,6 +34,8 @@ public class MappedPOIControllerTest {
 
   private MappedPOI testMappedPOI;
   @Autowired private TestRestTemplate restTemplate;
+
+  @Autowired private Room room;
 
   @Autowired private MapIcon mapIcon;
 
@@ -89,6 +92,8 @@ public class MappedPOIControllerTest {
     request.setLat(10D);
 
     request.setX(10D);
+
+    request.setRoomId(this.room.getId());
 
     request.setGeoHash12("test-string");
 
@@ -199,6 +204,12 @@ public class MappedPOIControllerTest {
     if (request.getX() != null) {
 
       Assertions.assertEquals(request.getX(), testMappedPOI.getX());
+    }
+
+    if (request.getRoomId() != null) {
+
+      Assertions.assertNotNull(testMappedPOI.getRoom());
+      Assertions.assertEquals(request.getRoomId(), testMappedPOI.getRoom().getId());
     }
 
     if (request.getGeoHash12() != null) {

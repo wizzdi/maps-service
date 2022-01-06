@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
 import com.wizzdi.flexicore.security.request.BasicCreate;
 import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.model.Room;
 
 public class MappedPOICreate extends BasicCreate {
 
@@ -37,9 +38,13 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash9;
 
+  @JsonIgnore private Room room;
+
   private Double lat;
 
   private Double x;
+
+  private String roomId;
 
   @JsonIgnore private Address address;
 
@@ -185,6 +190,16 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
+  @JsonIgnore
+  public Room getRoom() {
+    return this.room;
+  }
+
+  public <T extends MappedPOICreate> T setRoom(Room room) {
+    this.room = room;
+    return (T) this;
+  }
+
   public Double getLat() {
     return this.lat;
   }
@@ -200,6 +215,15 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setX(Double x) {
     this.x = x;
+    return (T) this;
+  }
+
+  public String getRoomId() {
+    return this.roomId;
+  }
+
+  public <T extends MappedPOICreate> T setRoomId(String roomId) {
+    this.roomId = roomId;
     return (T) this;
   }
 
