@@ -34,6 +34,7 @@ import com.wizzdi.flexicore.boot.jpa.service.EntitiesHolder;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.file.model.ZipFile;
 import com.wizzdi.flexicore.file.model.ZipFileToFileResource;
+import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -84,6 +85,7 @@ public class AppTestEntities {
                 FileResource.class,
                 ZipFile.class,
                 ZipFileToFileResource.class,
+                MapIcon.class,
                 FileResource.class,
                 JsonConverter.class,
                 SecuredBasic.class)));

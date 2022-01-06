@@ -1,6 +1,9 @@
 package com.wizzdi.maps.service;
 
 import com.flexicore.security.SecurityContextBase;
+import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.service.request.MapIconCreate;
+import com.wizzdi.maps.service.service.MapIconService;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.service.MappedPOIService;
@@ -11,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
+
+  @Autowired private MapIconService mapIconService;
 
   @Autowired
   @Qualifier("adminSecurityContext")
@@ -26,5 +31,11 @@ public class AppConfig {
   @Bean
   public MappedPOI second(){
     return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06207103256403 ).setLon( 34.777958888094304).setName("second"),securityContext);
+  }
+
+  @Bean
+  public MapIcon mapIcon() {
+    MapIconCreate mapIconCreate = new MapIconCreate();
+    return mapIconService.createMapIcon(mapIconCreate, securityContext);
   }
 }

@@ -7,10 +7,10 @@ import com.flexicore.model.SecuredBasic_;
 import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
+import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.data.MappedPOIRepository;
 import com.wizzdi.maps.service.request.GeoHashRequest;
@@ -53,18 +53,18 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     private static final Map<String, Method> setterCache = new ConcurrentHashMap<>();
 
 
-    /**
-     * @param mappedPOICreate
-     * @param securityContext
-     * @return created MappedPOI
-     */
-    @Override
-    public MappedPOI createMappedPOI(
-            MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
-        MappedPOI mappedPOI = createMappedPOINoMerge(mappedPOICreate, securityContext);
-        repository.merge(mappedPOI);
-        return mappedPOI;
-    }
+  /**
+   * @param mappedPOICreate
+   * @param securityContext
+   * @return created MappedPOI
+   */
+  @Override
+  public MappedPOI createMappedPOI(
+      MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
+    MappedPOI mappedPOI = createMappedPOINoMerge(mappedPOICreate, securityContext);
+    this.repository.merge(mappedPOI);
+    return mappedPOI;
+  }
 
     /**
      * @param mappedPOICreate
@@ -99,12 +99,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
             update = true;
         }
 
-        if (mappedPOICreate.getIcon() != null
-                && (mappedPOI.getIcon() == null
-                || !mappedPOICreate.getIcon().getId().equals(mappedPOI.getIcon().getId()))) {
-            mappedPOI.setIcon(mappedPOICreate.getIcon());
-            update = true;
-        }
+
 
         if (mappedPOICreate.getLat() != null
                 && (!mappedPOICreate.getLat().equals(mappedPOI.getLat()))) {
@@ -135,6 +130,12 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
             update = true;
             updateLocation = true;
 
+        }
+        if (mappedPOICreate.getMapIcon() != null
+                && (mappedPOI.getMapIcon() == null
+                || !mappedPOICreate.getMapIcon().getId().equals(mappedPOI.getMapIcon().getId()))) {
+            mappedPOI.setMapIcon(mappedPOICreate.getMapIcon());
+            update = true;
         }
         if (updateLocation) {
             generateGeoHash(mappedPOI);
@@ -191,29 +192,29 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
         return mappedPOI;
     }
 
-    /**
-     * @param mappedPOIFilter
-     * @param securityContext
-     * @return PaginationResponse containing paging information for MappedPOI
-     */
-    @Override
-    public PaginationResponse<MappedPOI> getAllMappedPOIs(
-            MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
-        List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
-        long count = repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
-        return new PaginationResponse<>(list, mappedPOIFilter, count);
-    }
+  /**
+   * @param mappedPOIFilter
+   * @param securityContext
+   * @return PaginationResponse containing paging information for MappedPOI
+   */
+  @Override
+  public PaginationResponse<MappedPOI> getAllMappedPOIs(
+      MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
+    List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
+    long count = this.repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
+    return new PaginationResponse<>(list, mappedPOIFilter, count);
+  }
 
-    /**
-     * @param mappedPOIFilter
-     * @param securityContext
-     * @return List of MappedPOI
-     */
-    @Override
-    public List<MappedPOI> listAllMappedPOIs(
-            MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
-        return repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
-    }
+  /**
+   * @param mappedPOIFilter
+   * @param securityContext
+   * @return List of MappedPOI
+   */
+  @Override
+  public List<MappedPOI> listAllMappedPOIs(
+      MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
+    return repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
+  }
 
     /**
      * @param mappedPOIFilter
@@ -243,17 +244,16 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
         basicService.validate(mappedPOICreate, securityContext);
 
-        String iconId = mappedPOICreate.getIconId();
-        FileResource icon =
-                iconId == null
+        String mapIconId = mappedPOICreate.getMapIconId();
+        MapIcon mapIcon =
+                mapIconId == null
                         ? null
-                        : repository.getByIdOrNull(
-                        iconId, FileResource.class, SecuredBasic_.security, securityContext);
-        if (iconId != null && icon == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "No FileResource with id " + iconId);
+                        : this.repository.getByIdOrNull(
+                        mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
+        if (mapIconId != null && mapIcon == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
         }
-        mappedPOICreate.setIcon(icon);
+        mappedPOICreate.setMapIcon(mapIcon);
 
         String addressId = mappedPOICreate.getAddressId();
         Address address =

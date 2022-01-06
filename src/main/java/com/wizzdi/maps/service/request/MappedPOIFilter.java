@@ -11,47 +11,47 @@ import java.util.Set;
 
 public class MappedPOIFilter extends PaginationFilter {
 
-    private Set<String> addressIds;
-    @JsonIgnore
-    private List<Address> address;
-    private BasicPropertiesFilter basicPropertiesFilter;
-    private LocationArea locationArea;
+  private Set<String> addressIds;
+  @JsonIgnore
+  private List<Address> address;
+  private BasicPropertiesFilter basicPropertiesFilter;
+  private LocationArea locationArea;
 
 
-    public Set<String> getAddressIds() {
-        return addressIds;
-    }
+  public Set<String> getAddressIds() {
+    return addressIds;
+  }
 
-    public <T extends MappedPOIFilter> T setAddressIds(Set<String> addressIds) {
-        this.addressIds = addressIds;
-        return (T) this;
-    }
+  public <T extends MappedPOIFilter> T setAddressIds(Set<String> addressIds) {
+    this.addressIds = addressIds;
+    return (T) this;
+  }
 
 
-    @JsonIgnore
-    public List<Address> getAddress() {
-        return address;
-    }
+  @JsonIgnore
+  public List<Address> getAddress() {
+    return address;
+  }
 
-    public <T extends MappedPOIFilter> T setAddress(List<Address> address) {
-        this.address = address;
-        return (T) this;
-    }
-    public BasicPropertiesFilter getBasicPropertiesFilter() {
-        return basicPropertiesFilter;
-    }
+  public <T extends MappedPOIFilter> T setAddress(List<Address> address) {
+    this.address = address;
+    return (T) this;
+  }
+  public BasicPropertiesFilter getBasicPropertiesFilter() {
+    return basicPropertiesFilter;
+  }
 
-    public <T extends MappedPOIFilter> T setBasicPropertiesFilter(BasicPropertiesFilter basicPropertiesFilter) {
-        this.basicPropertiesFilter = basicPropertiesFilter;
-        return (T) this;
-    }
+  public <T extends MappedPOIFilter> T setBasicPropertiesFilter(BasicPropertiesFilter basicPropertiesFilter) {
+    this.basicPropertiesFilter = basicPropertiesFilter;
+    return (T) this;
+  }
 
-    public LocationArea getLocationArea() {
-        return locationArea;
-    }
+  public LocationArea getLocationArea() {
+    return locationArea;
+  }
 
-    public <T extends MappedPOIFilter> T setLocationArea(LocationArea locationArea) {
-        this.locationArea = locationArea;
-        return (T) this;
-    }
+  public <T extends MappedPOIFilter> T setLocationArea(LocationArea locationArea) {
+    this.locationArea = locationArea;
+    return (T) this;
+  }
 }

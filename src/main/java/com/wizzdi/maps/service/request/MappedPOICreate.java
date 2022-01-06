@@ -2,12 +2,12 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.maps.model.MapIcon;
 
 public class MappedPOICreate extends BasicCreate {
 
-    private String iconId;
+    private String mapIconId;
     private Double y;
     private Double z;
     private Double lat;
@@ -16,16 +16,15 @@ public class MappedPOICreate extends BasicCreate {
     @JsonIgnore
     private Address address;
     @JsonIgnore
-    private FileResource icon;
+    private MapIcon mapIcon;
     private Double lon;
 
-
-    public String getIconId() {
-        return iconId;
+    public String getMapIconId() {
+        return this.mapIconId;
     }
 
-    public <T extends MappedPOICreate> T setIconId(String iconId) {
-        this.iconId = iconId;
+    public <T extends MappedPOICreate> T setMapIconId(String mapIconId) {
+        this.mapIconId = mapIconId;
         return (T) this;
     }
 
@@ -76,12 +75,12 @@ public class MappedPOICreate extends BasicCreate {
     }
 
     @JsonIgnore
-    public FileResource getIcon() {
-        return icon;
+    public MapIcon getMapIcon() {
+        return this.mapIcon;
     }
 
-    public <T extends MappedPOICreate> T setIcon(FileResource icon) {
-        this.icon = icon;
+    public <T extends MappedPOICreate> T setMapIcon(MapIcon mapIcon) {
+        this.mapIcon = mapIcon;
         return (T) this;
     }
 
