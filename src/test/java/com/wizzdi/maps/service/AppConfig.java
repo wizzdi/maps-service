@@ -44,13 +44,8 @@ public class AppConfig {
     private SecurityContextBase securityContext;
 
 
-  @Autowired private MapGroupService mapGroupService;
-
-
-
-  @Autowired
-  @Qualifier("adminSecurityContext")
-  private SecurityContextBase securityContext;
+    @Autowired
+    private MapGroupService mapGroupService;
 
     @Bean
     public MappedPOI first() {
@@ -74,17 +69,17 @@ public class AppConfig {
         return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
     }
 
-  @Bean
-  public MapGroup mapGroup() {
-    MapGroupCreate mapGroupCreate = new MapGroupCreate();
-    return mapGroupService.createMapGroup(mapGroupCreate, securityContext);
-  }
+    @Bean
+    public MapGroup mapGroup() {
+        MapGroupCreate mapGroupCreate = new MapGroupCreate();
+        return mapGroupService.createMapGroup(mapGroupCreate, securityContext);
+    }
 
-  @Bean
-  public Building building() {
-    BuildingCreate buildingCreate = new BuildingCreate();
-    return buildingService.createBuilding(buildingCreate, securityContext);
-  }
+    @Bean
+    public Building building() {
+        BuildingCreate buildingCreate = new BuildingCreate();
+        return buildingService.createBuilding(buildingCreate, securityContext);
+    }
 
     @Bean
     public MapIcon mapIcon() {
