@@ -42,19 +42,19 @@ public class MappedPOIControllerTest {
   @BeforeAll
   private void init() {
     ResponseEntity<AuthenticationResponse> authenticationResponse =
-        this.restTemplate.postForEntity(
-            "/FlexiCore/rest/authenticationNew/login",
-            new AuthenticationRequest().setEmail("admin@flexicore.com").setPassword("admin"),
-            AuthenticationResponse.class);
+            this.restTemplate.postForEntity(
+                    "/FlexiCore/rest/authenticationNew/login",
+                    new AuthenticationRequest().setEmail("admin@flexicore.com").setPassword("admin"),
+                    AuthenticationResponse.class);
     String authenticationKey = authenticationResponse.getBody().getAuthenticationKey();
     restTemplate
-        .getRestTemplate()
-        .setInterceptors(
-            Collections.singletonList(
-                (request, body, execution) -> {
-                  request.getHeaders().add("authenticationKey", authenticationKey);
-                  return execution.execute(request, body);
-                }));
+            .getRestTemplate()
+            .setInterceptors(
+                    Collections.singletonList(
+                            (request, body, execution) -> {
+                              request.getHeaders().add("authenticationKey", authenticationKey);
+                              return execution.execute(request, body);
+                            }));
   }
 
   @Test
@@ -77,6 +77,7 @@ public class MappedPOIControllerTest {
     request.setLat(10D);
 
     request.setX(10D);
+    request.setRoomId(this.room.getId());
 
 
     request.setRoomId(this.room.getId());
@@ -85,7 +86,7 @@ public class MappedPOIControllerTest {
 
 
     ResponseEntity<MappedPOI> response =
-        this.restTemplate.postForEntity("/MappedPOI/createMappedPOI", request, MappedPOI.class);
+            this.restTemplate.postForEntity("/MappedPOI/createMappedPOI", request, MappedPOI.class);
     Assertions.assertEquals(200, response.getStatusCodeValue());
     testMappedPOI = response.getBody();
     assertMappedPOI(request, testMappedPOI);
@@ -96,18 +97,18 @@ public class MappedPOIControllerTest {
   public void testListAllMappedPOIs() {
     MappedPOIFilter request = new MappedPOIFilter();
     ParameterizedTypeReference<PaginationResponse<MappedPOI>> t =
-        new ParameterizedTypeReference<>() {};
+            new ParameterizedTypeReference<>() {};
 
     ResponseEntity<PaginationResponse<MappedPOI>> response =
-        this.restTemplate.exchange(
-            "/MappedPOI/getAllMappedPOIs", HttpMethod.POST, new HttpEntity<>(request), t);
+            this.restTemplate.exchange(
+                    "/MappedPOI/getAllMappedPOIs", HttpMethod.POST, new HttpEntity<>(request), t);
     Assertions.assertEquals(200, response.getStatusCodeValue());
     PaginationResponse<MappedPOI> body = response.getBody();
     Assertions.assertNotNull(body);
     List<MappedPOI> MappedPOIs = body.getList();
     Assertions.assertNotEquals(0, MappedPOIs.size());
     Assertions.assertTrue(
-        MappedPOIs.stream().anyMatch(f -> f.getId().equals(testMappedPOI.getId())));
+            MappedPOIs.stream().anyMatch(f -> f.getId().equals(testMappedPOI.getId())));
   }
 
   public void assertMappedPOI(MappedPOICreate request, MappedPOI testMappedPOI) {
@@ -148,6 +149,10 @@ public class MappedPOIControllerTest {
 
       Assertions.assertEquals(request.getLon(), testMappedPOI.getLon());
     }
+    if (request.getExternalId() != null) {
+
+      Assertions.assertEquals(request.getExternalId(), testMappedPOI.getExternalId());
+    }
 
 
   }
@@ -158,11 +163,11 @@ public class MappedPOIControllerTest {
     String name = UUID.randomUUID().toString();
     MappedPOIUpdate request = new MappedPOIUpdate().setId(testMappedPOI.getId()).setName(name);
     ResponseEntity<MappedPOI> response =
-        this.restTemplate.exchange(
-            "/MappedPOI/updateMappedPOI",
-            HttpMethod.PUT,
-            new HttpEntity<>(request),
-            MappedPOI.class);
+            this.restTemplate.exchange(
+                    "/MappedPOI/updateMappedPOI",
+                    HttpMethod.PUT,
+                    new HttpEntity<>(request),
+                    MappedPOI.class);
     Assertions.assertEquals(200, response.getStatusCodeValue());
     testMappedPOI = response.getBody();
     assertMappedPOI(request, testMappedPOI);
