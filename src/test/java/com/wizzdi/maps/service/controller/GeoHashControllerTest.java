@@ -70,9 +70,9 @@ public class GeoHashControllerTest {
     Assertions.assertNotNull(body);
     List<GeoHashResponse> areas = body.getList();
     Assertions.assertNotEquals(0, areas.size());
-    Assertions.assertEquals(1,areas.size());
+    Assertions.assertEquals(2,areas.size());
     GeoHashResponse area = areas.get(0);
-    Assertions.assertEquals(2, area.getCount());
+    Assertions.assertEquals(1, area.getCount());
 
 
   }
@@ -93,7 +93,7 @@ public class GeoHashControllerTest {
     Assertions.assertNotNull(body);
     List<GeoHashResponse> areas = body.getList();
     Assertions.assertNotEquals(0, areas.size());
-    Assertions.assertEquals(2,areas.size());
+    Assertions.assertEquals(3,areas.size());
     for (GeoHashResponse area : areas) {
       Assertions.assertEquals(1, area.getCount());
 

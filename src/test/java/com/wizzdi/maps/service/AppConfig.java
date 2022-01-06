@@ -24,51 +24,53 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-  @Autowired private RoomService roomService;
+    @Autowired
+    private RoomService roomService;
 
-  @Autowired private MappedPOIService mappedPOIService;
+    @Autowired
+    private MappedPOIService mappedPOIService;
 
-  @Autowired private BuildingService buildingService;
+    @Autowired
+    private BuildingService buildingService;
 
-  @Autowired private MapIconService mapIconService;
+    @Autowired
+    private MapIconService mapIconService;
 
-  @Autowired
-  @Qualifier("adminSecurityContext")
-  private SecurityContextBase securityContext;
-  @Autowired
-  private MappedPOIService mappedPOIService;
+    @Autowired
+    @Qualifier("adminSecurityContext")
+    private SecurityContextBase securityContext;
 
-  @Bean
-  public MappedPOI first(){
-    return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06121634257458).setLon( 34.77602769776043).setName("first"),securityContext);
-  }
+    @Bean
+    public MappedPOI first() {
+        return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06121634257458).setLon(34.77602769776043).setName("first"), securityContext);
+    }
 
-  @Bean
-  public MappedPOI second(){
-    return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06207103256403 ).setLon( 34.777958888094304).setName("second"),securityContext);
-  }
+    @Bean
+    public MappedPOI second() {
+        return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06207103256403).setLon(34.777958888094304).setName("second"), securityContext);
+    }
 
-  @Bean
-  public Room room() {
-    RoomCreate roomCreate = new RoomCreate();
-    return roomService.createRoom(roomCreate, securityContext);
-  }
+    @Bean
+    public Room room() {
+        RoomCreate roomCreate = new RoomCreate();
+        return roomService.createRoom(roomCreate, securityContext);
+    }
 
-  @Bean
-  public MappedPOI mappedPOI() {
-    MappedPOICreate mappedPOICreate = new MappedPOICreate();
-    return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
-  }
+    @Bean
+    public MappedPOI mappedPOI() {
+        MappedPOICreate mappedPOICreate = new MappedPOICreate();
+        return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
+    }
 
-  @Bean
-  public Building building() {
-    BuildingCreate buildingCreate = new BuildingCreate();
-    return buildingService.createBuilding(buildingCreate, securityContext);
-  }
+    @Bean
+    public Building building() {
+        BuildingCreate buildingCreate = new BuildingCreate();
+        return buildingService.createBuilding(buildingCreate, securityContext);
+    }
 
-  @Bean
-  public MapIcon mapIcon() {
-    MapIconCreate mapIconCreate = new MapIconCreate();
-    return mapIconService.createMapIcon(mapIconCreate, securityContext);
-  }
+    @Bean
+    public MapIcon mapIcon() {
+        MapIconCreate mapIconCreate = new MapIconCreate();
+        return mapIconService.createMapIcon(mapIconCreate, securityContext);
+    }
 }
