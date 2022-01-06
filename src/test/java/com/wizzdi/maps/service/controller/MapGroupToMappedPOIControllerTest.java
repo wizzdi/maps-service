@@ -3,7 +3,9 @@ package com.wizzdi.maps.service.controller;
 import com.flexicore.request.AuthenticationRequest;
 import com.flexicore.response.AuthenticationResponse;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
+import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapGroupToMappedPOI;
+import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.App;
 import com.wizzdi.maps.service.request.MapGroupToMappedPOICreate;
 import com.wizzdi.maps.service.request.MapGroupToMappedPOIFilter;
@@ -33,6 +35,10 @@ public class MapGroupToMappedPOIControllerTest {
   private MapGroupToMappedPOI testMapGroupToMappedPOI;
   @Autowired private TestRestTemplate restTemplate;
 
+  @Autowired private MapGroup mapGroup;
+
+  @Autowired private MappedPOI mappedPOI;
+
   @BeforeAll
   private void init() {
     ResponseEntity<AuthenticationResponse> authenticationResponse =
@@ -56,6 +62,10 @@ public class MapGroupToMappedPOIControllerTest {
   public void testMapGroupToMappedPOICreate() {
     String name = UUID.randomUUID().toString();
     MapGroupToMappedPOICreate request = new MapGroupToMappedPOICreate().setName(name);
+
+    request.setMapGroupId(this.mapGroup.getId());
+
+    request.setMappedPOIId(this.mappedPOI.getId());
 
     ResponseEntity<MapGroupToMappedPOI> response =
         this.restTemplate.postForEntity(
@@ -91,6 +101,20 @@ public class MapGroupToMappedPOIControllerTest {
   public void assertMapGroupToMappedPOI(
       MapGroupToMappedPOICreate request, MapGroupToMappedPOI testMapGroupToMappedPOI) {
     Assertions.assertNotNull(testMapGroupToMappedPOI);
+
+    if (request.getMapGroupId() != null) {
+
+      Assertions.assertNotNull(testMapGroupToMappedPOI.getMapGroup());
+      Assertions.assertEquals(
+          request.getMapGroupId(), testMapGroupToMappedPOI.getMapGroup().getId());
+    }
+
+    if (request.getMappedPOIId() != null) {
+
+      Assertions.assertNotNull(testMapGroupToMappedPOI.getMappedPOI());
+      Assertions.assertEquals(
+          request.getMappedPOIId(), testMapGroupToMappedPOI.getMappedPOI().getId());
+    }
   }
 
   @Test

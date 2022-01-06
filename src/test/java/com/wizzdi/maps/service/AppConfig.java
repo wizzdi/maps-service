@@ -2,14 +2,17 @@ package com.wizzdi.maps.service;
 
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.request.BuildingCreate;
+import com.wizzdi.maps.service.request.MapGroupCreate;
 import com.wizzdi.maps.service.request.MapIconCreate;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.RoomCreate;
 import com.wizzdi.maps.service.service.BuildingService;
+import com.wizzdi.maps.service.service.MapGroupService;
 import com.wizzdi.maps.service.service.MapIconService;
 import com.wizzdi.maps.service.service.MappedPOIService;
 import com.wizzdi.maps.service.service.RoomService;
@@ -24,6 +27,8 @@ public class AppConfig {
   @Autowired private RoomService roomService;
 
   @Autowired private MappedPOIService mappedPOIService;
+
+  @Autowired private MapGroupService mapGroupService;
 
   @Autowired private BuildingService buildingService;
 
@@ -43,6 +48,12 @@ public class AppConfig {
   public MappedPOI mappedPOI() {
     MappedPOICreate mappedPOICreate = new MappedPOICreate();
     return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
+  }
+
+  @Bean
+  public MapGroup mapGroup() {
+    MapGroupCreate mapGroupCreate = new MapGroupCreate();
+    return mapGroupService.createMapGroup(mapGroupCreate, securityContext);
   }
 
   @Bean
