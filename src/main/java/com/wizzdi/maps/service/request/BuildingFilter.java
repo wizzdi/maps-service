@@ -13,6 +13,8 @@ public class BuildingFilter extends PaginationFilter {
 
   private Set<String> mappedPOIIds;
 
+  private Set<String> externalId;
+
   private BasicPropertiesFilter basicPropertiesFilter;
 
   @JsonIgnore
@@ -31,6 +33,15 @@ public class BuildingFilter extends PaginationFilter {
 
   public <T extends BuildingFilter> T setMappedPOIIds(Set<String> mappedPOIIds) {
     this.mappedPOIIds = mappedPOIIds;
+    return (T) this;
+  }
+
+  public Set<String> getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends BuildingFilter> T setExternalId(Set<String> externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 

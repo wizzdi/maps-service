@@ -62,6 +62,8 @@ public class BuildingControllerTest {
 
     request.setMappedPOIId(this.mappedPOI.getId());
 
+    request.setExternalId("test-string");
+
     ResponseEntity<Building> response =
         this.restTemplate.postForEntity("/Building/createBuilding", request, Building.class);
     Assertions.assertEquals(200, response.getStatusCodeValue());
@@ -94,6 +96,11 @@ public class BuildingControllerTest {
 
       Assertions.assertNotNull(testBuilding.getMappedPOI());
       Assertions.assertEquals(request.getMappedPOIId(), testBuilding.getMappedPOI().getId());
+    }
+
+    if (request.getExternalId() != null) {
+
+      Assertions.assertEquals(request.getExternalId(), testBuilding.getExternalId());
     }
   }
 
