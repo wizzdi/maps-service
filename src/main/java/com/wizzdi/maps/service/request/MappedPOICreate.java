@@ -10,6 +10,8 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash7;
 
+  private String externalId;
+
   private String geoHash10;
 
   private String geoHash2;
@@ -60,6 +62,15 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setGeoHash7(String geoHash7) {
     this.geoHash7 = geoHash7;
+    return (T) this;
+  }
+
+  public String getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends MappedPOICreate> T setExternalId(String externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 

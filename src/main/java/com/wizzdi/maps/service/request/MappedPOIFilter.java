@@ -15,6 +15,26 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash10;
 
+  private Set<String> geoHash6;
+
+  private Set<String> geoHash8;
+
+  private Set<Double> z;
+
+  private Set<String> mapIconIds;
+
+  private Set<String> addressIds;
+
+  @JsonIgnore private List<Room> room;
+
+  private Set<Double> lat;
+
+  private Set<String> roomIds;
+
+  private Set<String> geoHash12;
+
+  private Set<String> externalId;
+
   private Set<String> geoHash2;
 
   private Set<Double> y;
@@ -23,35 +43,17 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash4;
 
-  private Set<String> geoHash6;
-
-  private Set<String> geoHash8;
-
-  private Set<Double> z;
-
   private Set<String> geoHash1;
 
   private Set<String> geoHash3;
 
   @JsonIgnore private List<MapIcon> mapIcon;
 
-  private Set<String> mapIconIds;
-
-  private Set<String> addressIds;
-
   private Set<String> geoHash9;
-
-  @JsonIgnore private List<Room> room;
-
-  private Set<Double> lat;
 
   private Set<Double> x;
 
-  private Set<String> roomIds;
-
   @JsonIgnore private List<Address> address;
-
-  private Set<String> geoHash12;
 
   private BasicPropertiesFilter basicPropertiesFilter;
 
@@ -74,6 +76,97 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setGeoHash10(Set<String> geoHash10) {
     this.geoHash10 = geoHash10;
+    return (T) this;
+  }
+
+  public Set<String> getGeoHash6() {
+    return this.geoHash6;
+  }
+
+  public <T extends MappedPOIFilter> T setGeoHash6(Set<String> geoHash6) {
+    this.geoHash6 = geoHash6;
+    return (T) this;
+  }
+
+  public Set<String> getGeoHash8() {
+    return this.geoHash8;
+  }
+
+  public <T extends MappedPOIFilter> T setGeoHash8(Set<String> geoHash8) {
+    this.geoHash8 = geoHash8;
+    return (T) this;
+  }
+
+  public Set<Double> getZ() {
+    return this.z;
+  }
+
+  public <T extends MappedPOIFilter> T setZ(Set<Double> z) {
+    this.z = z;
+    return (T) this;
+  }
+
+  public Set<String> getMapIconIds() {
+    return this.mapIconIds;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIconIds(Set<String> mapIconIds) {
+    this.mapIconIds = mapIconIds;
+    return (T) this;
+  }
+
+  public Set<String> getAddressIds() {
+    return this.addressIds;
+  }
+
+  public <T extends MappedPOIFilter> T setAddressIds(Set<String> addressIds) {
+    this.addressIds = addressIds;
+    return (T) this;
+  }
+
+  @JsonIgnore
+  public List<Room> getRoom() {
+    return this.room;
+  }
+
+  public <T extends MappedPOIFilter> T setRoom(List<Room> room) {
+    this.room = room;
+    return (T) this;
+  }
+
+  public Set<Double> getLat() {
+    return this.lat;
+  }
+
+  public <T extends MappedPOIFilter> T setLat(Set<Double> lat) {
+    this.lat = lat;
+    return (T) this;
+  }
+
+  public Set<String> getRoomIds() {
+    return this.roomIds;
+  }
+
+  public <T extends MappedPOIFilter> T setRoomIds(Set<String> roomIds) {
+    this.roomIds = roomIds;
+    return (T) this;
+  }
+
+  public Set<String> getGeoHash12() {
+    return this.geoHash12;
+  }
+
+  public <T extends MappedPOIFilter> T setGeoHash12(Set<String> geoHash12) {
+    this.geoHash12 = geoHash12;
+    return (T) this;
+  }
+
+  public Set<String> getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends MappedPOIFilter> T setExternalId(Set<String> externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 
@@ -113,33 +206,6 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
-  public Set<String> getGeoHash6() {
-    return this.geoHash6;
-  }
-
-  public <T extends MappedPOIFilter> T setGeoHash6(Set<String> geoHash6) {
-    this.geoHash6 = geoHash6;
-    return (T) this;
-  }
-
-  public Set<String> getGeoHash8() {
-    return this.geoHash8;
-  }
-
-  public <T extends MappedPOIFilter> T setGeoHash8(Set<String> geoHash8) {
-    this.geoHash8 = geoHash8;
-    return (T) this;
-  }
-
-  public Set<Double> getZ() {
-    return this.z;
-  }
-
-  public <T extends MappedPOIFilter> T setZ(Set<Double> z) {
-    this.z = z;
-    return (T) this;
-  }
-
   public Set<String> getGeoHash1() {
     return this.geoHash1;
   }
@@ -168,49 +234,12 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
-  public Set<String> getMapIconIds() {
-    return this.mapIconIds;
-  }
-
-  public <T extends MappedPOIFilter> T setMapIconIds(Set<String> mapIconIds) {
-    this.mapIconIds = mapIconIds;
-    return (T) this;
-  }
-
-  public Set<String> getAddressIds() {
-    return this.addressIds;
-  }
-
-  public <T extends MappedPOIFilter> T setAddressIds(Set<String> addressIds) {
-    this.addressIds = addressIds;
-    return (T) this;
-  }
-
   public Set<String> getGeoHash9() {
     return this.geoHash9;
   }
 
   public <T extends MappedPOIFilter> T setGeoHash9(Set<String> geoHash9) {
     this.geoHash9 = geoHash9;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public List<Room> getRoom() {
-    return this.room;
-  }
-
-  public <T extends MappedPOIFilter> T setRoom(List<Room> room) {
-    this.room = room;
-    return (T) this;
-  }
-
-  public Set<Double> getLat() {
-    return this.lat;
-  }
-
-  public <T extends MappedPOIFilter> T setLat(Set<Double> lat) {
-    this.lat = lat;
     return (T) this;
   }
 
@@ -223,15 +252,6 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
-  public Set<String> getRoomIds() {
-    return this.roomIds;
-  }
-
-  public <T extends MappedPOIFilter> T setRoomIds(Set<String> roomIds) {
-    this.roomIds = roomIds;
-    return (T) this;
-  }
-
   @JsonIgnore
   public List<Address> getAddress() {
     return this.address;
@@ -239,15 +259,6 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setAddress(List<Address> address) {
     this.address = address;
-    return (T) this;
-  }
-
-  public Set<String> getGeoHash12() {
-    return this.geoHash12;
-  }
-
-  public <T extends MappedPOIFilter> T setGeoHash12(Set<String> geoHash12) {
-    this.geoHash12 = geoHash12;
     return (T) this;
   }
 
