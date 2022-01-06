@@ -2,17 +2,15 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
+import com.wizzdi.maps.model.MapIcon;
 import java.util.List;
 import java.util.Set;
 
 public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash7;
-
-  private Set<String> iconIds;
 
   private Set<String> geoHash10;
 
@@ -34,6 +32,10 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash3;
 
+  @JsonIgnore private List<MapIcon> mapIcon;
+
+  private Set<String> mapIconIds;
+
   private Set<String> addressIds;
 
   private Set<String> geoHash9;
@@ -43,8 +45,6 @@ public class MappedPOIFilter extends PaginationFilter {
   private Set<Double> x;
 
   @JsonIgnore private List<Address> address;
-
-  @JsonIgnore private List<FileResource> icon;
 
   private Set<String> geoHash12;
 
@@ -60,15 +60,6 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setGeoHash7(Set<String> geoHash7) {
     this.geoHash7 = geoHash7;
-    return (T) this;
-  }
-
-  public Set<String> getIconIds() {
-    return this.iconIds;
-  }
-
-  public <T extends MappedPOIFilter> T setIconIds(Set<String> iconIds) {
-    this.iconIds = iconIds;
     return (T) this;
   }
 
@@ -162,6 +153,25 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
+  @JsonIgnore
+  public List<MapIcon> getMapIcon() {
+    return this.mapIcon;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIcon(List<MapIcon> mapIcon) {
+    this.mapIcon = mapIcon;
+    return (T) this;
+  }
+
+  public Set<String> getMapIconIds() {
+    return this.mapIconIds;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIconIds(Set<String> mapIconIds) {
+    this.mapIconIds = mapIconIds;
+    return (T) this;
+  }
+
   public Set<String> getAddressIds() {
     return this.addressIds;
   }
@@ -205,16 +215,6 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setAddress(List<Address> address) {
     this.address = address;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public List<FileResource> getIcon() {
-    return this.icon;
-  }
-
-  public <T extends MappedPOIFilter> T setIcon(List<FileResource> icon) {
-    this.icon = icon;
     return (T) this;
   }
 

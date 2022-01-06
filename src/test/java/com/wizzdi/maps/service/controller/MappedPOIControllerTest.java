@@ -3,6 +3,7 @@ package com.wizzdi.maps.service.controller;
 import com.flexicore.request.AuthenticationRequest;
 import com.flexicore.response.AuthenticationResponse;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
+import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.App;
 import com.wizzdi.maps.service.request.MappedPOICreate;
@@ -32,6 +33,8 @@ public class MappedPOIControllerTest {
 
   private MappedPOI testMappedPOI;
   @Autowired private TestRestTemplate restTemplate;
+
+  @Autowired private MapIcon mapIcon;
 
   @BeforeAll
   private void init() {
@@ -78,6 +81,8 @@ public class MappedPOIControllerTest {
     request.setGeoHash1("test-string");
 
     request.setGeoHash3("test-string");
+
+    request.setMapIconId(this.mapIcon.getId());
 
     request.setGeoHash9("test-string");
 
@@ -173,6 +178,12 @@ public class MappedPOIControllerTest {
     if (request.getGeoHash3() != null) {
 
       Assertions.assertEquals(request.getGeoHash3(), testMappedPOI.getGeoHash3());
+    }
+
+    if (request.getMapIconId() != null) {
+
+      Assertions.assertNotNull(testMappedPOI.getMapIcon());
+      Assertions.assertEquals(request.getMapIconId(), testMappedPOI.getMapIcon().getId());
     }
 
     if (request.getGeoHash9() != null) {

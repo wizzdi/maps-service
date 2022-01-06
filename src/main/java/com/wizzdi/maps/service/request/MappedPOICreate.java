@@ -2,14 +2,12 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.maps.model.MapIcon;
 
 public class MappedPOICreate extends BasicCreate {
 
   private String geoHash7;
-
-  private String iconId;
 
   private String geoHash10;
 
@@ -31,6 +29,10 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash3;
 
+  @JsonIgnore private MapIcon mapIcon;
+
+  private String mapIconId;
+
   private String addressId;
 
   private String geoHash9;
@@ -40,8 +42,6 @@ public class MappedPOICreate extends BasicCreate {
   private Double x;
 
   @JsonIgnore private Address address;
-
-  @JsonIgnore private FileResource icon;
 
   private String geoHash12;
 
@@ -55,15 +55,6 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setGeoHash7(String geoHash7) {
     this.geoHash7 = geoHash7;
-    return (T) this;
-  }
-
-  public String getIconId() {
-    return this.iconId;
-  }
-
-  public <T extends MappedPOICreate> T setIconId(String iconId) {
-    this.iconId = iconId;
     return (T) this;
   }
 
@@ -157,6 +148,25 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
+  @JsonIgnore
+  public MapIcon getMapIcon() {
+    return this.mapIcon;
+  }
+
+  public <T extends MappedPOICreate> T setMapIcon(MapIcon mapIcon) {
+    this.mapIcon = mapIcon;
+    return (T) this;
+  }
+
+  public String getMapIconId() {
+    return this.mapIconId;
+  }
+
+  public <T extends MappedPOICreate> T setMapIconId(String mapIconId) {
+    this.mapIconId = mapIconId;
+    return (T) this;
+  }
+
   public String getAddressId() {
     return this.addressId;
   }
@@ -200,16 +210,6 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setAddress(Address address) {
     this.address = address;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public FileResource getIcon() {
-    return this.icon;
-  }
-
-  public <T extends MappedPOICreate> T setIcon(FileResource icon) {
-    this.icon = icon;
     return (T) this;
   }
 

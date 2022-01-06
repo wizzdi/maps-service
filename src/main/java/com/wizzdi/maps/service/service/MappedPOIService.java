@@ -6,10 +6,10 @@ import com.flexicore.model.SecuredBasic_;
 import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
+import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.data.MappedPOIRepository;
 import com.wizzdi.maps.service.request.MappedPOICreate;
@@ -47,7 +47,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   public MappedPOI createMappedPOI(
       MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = createMappedPOINoMerge(mappedPOICreate, securityContext);
-    repository.merge(mappedPOI);
+    this.repository.merge(mappedPOI);
     return mappedPOI;
   }
 
@@ -81,13 +81,6 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
         && (mappedPOI.getAddress() == null
             || !mappedPOICreate.getAddress().getId().equals(mappedPOI.getAddress().getId()))) {
       mappedPOI.setAddress(mappedPOICreate.getAddress());
-      update = true;
-    }
-
-    if (mappedPOICreate.getIcon() != null
-        && (mappedPOI.getIcon() == null
-            || !mappedPOICreate.getIcon().getId().equals(mappedPOI.getIcon().getId()))) {
-      mappedPOI.setIcon(mappedPOICreate.getIcon());
       update = true;
     }
 
@@ -190,6 +183,13 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       update = true;
     }
 
+    if (mappedPOICreate.getMapIcon() != null
+        && (mappedPOI.getMapIcon() == null
+            || !mappedPOICreate.getMapIcon().getId().equals(mappedPOI.getMapIcon().getId()))) {
+      mappedPOI.setMapIcon(mappedPOICreate.getMapIcon());
+      update = true;
+    }
+
     return update;
   }
   /**
@@ -202,7 +202,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       MappedPOIUpdate mappedPOIUpdate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = mappedPOIUpdate.getMappedPOI();
     if (updateMappedPOINoMerge(mappedPOIUpdate, mappedPOI)) {
-      repository.merge(mappedPOI);
+      this.repository.merge(mappedPOI);
     }
     return mappedPOI;
   }
@@ -216,7 +216,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   public PaginationResponse<MappedPOI> getAllMappedPOIs(
       MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
-    long count = repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
+    long count = this.repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
     return new PaginationResponse<>(list, mappedPOIFilter, count);
   }
 
@@ -228,7 +228,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   @Override
   public List<MappedPOI> listAllMappedPOIs(
       MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
-    return repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
+    return this.repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
   }
 
   /**
@@ -240,27 +240,27 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mappedPOIFilter, securityContext);
 
-    Set<String> iconIds =
-        mappedPOIFilter.getIconIds() == null ? new HashSet<>() : mappedPOIFilter.getIconIds();
-    Map<String, FileResource> icon =
-        iconIds.isEmpty()
+    Set<String> mapIconIds =
+        mappedPOIFilter.getMapIconIds() == null ? new HashSet<>() : mappedPOIFilter.getMapIconIds();
+    Map<String, MapIcon> mapIcon =
+        mapIconIds.isEmpty()
             ? new HashMap<>()
-            : repository
-                .listByIds(FileResource.class, iconIds, SecuredBasic_.security, securityContext)
+            : this.repository
+                .listByIds(MapIcon.class, mapIconIds, SecuredBasic_.security, securityContext)
                 .parallelStream()
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    iconIds.removeAll(icon.keySet());
-    if (!iconIds.isEmpty()) {
+    mapIconIds.removeAll(mapIcon.keySet());
+    if (!mapIconIds.isEmpty()) {
       throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No FileResource with ids " + iconIds);
+          HttpStatus.BAD_REQUEST, "No MapIcon with ids " + mapIconIds);
     }
-    mappedPOIFilter.setIcon(new ArrayList<>(icon.values()));
+    mappedPOIFilter.setMapIcon(new ArrayList<>(mapIcon.values()));
     Set<String> addressIds =
         mappedPOIFilter.getAddressIds() == null ? new HashSet<>() : mappedPOIFilter.getAddressIds();
     Map<String, Address> address =
         addressIds.isEmpty()
             ? new HashMap<>()
-            : repository
+            : this.repository
                 .listByIds(Address.class, addressIds, SecuredBasic_.security, securityContext)
                 .parallelStream()
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
@@ -281,23 +281,22 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mappedPOICreate, securityContext);
 
-    String iconId = mappedPOICreate.getIconId();
-    FileResource icon =
-        iconId == null
+    String mapIconId = mappedPOICreate.getMapIconId();
+    MapIcon mapIcon =
+        mapIconId == null
             ? null
-            : repository.getByIdOrNull(
-                iconId, FileResource.class, SecuredBasic_.security, securityContext);
-    if (iconId != null && icon == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No FileResource with id " + iconId);
+            : this.repository.getByIdOrNull(
+                mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
+    if (mapIconId != null && mapIcon == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
     }
-    mappedPOICreate.setIcon(icon);
+    mappedPOICreate.setMapIcon(mapIcon);
 
     String addressId = mappedPOICreate.getAddressId();
     Address address =
         addressId == null
             ? null
-            : repository.getByIdOrNull(
+            : this.repository.getByIdOrNull(
                 addressId, Address.class, SecuredBasic_.security, securityContext);
     if (addressId != null && address == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with id " + addressId);
@@ -308,13 +307,13 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
   @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
-    return repository.listByIds(c, ids, securityContext);
+    return this.repository.listByIds(c, ids, securityContext);
   }
 
   @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
-    return repository.getByIdOrNull(id, c, securityContext);
+    return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
   @Override
@@ -323,7 +322,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       Class<T> c,
       SingularAttribute<D, E> baseclassAttribute,
       SecurityContextBase securityContext) {
-    return repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
+    return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
   @Override
@@ -332,32 +331,32 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       Set<String> ids,
       SingularAttribute<D, E> baseclassAttribute,
       SecurityContextBase securityContext) {
-    return repository.listByIds(c, ids, baseclassAttribute, securityContext);
+    return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
   @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
-    return repository.findByIds(c, ids, idAttribute);
+    return this.repository.findByIds(c, ids, idAttribute);
   }
 
   @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
-    return repository.findByIds(c, requested);
+    return this.repository.findByIds(c, requested);
   }
 
   @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
-    return repository.findByIdOrNull(type, id);
+    return this.repository.findByIdOrNull(type, id);
   }
 
   @Override
   public void merge(java.lang.Object base) {
-    repository.merge(base);
+    this.repository.merge(base);
   }
 
   @Override
   public void massMerge(List<?> toMerge) {
-    repository.massMerge(toMerge);
+    this.repository.massMerge(toMerge);
   }
 }
