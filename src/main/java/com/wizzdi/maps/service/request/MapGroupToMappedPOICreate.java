@@ -7,9 +7,31 @@ import com.wizzdi.maps.model.MappedPOI;
 
 public class MapGroupToMappedPOICreate extends BasicCreate {
 
+  private String mapGroupId;
+
+  private String mappedPOIId;
+
   @JsonIgnore private MappedPOI mappedPOI;
 
   @JsonIgnore private MapGroup mapGroup;
+
+  public String getMapGroupId() {
+    return this.mapGroupId;
+  }
+
+  public <T extends MapGroupToMappedPOICreate> T setMapGroupId(String mapGroupId) {
+    this.mapGroupId = mapGroupId;
+    return (T) this;
+  }
+
+  public String getMappedPOIId() {
+    return this.mappedPOIId;
+  }
+
+  public <T extends MapGroupToMappedPOICreate> T setMappedPOIId(String mappedPOIId) {
+    this.mappedPOIId = mappedPOIId;
+    return (T) this;
+  }
 
   @JsonIgnore
   public MappedPOI getMappedPOI() {

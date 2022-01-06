@@ -63,17 +63,17 @@ public class MapGroupToMappedPOIRepository implements Plugin, IMapGroupToMappedP
     this.securedBasicRepository.addSecuredBasicPredicates(
         filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getMapGroup() != null && !filtering.getMapGroup().isEmpty()) {
-      Set<String> ids =
-          filtering.getMapGroup().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, MapGroup> join = r.join(MapGroupToMappedPOI_.mapGroup);
-      preds.add(join.get(Basic_.id).in(ids));
-    }
-
     if (filtering.getMappedPOI() != null && !filtering.getMappedPOI().isEmpty()) {
       Set<String> ids =
           filtering.getMappedPOI().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
       Join<T, MappedPOI> join = r.join(MapGroupToMappedPOI_.mappedPOI);
+      preds.add(join.get(Basic_.id).in(ids));
+    }
+
+    if (filtering.getMapGroup() != null && !filtering.getMapGroup().isEmpty()) {
+      Set<String> ids =
+          filtering.getMapGroup().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+      Join<T, MapGroup> join = r.join(MapGroupToMappedPOI_.mapGroup);
       preds.add(join.get(Basic_.id).in(ids));
     }
   }

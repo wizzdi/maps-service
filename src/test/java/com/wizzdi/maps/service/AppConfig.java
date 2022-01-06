@@ -2,14 +2,17 @@ package com.wizzdi.maps.service;
 
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.request.BuildingCreate;
+import com.wizzdi.maps.service.request.MapGroupCreate;
 import com.wizzdi.maps.service.request.MapIconCreate;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.RoomCreate;
 import com.wizzdi.maps.service.service.BuildingService;
+import com.wizzdi.maps.service.service.MapGroupService;
 import com.wizzdi.maps.service.service.MapIconService;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.request.MappedPOICreate;
@@ -40,6 +43,15 @@ public class AppConfig {
     @Qualifier("adminSecurityContext")
     private SecurityContextBase securityContext;
 
+
+  @Autowired private MapGroupService mapGroupService;
+
+
+
+  @Autowired
+  @Qualifier("adminSecurityContext")
+  private SecurityContextBase securityContext;
+
     @Bean
     public MappedPOI first() {
         return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06121634257458).setLon(34.77602769776043).setName("first"), securityContext);
@@ -62,11 +74,17 @@ public class AppConfig {
         return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
     }
 
-    @Bean
-    public Building building() {
-        BuildingCreate buildingCreate = new BuildingCreate();
-        return buildingService.createBuilding(buildingCreate, securityContext);
-    }
+  @Bean
+  public MapGroup mapGroup() {
+    MapGroupCreate mapGroupCreate = new MapGroupCreate();
+    return mapGroupService.createMapGroup(mapGroupCreate, securityContext);
+  }
+
+  @Bean
+  public Building building() {
+    BuildingCreate buildingCreate = new BuildingCreate();
+    return buildingService.createBuilding(buildingCreate, securityContext);
+  }
 
     @Bean
     public MapIcon mapIcon() {

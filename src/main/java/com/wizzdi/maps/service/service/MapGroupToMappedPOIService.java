@@ -2,22 +2,31 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
+import com.flexicore.model.SecuredBasic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
+import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapGroupToMappedPOI;
+import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.data.MapGroupToMappedPOIRepository;
 import com.wizzdi.maps.service.request.MapGroupToMappedPOICreate;
 import com.wizzdi.maps.service.request.MapGroupToMappedPOIFilter;
 import com.wizzdi.maps.service.request.MapGroupToMappedPOIUpdate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,16 +81,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
     boolean update =
         basicService.updateBasicNoMerge(mapGroupToMappedPOICreate, mapGroupToMappedPOI);
 
-    if (mapGroupToMappedPOICreate.getMapGroup() != null
-        && (mapGroupToMappedPOI.getMapGroup() == null
-            || !mapGroupToMappedPOICreate
-                .getMapGroup()
-                .getId()
-                .equals(mapGroupToMappedPOI.getMapGroup().getId()))) {
-      mapGroupToMappedPOI.setMapGroup(mapGroupToMappedPOICreate.getMapGroup());
-      update = true;
-    }
-
     if (mapGroupToMappedPOICreate.getMappedPOI() != null
         && (mapGroupToMappedPOI.getMappedPOI() == null
             || !mapGroupToMappedPOICreate
@@ -89,6 +88,16 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
                 .getId()
                 .equals(mapGroupToMappedPOI.getMappedPOI().getId()))) {
       mapGroupToMappedPOI.setMappedPOI(mapGroupToMappedPOICreate.getMappedPOI());
+      update = true;
+    }
+
+    if (mapGroupToMappedPOICreate.getMapGroup() != null
+        && (mapGroupToMappedPOI.getMapGroup() == null
+            || !mapGroupToMappedPOICreate
+                .getMapGroup()
+                .getId()
+                .equals(mapGroupToMappedPOI.getMapGroup().getId()))) {
+      mapGroupToMappedPOI.setMapGroup(mapGroupToMappedPOICreate.getMapGroup());
       update = true;
     }
 
@@ -144,6 +153,41 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
   public void validate(
       MapGroupToMappedPOIFilter mapGroupToMappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mapGroupToMappedPOIFilter, securityContext);
+
+    Set<String> mapGroupIds =
+        mapGroupToMappedPOIFilter.getMapGroupIds() == null
+            ? new HashSet<>()
+            : mapGroupToMappedPOIFilter.getMapGroupIds();
+    Map<String, MapGroup> mapGroup =
+        mapGroupIds.isEmpty()
+            ? new HashMap<>()
+            : this.repository
+                .listByIds(MapGroup.class, mapGroupIds, SecuredBasic_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+    mapGroupIds.removeAll(mapGroup.keySet());
+    if (!mapGroupIds.isEmpty()) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No MapGroup with ids " + mapGroupIds);
+    }
+    mapGroupToMappedPOIFilter.setMapGroup(new ArrayList<>(mapGroup.values()));
+    Set<String> mappedPOIIds =
+        mapGroupToMappedPOIFilter.getMappedPOIIds() == null
+            ? new HashSet<>()
+            : mapGroupToMappedPOIFilter.getMappedPOIIds();
+    Map<String, MappedPOI> mappedPOI =
+        mappedPOIIds.isEmpty()
+            ? new HashMap<>()
+            : this.repository
+                .listByIds(MappedPOI.class, mappedPOIIds, SecuredBasic_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+    mappedPOIIds.removeAll(mappedPOI.keySet());
+    if (!mappedPOIIds.isEmpty()) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No MappedPOI with ids " + mappedPOIIds);
+    }
+    mapGroupToMappedPOIFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
   }
 
   /**
@@ -155,6 +199,30 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
   public void validate(
       MapGroupToMappedPOICreate mapGroupToMappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mapGroupToMappedPOICreate, securityContext);
+
+    String mapGroupId = mapGroupToMappedPOICreate.getMapGroupId();
+    MapGroup mapGroup =
+        mapGroupId == null
+            ? null
+            : this.repository.getByIdOrNull(
+                mapGroupId, MapGroup.class, SecuredBasic_.security, securityContext);
+    if (mapGroupId != null && mapGroup == null) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No MapGroup with id " + mapGroupId);
+    }
+    mapGroupToMappedPOICreate.setMapGroup(mapGroup);
+
+    String mappedPOIId = mapGroupToMappedPOICreate.getMappedPOIId();
+    MappedPOI mappedPOI =
+        mappedPOIId == null
+            ? null
+            : this.repository.getByIdOrNull(
+                mappedPOIId, MappedPOI.class, SecuredBasic_.security, securityContext);
+    if (mappedPOIId != null && mappedPOI == null) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
+    }
+    mapGroupToMappedPOICreate.setMappedPOI(mappedPOI);
   }
 
   @Override
