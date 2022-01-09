@@ -11,6 +11,7 @@ import com.wizzdi.maps.service.request.LocationHistoryCreate;
 import com.wizzdi.maps.service.request.LocationHistoryFilter;
 import com.wizzdi.maps.service.request.LocationHistoryUpdate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -116,7 +117,7 @@ public class LocationHistoryControllerTest {
 
     if (request.getDateAtLocation() != null) {
 
-      Assertions.assertEquals(request.getDateAtLocation(), testLocationHistory.getDateAtLocation());
+      Assertions.assertEquals(request.getDateAtLocation().atZoneSameInstant(ZoneId.systemDefault()), testLocationHistory.getDateAtLocation().atZoneSameInstant(ZoneId.systemDefault()));
     }
 
     if (request.getY() != null) {
