@@ -35,6 +35,7 @@ import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.file.model.ZipFile;
 import com.wizzdi.flexicore.file.model.ZipFileToFileResource;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.LocationHistory;
 import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapGroupToMappedPOI;
 import com.wizzdi.maps.model.MapIcon;
@@ -94,6 +95,7 @@ public class AppTestEntities {
                 MapIcon.class,
                 Building.class,
                 MapGroupToMappedPOI.class,
+                LocationHistory.class,
                 FileResource.class,
                 JsonConverter.class,
                 SecuredBasic.class)));
