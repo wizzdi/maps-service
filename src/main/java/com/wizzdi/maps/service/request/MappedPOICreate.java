@@ -10,9 +10,29 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash7;
 
-  private String externalId;
-
   private String geoHash10;
+
+  private String geoHash6;
+
+  private String geoHash8;
+
+  private Double z;
+
+  private String mapIconId;
+
+  private String addressId;
+
+  @JsonIgnore private Room room;
+
+  private Double lat;
+
+  private String roomId;
+
+  private Boolean keepHistory;
+
+  private String geoHash12;
+
+  private String externalId;
 
   private String geoHash2;
 
@@ -22,35 +42,17 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash4;
 
-  private String geoHash6;
-
-  private String geoHash8;
-
-  private Double z;
-
   private String geoHash1;
 
   private String geoHash3;
 
   @JsonIgnore private MapIcon mapIcon;
 
-  private String mapIconId;
-
-  private String addressId;
-
   private String geoHash9;
-
-  @JsonIgnore private Room room;
-
-  private Double lat;
 
   private Double x;
 
-  private String roomId;
-
   @JsonIgnore private Address address;
-
-  private String geoHash12;
 
   private Double lon;
 
@@ -65,21 +67,112 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
-  public String getExternalId() {
-    return this.externalId;
-  }
-
-  public <T extends MappedPOICreate> T setExternalId(String externalId) {
-    this.externalId = externalId;
-    return (T) this;
-  }
-
   public String getGeoHash10() {
     return this.geoHash10;
   }
 
   public <T extends MappedPOICreate> T setGeoHash10(String geoHash10) {
     this.geoHash10 = geoHash10;
+    return (T) this;
+  }
+
+  public String getGeoHash6() {
+    return this.geoHash6;
+  }
+
+  public <T extends MappedPOICreate> T setGeoHash6(String geoHash6) {
+    this.geoHash6 = geoHash6;
+    return (T) this;
+  }
+
+  public String getGeoHash8() {
+    return this.geoHash8;
+  }
+
+  public <T extends MappedPOICreate> T setGeoHash8(String geoHash8) {
+    this.geoHash8 = geoHash8;
+    return (T) this;
+  }
+
+  public Double getZ() {
+    return this.z;
+  }
+
+  public <T extends MappedPOICreate> T setZ(Double z) {
+    this.z = z;
+    return (T) this;
+  }
+
+  public String getMapIconId() {
+    return this.mapIconId;
+  }
+
+  public <T extends MappedPOICreate> T setMapIconId(String mapIconId) {
+    this.mapIconId = mapIconId;
+    return (T) this;
+  }
+
+  public String getAddressId() {
+    return this.addressId;
+  }
+
+  public <T extends MappedPOICreate> T setAddressId(String addressId) {
+    this.addressId = addressId;
+    return (T) this;
+  }
+
+  @JsonIgnore
+  public Room getRoom() {
+    return this.room;
+  }
+
+  public <T extends MappedPOICreate> T setRoom(Room room) {
+    this.room = room;
+    return (T) this;
+  }
+
+  public Double getLat() {
+    return this.lat;
+  }
+
+  public <T extends MappedPOICreate> T setLat(Double lat) {
+    this.lat = lat;
+    return (T) this;
+  }
+
+  public String getRoomId() {
+    return this.roomId;
+  }
+
+  public <T extends MappedPOICreate> T setRoomId(String roomId) {
+    this.roomId = roomId;
+    return (T) this;
+  }
+
+  public Boolean isKeepHistory() {
+    return this.keepHistory;
+  }
+
+  public <T extends MappedPOICreate> T setKeepHistory(Boolean keepHistory) {
+    this.keepHistory = keepHistory;
+    return (T) this;
+  }
+
+  public String getGeoHash12() {
+    return this.geoHash12;
+  }
+
+  public <T extends MappedPOICreate> T setGeoHash12(String geoHash12) {
+    this.geoHash12 = geoHash12;
+    return (T) this;
+  }
+
+  public String getExternalId() {
+    return this.externalId;
+  }
+
+  public <T extends MappedPOICreate> T setExternalId(String externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 
@@ -119,33 +212,6 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
-  public String getGeoHash6() {
-    return this.geoHash6;
-  }
-
-  public <T extends MappedPOICreate> T setGeoHash6(String geoHash6) {
-    this.geoHash6 = geoHash6;
-    return (T) this;
-  }
-
-  public String getGeoHash8() {
-    return this.geoHash8;
-  }
-
-  public <T extends MappedPOICreate> T setGeoHash8(String geoHash8) {
-    this.geoHash8 = geoHash8;
-    return (T) this;
-  }
-
-  public Double getZ() {
-    return this.z;
-  }
-
-  public <T extends MappedPOICreate> T setZ(Double z) {
-    this.z = z;
-    return (T) this;
-  }
-
   public String getGeoHash1() {
     return this.geoHash1;
   }
@@ -174,49 +240,12 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
-  public String getMapIconId() {
-    return this.mapIconId;
-  }
-
-  public <T extends MappedPOICreate> T setMapIconId(String mapIconId) {
-    this.mapIconId = mapIconId;
-    return (T) this;
-  }
-
-  public String getAddressId() {
-    return this.addressId;
-  }
-
-  public <T extends MappedPOICreate> T setAddressId(String addressId) {
-    this.addressId = addressId;
-    return (T) this;
-  }
-
   public String getGeoHash9() {
     return this.geoHash9;
   }
 
   public <T extends MappedPOICreate> T setGeoHash9(String geoHash9) {
     this.geoHash9 = geoHash9;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public Room getRoom() {
-    return this.room;
-  }
-
-  public <T extends MappedPOICreate> T setRoom(Room room) {
-    this.room = room;
-    return (T) this;
-  }
-
-  public Double getLat() {
-    return this.lat;
-  }
-
-  public <T extends MappedPOICreate> T setLat(Double lat) {
-    this.lat = lat;
     return (T) this;
   }
 
@@ -229,15 +258,6 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
-  public String getRoomId() {
-    return this.roomId;
-  }
-
-  public <T extends MappedPOICreate> T setRoomId(String roomId) {
-    this.roomId = roomId;
-    return (T) this;
-  }
-
   @JsonIgnore
   public Address getAddress() {
     return this.address;
@@ -245,15 +265,6 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setAddress(Address address) {
     this.address = address;
-    return (T) this;
-  }
-
-  public String getGeoHash12() {
-    return this.geoHash12;
-  }
-
-  public <T extends MappedPOICreate> T setGeoHash12(String geoHash12) {
-    this.geoHash12 = geoHash12;
     return (T) this;
   }
 

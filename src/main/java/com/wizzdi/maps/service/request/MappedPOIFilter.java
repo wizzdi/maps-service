@@ -31,6 +31,8 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> roomIds;
 
+  private Set<Boolean> keepHistory;
+
   private Set<String> geoHash12;
 
   private Set<String> externalId;
@@ -149,6 +151,15 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setRoomIds(Set<String> roomIds) {
     this.roomIds = roomIds;
+    return (T) this;
+  }
+
+  public Set<Boolean> getKeepHistory() {
+    return this.keepHistory;
+  }
+
+  public <T extends MappedPOIFilter> T setKeepHistory(Set<Boolean> keepHistory) {
+    this.keepHistory = keepHistory;
     return (T) this;
   }
 
