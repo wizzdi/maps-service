@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-@EnableAsync
+@EnableAsync(proxyTargetClass = true)
 @Extension
 public class MapConfig implements Plugin {
 }
