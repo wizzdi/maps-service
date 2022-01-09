@@ -23,6 +23,8 @@ public class MappedPOICreate extends BasicCreate {
   private Room room;
   private String roomId;
   private String externalId;
+  private Boolean keepHistory;
+
 
 
 
@@ -133,6 +135,14 @@ public class MappedPOICreate extends BasicCreate {
 
   public <T extends MappedPOICreate> T setExternalId(String externalId) {
     this.externalId = externalId;
+    return (T) this;
+  }
+  public Boolean isKeepHistory() {
+    return this.keepHistory;
+  }
+
+  public <T extends MappedPOICreate> T setKeepHistory(Boolean keepHistory) {
+    this.keepHistory = keepHistory;
     return (T) this;
   }
 }

@@ -153,6 +153,12 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       generateGeoHash(mappedPOI);
     }
 
+    if (mappedPOICreate.isKeepHistory() != null
+        && (!mappedPOICreate.isKeepHistory().equals(mappedPOI.isKeepHistory()))) {
+      mappedPOI.setKeepHistory(mappedPOICreate.isKeepHistory());
+      update = true;
+    }
+
     return update;
   }
 
