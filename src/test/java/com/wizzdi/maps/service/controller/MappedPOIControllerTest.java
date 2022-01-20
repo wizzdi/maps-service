@@ -65,25 +65,9 @@ public class MappedPOIControllerTest {
 
     request.setGeoHash7("test-string");
 
-    request.setGeoHash10("test-string");
-
-    request.setGeoHash6("test-string");
-
-    request.setGeoHash8("test-string");
-
-    request.setZ(10D);
-
-    request.setMapIconId(this.mapIcon.getId());
-
-    request.setLat(10D);
-
-    request.setRoomId(this.room.getId());
-
-    request.setKeepHistory(true);
-
-    request.setGeoHash12("test-string");
-
     request.setExternalId("test-string");
+
+    request.setGeoHash10("test-string");
 
     request.setGeoHash2("test-string");
 
@@ -93,13 +77,29 @@ public class MappedPOIControllerTest {
 
     request.setGeoHash4("test-string");
 
+    request.setGeoHash6("test-string");
+
+    request.setGeoHash8("test-string");
+
+    request.setZ(10D);
+
     request.setGeoHash1("test-string");
 
     request.setGeoHash3("test-string");
 
+    request.setMapIconId(this.mapIcon.getId());
+
     request.setGeoHash9("test-string");
 
+    request.setRoomId(this.room.getId());
+
+    request.setLat(10D);
+
     request.setX(10D);
+
+    request.setKeepHistory(true);
+
+    request.setGeoHash12("test-string");
 
     request.setLon(10D);
 
@@ -135,28 +135,51 @@ public class MappedPOIControllerTest {
     Assertions.assertNotNull(testMappedPOI);
 
     if (request.getGeoHash7() != null) {
-
       Assertions.assertEquals(request.getGeoHash7(), testMappedPOI.getGeoHash7());
     }
 
-    if (request.getGeoHash10() != null) {
+    if (request.getExternalId() != null) {
+      Assertions.assertEquals(request.getExternalId(), testMappedPOI.getExternalId());
+    }
 
+    if (request.getGeoHash10() != null) {
       Assertions.assertEquals(request.getGeoHash10(), testMappedPOI.getGeoHash10());
     }
 
-    if (request.getGeoHash6() != null) {
+    if (request.getGeoHash2() != null) {
+      Assertions.assertEquals(request.getGeoHash2(), testMappedPOI.getGeoHash2());
+    }
 
+    if (request.getY() != null) {
+      Assertions.assertEquals(request.getY(), testMappedPOI.getY());
+    }
+
+    if (request.getGeoHash11() != null) {
+      Assertions.assertEquals(request.getGeoHash11(), testMappedPOI.getGeoHash11());
+    }
+
+    if (request.getGeoHash4() != null) {
+      Assertions.assertEquals(request.getGeoHash4(), testMappedPOI.getGeoHash4());
+    }
+
+    if (request.getGeoHash6() != null) {
       Assertions.assertEquals(request.getGeoHash6(), testMappedPOI.getGeoHash6());
     }
 
     if (request.getGeoHash8() != null) {
-
       Assertions.assertEquals(request.getGeoHash8(), testMappedPOI.getGeoHash8());
     }
 
     if (request.getZ() != null) {
-
       Assertions.assertEquals(request.getZ(), testMappedPOI.getZ());
+    }
+
+    if (request.getGeoHash1() != null) {
+      Assertions.assertEquals(request.getGeoHash1(), testMappedPOI.getGeoHash1());
+    }
+
+    if (request.getGeoHash3() != null) {
+      Assertions.assertEquals(request.getGeoHash3(), testMappedPOI.getGeoHash3());
     }
 
     if (request.getMapIconId() != null) {
@@ -165,9 +188,8 @@ public class MappedPOIControllerTest {
       Assertions.assertEquals(request.getMapIconId(), testMappedPOI.getMapIcon().getId());
     }
 
-    if (request.getLat() != null) {
-
-      Assertions.assertEquals(request.getLat(), testMappedPOI.getLat());
+    if (request.getGeoHash9() != null) {
+      Assertions.assertEquals(request.getGeoHash9(), testMappedPOI.getGeoHash9());
     }
 
     if (request.getRoomId() != null) {
@@ -176,68 +198,27 @@ public class MappedPOIControllerTest {
       Assertions.assertEquals(request.getRoomId(), testMappedPOI.getRoom().getId());
     }
 
-    if (request.isKeepHistory() != null) {
-
-      Assertions.assertEquals(request.isKeepHistory(), testMappedPOI.isKeepHistory());
-    }
-
-    if (request.getGeoHash12() != null) {
-
-      Assertions.assertEquals(request.getGeoHash12(), testMappedPOI.getGeoHash12());
-    }
-
-    if (request.getExternalId() != null) {
-
-      Assertions.assertEquals(request.getExternalId(), testMappedPOI.getExternalId());
-    }
-
-    if (request.getGeoHash2() != null) {
-
-      Assertions.assertEquals(request.getGeoHash2(), testMappedPOI.getGeoHash2());
-    }
-
-    if (request.getY() != null) {
-
-      Assertions.assertEquals(request.getY(), testMappedPOI.getY());
-    }
-
-    if (request.getGeoHash11() != null) {
-
-      Assertions.assertEquals(request.getGeoHash11(), testMappedPOI.getGeoHash11());
-    }
-
-    if (request.getGeoHash4() != null) {
-
-      Assertions.assertEquals(request.getGeoHash4(), testMappedPOI.getGeoHash4());
-    }
-
-    if (request.getGeoHash1() != null) {
-
-      Assertions.assertEquals(request.getGeoHash1(), testMappedPOI.getGeoHash1());
-    }
-
-    if (request.getGeoHash3() != null) {
-
-      Assertions.assertEquals(request.getGeoHash3(), testMappedPOI.getGeoHash3());
-    }
-
-    if (request.getGeoHash9() != null) {
-
-      Assertions.assertEquals(request.getGeoHash9(), testMappedPOI.getGeoHash9());
+    if (request.getLat() != null) {
+      Assertions.assertEquals(request.getLat(), testMappedPOI.getLat());
     }
 
     if (request.getX() != null) {
-
       Assertions.assertEquals(request.getX(), testMappedPOI.getX());
     }
 
-    if (request.getLon() != null) {
+    if (request.getKeepHistory() != null) {
+      Assertions.assertEquals(request.getKeepHistory(), testMappedPOI.isKeepHistory());
+    }
 
+    if (request.getGeoHash12() != null) {
+      Assertions.assertEquals(request.getGeoHash12(), testMappedPOI.getGeoHash12());
+    }
+
+    if (request.getLon() != null) {
       Assertions.assertEquals(request.getLon(), testMappedPOI.getLon());
     }
 
     if (request.getGeoHash5() != null) {
-
       Assertions.assertEquals(request.getGeoHash5(), testMappedPOI.getGeoHash5());
     }
   }

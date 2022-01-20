@@ -33,16 +33,18 @@ public class MapIconController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapIconCreate mapIconCreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapIconService.validate(mapIconCreate, securityContext);
     return mapIconService.createMapIcon(mapIconCreate, securityContext);
   }
 
-  @Operation(summary = "updateMapIcon", description = "Updates MapIcon")
   @PutMapping("updateMapIcon")
+  @Operation(summary = "updateMapIcon", description = "Updates MapIcon")
   public MapIcon updateMapIcon(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapIconUpdate mapIconUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String mapIconId = mapIconUpdate.getId();
     MapIcon mapIcon =
         mapIconService.getByIdOrNull(mapIconId, MapIcon.class, MapIcon_.security, securityContext);
@@ -54,12 +56,13 @@ public class MapIconController implements Plugin {
     return mapIconService.updateMapIcon(mapIconUpdate, securityContext);
   }
 
-  @Operation(summary = "getAllMapIcons", description = "Gets All MapIcons Filtered")
   @PostMapping("getAllMapIcons")
+  @Operation(summary = "getAllMapIcons", description = "lists MapIcons")
   public PaginationResponse<MapIcon> getAllMapIcons(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapIconFilter mapIconFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapIconService.validate(mapIconFilter, securityContext);
     return mapIconService.getAllMapIcons(mapIconFilter, securityContext);
   }

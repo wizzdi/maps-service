@@ -88,7 +88,6 @@ public class MapIconControllerTest {
     Assertions.assertNotNull(testMapIcon);
 
     if (request.getExternalId() != null) {
-
       Assertions.assertEquals(request.getExternalId(), testMapIcon.getExternalId());
     }
   }

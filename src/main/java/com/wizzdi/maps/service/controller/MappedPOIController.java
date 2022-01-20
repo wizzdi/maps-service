@@ -33,16 +33,18 @@ public class MappedPOIController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MappedPOICreate mappedPOICreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mappedPOIService.validate(mappedPOICreate, securityContext);
     return mappedPOIService.createMappedPOI(mappedPOICreate, securityContext);
   }
 
-  @Operation(summary = "updateMappedPOI", description = "Updates MappedPOI")
   @PutMapping("updateMappedPOI")
+  @Operation(summary = "updateMappedPOI", description = "Updates MappedPOI")
   public MappedPOI updateMappedPOI(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MappedPOIUpdate mappedPOIUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String mappedPOIId = mappedPOIUpdate.getId();
     MappedPOI mappedPOI =
         mappedPOIService.getByIdOrNull(
@@ -56,12 +58,13 @@ public class MappedPOIController implements Plugin {
     return mappedPOIService.updateMappedPOI(mappedPOIUpdate, securityContext);
   }
 
-  @Operation(summary = "getAllMappedPOIs", description = "Gets All MappedPOIs Filtered")
   @PostMapping("getAllMappedPOIs")
+  @Operation(summary = "getAllMappedPOIs", description = "lists MappedPOIs")
   public PaginationResponse<MappedPOI> getAllMappedPOIs(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MappedPOIFilter mappedPOIFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mappedPOIService.validate(mappedPOIFilter, securityContext);
     return mappedPOIService.getAllMappedPOIs(mappedPOIFilter, securityContext);
   }

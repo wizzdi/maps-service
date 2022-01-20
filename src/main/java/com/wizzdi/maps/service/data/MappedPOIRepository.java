@@ -29,32 +29,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
+public class MappedPOIRepository implements Plugin {
   @PersistenceContext private EntityManager em;
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
-   * @param filtering
+   * @param mappedPOIFilter Object Used to List MappedPOI
    * @param securityContext
    * @return List of MappedPOI
    */
-  @Override
   public List<MappedPOI> listAllMappedPOIs(
-      MappedPOIFilter filtering, SecurityContextBase securityContext) {
+      MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<MappedPOI> q = cb.createQuery(MappedPOI.class);
     Root<MappedPOI> r = q.from(MappedPOI.class);
     List<Predicate> preds = new ArrayList<>();
-    addMappedPOIPredicate(filtering, cb, q, r, preds, securityContext);
+    addMappedPOIPredicate(mappedPOIFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<MappedPOI> query = em.createQuery(q);
-    BasicRepository.addPagination(filtering, query);
+    BasicRepository.addPagination(mappedPOIFilter, query);
     return query.getResultList();
   }
 
-  @Override
   public <T extends MappedPOI> void addMappedPOIPredicate(
-      MappedPOIFilter filtering,
+      MappedPOIFilter mappedPOIFilter,
       CriteriaBuilder cb,
       CommonAbstractCriteria q,
       From<?, T> r,
@@ -62,59 +60,138 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
       SecurityContextBase securityContext) {
 
     this.securedBasicRepository.addSecuredBasicPredicates(
-        filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
+        mappedPOIFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getAddress() != null && !filtering.getAddress().isEmpty()) {
-      Set<String> ids =
-          filtering.getAddress().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, Address> join = r.join(MappedPOI_.address);
-      preds.add(join.get(Basic_.id).in(ids));
+    if (mappedPOIFilter.getGeoHash7() != null && !mappedPOIFilter.getGeoHash7().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash7).in(mappedPOIFilter.getGeoHash7()));
     }
 
-    if (filtering.getMapIcon() != null && !filtering.getMapIcon().isEmpty()) {
+    if (mappedPOIFilter.getExternalId() != null && !mappedPOIFilter.getExternalId().isEmpty()) {
+      preds.add(r.get(MappedPOI_.externalId).in(mappedPOIFilter.getExternalId()));
+    }
+
+    if (mappedPOIFilter.getGeoHash10() != null && !mappedPOIFilter.getGeoHash10().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash10).in(mappedPOIFilter.getGeoHash10()));
+    }
+
+    if (mappedPOIFilter.getGeoHash2() != null && !mappedPOIFilter.getGeoHash2().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash2).in(mappedPOIFilter.getGeoHash2()));
+    }
+
+    if (mappedPOIFilter.getY() != null && !mappedPOIFilter.getY().isEmpty()) {
+      preds.add(r.get(MappedPOI_.y).in(mappedPOIFilter.getY()));
+    }
+
+    if (mappedPOIFilter.getGeoHash11() != null && !mappedPOIFilter.getGeoHash11().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash11).in(mappedPOIFilter.getGeoHash11()));
+    }
+
+    if (mappedPOIFilter.getGeoHash4() != null && !mappedPOIFilter.getGeoHash4().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash4).in(mappedPOIFilter.getGeoHash4()));
+    }
+
+    if (mappedPOIFilter.getGeoHash6() != null && !mappedPOIFilter.getGeoHash6().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash6).in(mappedPOIFilter.getGeoHash6()));
+    }
+
+    if (mappedPOIFilter.getGeoHash8() != null && !mappedPOIFilter.getGeoHash8().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash8).in(mappedPOIFilter.getGeoHash8()));
+    }
+
+    if (mappedPOIFilter.getZ() != null && !mappedPOIFilter.getZ().isEmpty()) {
+      preds.add(r.get(MappedPOI_.z).in(mappedPOIFilter.getZ()));
+    }
+
+    if (mappedPOIFilter.getGeoHash1() != null && !mappedPOIFilter.getGeoHash1().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash1).in(mappedPOIFilter.getGeoHash1()));
+    }
+
+    if (mappedPOIFilter.getGeoHash3() != null && !mappedPOIFilter.getGeoHash3().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash3).in(mappedPOIFilter.getGeoHash3()));
+    }
+
+    if (mappedPOIFilter.getMapIcon() != null && !mappedPOIFilter.getMapIcon().isEmpty()) {
       Set<String> ids =
-          filtering.getMapIcon().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+          mappedPOIFilter.getMapIcon().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
       Join<T, MapIcon> join = r.join(MappedPOI_.mapIcon);
       preds.add(join.get(Basic_.id).in(ids));
     }
 
-    if (filtering.getRoom() != null && !filtering.getRoom().isEmpty()) {
+    if (mappedPOIFilter.getGeoHash9() != null && !mappedPOIFilter.getGeoHash9().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash9).in(mappedPOIFilter.getGeoHash9()));
+    }
+
+    if (mappedPOIFilter.getRoom() != null && !mappedPOIFilter.getRoom().isEmpty()) {
       Set<String> ids =
-          filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+          mappedPOIFilter.getRoom().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
       Join<T, Room> join = r.join(MappedPOI_.room);
       preds.add(join.get(Basic_.id).in(ids));
     }
+
+    if (mappedPOIFilter.getLat() != null && !mappedPOIFilter.getLat().isEmpty()) {
+      preds.add(r.get(MappedPOI_.lat).in(mappedPOIFilter.getLat()));
+    }
+
+    if (mappedPOIFilter.getX() != null && !mappedPOIFilter.getX().isEmpty()) {
+      preds.add(r.get(MappedPOI_.x).in(mappedPOIFilter.getX()));
+    }
+
+    if (mappedPOIFilter.getKeepHistory() != null && !mappedPOIFilter.getKeepHistory().isEmpty()) {
+      preds.add(r.get(MappedPOI_.keepHistory).in(mappedPOIFilter.getKeepHistory()));
+    }
+
+    if (mappedPOIFilter.getAddress() != null && !mappedPOIFilter.getAddress().isEmpty()) {
+      Set<String> ids =
+          mappedPOIFilter.getAddress().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, Address> join = r.join(MappedPOI_.address);
+      preds.add(join.get(Basic_.id).in(ids));
+    }
+
+    if (mappedPOIFilter.getGeoHash12() != null && !mappedPOIFilter.getGeoHash12().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash12).in(mappedPOIFilter.getGeoHash12()));
+    }
+
+    if (mappedPOIFilter.getLon() != null && !mappedPOIFilter.getLon().isEmpty()) {
+      preds.add(r.get(MappedPOI_.lon).in(mappedPOIFilter.getLon()));
+    }
+
+    if (mappedPOIFilter.getGeoHash5() != null && !mappedPOIFilter.getGeoHash5().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash5).in(mappedPOIFilter.getGeoHash5()));
+    }
   }
   /**
-   * @param filtering
+   * @param mappedPOIFilter Object Used to List MappedPOI
    * @param securityContext
    * @return count of MappedPOI
    */
-  @Override
-  public Long countAllMappedPOIs(MappedPOIFilter filtering, SecurityContextBase securityContext) {
+  public Long countAllMappedPOIs(
+      MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
     Root<MappedPOI> r = q.from(MappedPOI.class);
     List<Predicate> preds = new ArrayList<>();
-    addMappedPOIPredicate(filtering, cb, q, r, preds, securityContext);
+    addMappedPOIPredicate(mappedPOIFilter, cb, q, r, preds, securityContext);
     q.select(cb.count(r)).where(preds.toArray(new Predicate[0]));
     TypedQuery<Long> query = em.createQuery(q);
     return query.getSingleResult();
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -123,7 +200,6 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -132,29 +208,24 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  @Override
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  @Override
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

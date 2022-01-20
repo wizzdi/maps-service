@@ -33,16 +33,18 @@ public class RoomController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody RoomCreate roomCreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     roomService.validate(roomCreate, securityContext);
     return roomService.createRoom(roomCreate, securityContext);
   }
 
-  @Operation(summary = "updateRoom", description = "Updates Room")
   @PutMapping("updateRoom")
+  @Operation(summary = "updateRoom", description = "Updates Room")
   public Room updateRoom(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody RoomUpdate roomUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String roomId = roomUpdate.getId();
     Room room = roomService.getByIdOrNull(roomId, Room.class, Room_.security, securityContext);
     if (room == null) {
@@ -53,12 +55,13 @@ public class RoomController implements Plugin {
     return roomService.updateRoom(roomUpdate, securityContext);
   }
 
-  @Operation(summary = "getAllRooms", description = "Gets All Rooms Filtered")
   @PostMapping("getAllRooms")
+  @Operation(summary = "getAllRooms", description = "lists Rooms")
   public PaginationResponse<Room> getAllRooms(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody RoomFilter roomFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     roomService.validate(roomFilter, securityContext);
     return roomService.getAllRooms(roomFilter, securityContext);
   }

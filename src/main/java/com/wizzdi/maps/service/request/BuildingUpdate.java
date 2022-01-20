@@ -3,27 +3,39 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.maps.model.Building;
 
+/** Object Used to Update Building */
 public class BuildingUpdate extends BuildingCreate {
 
-  private String id;
   @JsonIgnore private Building building;
 
-  public String getId() {
-    return id;
+  private String id;
+
+  /** @return building */
+  @JsonIgnore
+  public Building getBuilding() {
+    return this.building;
   }
 
-  public <T extends BuildingUpdate> T setId(String id) {
-    this.id = id;
+  /**
+   * @param building building to set
+   * @return BuildingUpdate
+   */
+  public <T extends BuildingUpdate> T setBuilding(Building building) {
+    this.building = building;
     return (T) this;
   }
 
-  @JsonIgnore
-  public Building getBuilding() {
-    return building;
+  /** @return id */
+  public String getId() {
+    return this.id;
   }
 
-  public <T extends BuildingUpdate> T setBuilding(Building building) {
-    this.building = building;
+  /**
+   * @param id id to set
+   * @return BuildingUpdate
+   */
+  public <T extends BuildingUpdate> T setId(String id) {
+    this.id = id;
     return (T) this;
   }
 }

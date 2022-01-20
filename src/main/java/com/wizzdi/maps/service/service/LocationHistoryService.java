@@ -32,7 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class LocationHistoryService implements Plugin, ILocationHistoryService {
+public class LocationHistoryService implements Plugin {
 
   @Autowired private LocationHistoryRepository repository;
 
@@ -43,7 +43,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @return created LocationHistory
    */
-  @Override
   public LocationHistory createLocationHistory(
       LocationHistoryCreate locationHistoryCreate, SecurityContextBase securityContext) {
     LocationHistory locationHistory =
@@ -57,7 +56,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @return created LocationHistory unmerged
    */
-  @Override
   public LocationHistory createLocationHistoryNoMerge(
       LocationHistoryCreate locationHistoryCreate, SecurityContextBase securityContext) {
     LocationHistory locationHistory = new LocationHistory();
@@ -74,36 +72,15 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param locationHistory
    * @return if locationHistory was updated
    */
-  @Override
   public boolean updateLocationHistoryNoMerge(
       LocationHistory locationHistory, LocationHistoryCreate locationHistoryCreate) {
     boolean update = basicService.updateBasicNoMerge(locationHistoryCreate, locationHistory);
 
-    if (locationHistoryCreate.getMappedPOI() != null
-        && (locationHistory.getMappedPOI() == null
-            || !locationHistoryCreate
-                .getMappedPOI()
-                .getId()
-                .equals(locationHistory.getMappedPOI().getId()))) {
-      locationHistory.setMappedPOI(locationHistoryCreate.getMappedPOI());
-      update = true;
-    }
-
-    if (locationHistoryCreate.getLat() != null
-        && (!locationHistoryCreate.getLat().equals(locationHistory.getLat()))) {
-      locationHistory.setLat(locationHistoryCreate.getLat());
-      update = true;
-    }
-
-    if (locationHistoryCreate.getLon() != null
-        && (!locationHistoryCreate.getLon().equals(locationHistory.getLon()))) {
-      locationHistory.setLon(locationHistoryCreate.getLon());
-      update = true;
-    }
-
-    if (locationHistoryCreate.getX() != null
-        && (!locationHistoryCreate.getX().equals(locationHistory.getX()))) {
-      locationHistory.setX(locationHistoryCreate.getX());
+    if (locationHistoryCreate.getDateAtLocation() != null
+        && (!locationHistoryCreate
+            .getDateAtLocation()
+            .equals(locationHistory.getDateAtLocation()))) {
+      locationHistory.setDateAtLocation(locationHistoryCreate.getDateAtLocation());
       update = true;
     }
 
@@ -119,14 +96,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
       update = true;
     }
 
-    if (locationHistoryCreate.getDateAtLocation() != null
-        && (!locationHistoryCreate
-            .getDateAtLocation()
-            .equals(locationHistory.getDateAtLocation()))) {
-      locationHistory.setDateAtLocation(locationHistoryCreate.getDateAtLocation());
-      update = true;
-    }
-
     if (locationHistoryCreate.getRoom() != null
         && (locationHistory.getRoom() == null
             || !locationHistoryCreate
@@ -137,6 +106,34 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
       update = true;
     }
 
+    if (locationHistoryCreate.getMappedPOI() != null
+        && (locationHistory.getMappedPOI() == null
+            || !locationHistoryCreate
+                .getMappedPOI()
+                .getId()
+                .equals(locationHistory.getMappedPOI().getId()))) {
+      locationHistory.setMappedPOI(locationHistoryCreate.getMappedPOI());
+      update = true;
+    }
+
+    if (locationHistoryCreate.getX() != null
+        && (!locationHistoryCreate.getX().equals(locationHistory.getX()))) {
+      locationHistory.setX(locationHistoryCreate.getX());
+      update = true;
+    }
+
+    if (locationHistoryCreate.getLon() != null
+        && (!locationHistoryCreate.getLon().equals(locationHistory.getLon()))) {
+      locationHistory.setLon(locationHistoryCreate.getLon());
+      update = true;
+    }
+
+    if (locationHistoryCreate.getLat() != null
+        && (!locationHistoryCreate.getLat().equals(locationHistory.getLat()))) {
+      locationHistory.setLat(locationHistoryCreate.getLat());
+      update = true;
+    }
+
     return update;
   }
   /**
@@ -144,7 +141,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @return locationHistory
    */
-  @Override
   public LocationHistory updateLocationHistory(
       LocationHistoryUpdate locationHistoryUpdate, SecurityContextBase securityContext) {
     LocationHistory locationHistory = locationHistoryUpdate.getLocationHistory();
@@ -159,7 +155,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @return PaginationResponse containing paging information for LocationHistory
    */
-  @Override
   public PaginationResponse<LocationHistory> getAllLocationHistories(
       LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
     List<LocationHistory> list = listAllLocationHistories(locationHistoryFilter, securityContext);
@@ -172,7 +167,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @return List of LocationHistory
    */
-  @Override
   public List<LocationHistory> listAllLocationHistories(
       LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
     return this.repository.listAllLocationHistories(locationHistoryFilter, securityContext);
@@ -183,7 +177,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @throws ResponseStatusException if locationHistoryFilter is not valid
    */
-  @Override
   public void validate(
       LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
     basicService.validate(locationHistoryFilter, securityContext);
@@ -201,7 +194,7 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
     roomIds.removeAll(room.keySet());
     if (!roomIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with ids " + roomIds);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + roomIds);
     }
     locationHistoryFilter.setRoom(new ArrayList<>(room.values()));
     Set<String> mappedPOIIds =
@@ -217,8 +210,7 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
     mappedPOIIds.removeAll(mappedPOI.keySet());
     if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with ids " + mappedPOIIds);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
     }
     locationHistoryFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
   }
@@ -228,7 +220,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
    * @param securityContext
    * @throws ResponseStatusException if locationHistoryCreate is not valid
    */
-  @Override
   public void validate(
       LocationHistoryCreate locationHistoryCreate, SecurityContextBase securityContext) {
     basicService.validate(locationHistoryCreate, securityContext);
@@ -257,19 +248,16 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
     locationHistoryCreate.setMappedPOI(mappedPOI);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -278,7 +266,6 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -287,28 +274,23 @@ public class LocationHistoryService implements Plugin, ILocationHistoryService {
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }

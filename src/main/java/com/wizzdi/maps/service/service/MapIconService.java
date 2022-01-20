@@ -31,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class MapIconService implements Plugin, IMapIconService {
+public class MapIconService implements Plugin {
 
   @Autowired private MapIconRepository repository;
 
@@ -42,7 +42,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @return created MapIcon
    */
-  @Override
   public MapIcon createMapIcon(MapIconCreate mapIconCreate, SecurityContextBase securityContext) {
     MapIcon mapIcon = createMapIconNoMerge(mapIconCreate, securityContext);
     this.repository.merge(mapIcon);
@@ -54,7 +53,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @return created MapIcon unmerged
    */
-  @Override
   public MapIcon createMapIconNoMerge(
       MapIconCreate mapIconCreate, SecurityContextBase securityContext) {
     MapIcon mapIcon = new MapIcon();
@@ -71,7 +69,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param mapIcon
    * @return if mapIcon was updated
    */
-  @Override
   public boolean updateMapIconNoMerge(MapIcon mapIcon, MapIconCreate mapIconCreate) {
     boolean update = basicService.updateBasicNoMerge(mapIconCreate, mapIcon);
 
@@ -98,7 +95,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @return mapIcon
    */
-  @Override
   public MapIcon updateMapIcon(MapIconUpdate mapIconUpdate, SecurityContextBase securityContext) {
     MapIcon mapIcon = mapIconUpdate.getMapIcon();
     if (updateMapIconNoMerge(mapIcon, mapIconUpdate)) {
@@ -112,7 +108,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @return PaginationResponse containing paging information for MapIcon
    */
-  @Override
   public PaginationResponse<MapIcon> getAllMapIcons(
       MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     List<MapIcon> list = listAllMapIcons(mapIconFilter, securityContext);
@@ -125,7 +120,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @return List of MapIcon
    */
-  @Override
   public List<MapIcon> listAllMapIcons(
       MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMapIcons(mapIconFilter, securityContext);
@@ -136,7 +130,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @throws ResponseStatusException if mapIconFilter is not valid
    */
-  @Override
   public void validate(MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     basicService.validate(mapIconFilter, securityContext);
 
@@ -155,7 +148,7 @@ public class MapIconService implements Plugin, IMapIconService {
     fileResourceIds.removeAll(fileResource.keySet());
     if (!fileResourceIds.isEmpty()) {
       throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No FileResource with ids " + fileResourceIds);
+          HttpStatus.BAD_REQUEST, "No Set with ids " + fileResourceIds);
     }
     mapIconFilter.setFileResource(new ArrayList<>(fileResource.values()));
   }
@@ -165,7 +158,6 @@ public class MapIconService implements Plugin, IMapIconService {
    * @param securityContext
    * @throws ResponseStatusException if mapIconCreate is not valid
    */
-  @Override
   public void validate(MapIconCreate mapIconCreate, SecurityContextBase securityContext) {
     basicService.validate(mapIconCreate, securityContext);
 
@@ -182,19 +174,16 @@ public class MapIconService implements Plugin, IMapIconService {
     mapIconCreate.setFileResource(fileResource);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -203,7 +192,6 @@ public class MapIconService implements Plugin, IMapIconService {
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -212,28 +200,23 @@ public class MapIconService implements Plugin, IMapIconService {
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }

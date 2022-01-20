@@ -70,11 +70,11 @@ public class LocationHistoryControllerTest {
 
     request.setZ(10D);
 
-    request.setX(10D);
-
     request.setRoomId(this.room.getId());
 
     request.setMappedPOIId(this.mappedPOI.getId());
+
+    request.setX(10D);
 
     request.setLon(10D);
 
@@ -115,23 +115,15 @@ public class LocationHistoryControllerTest {
     Assertions.assertNotNull(testLocationHistory);
 
     if (request.getDateAtLocation() != null) {
-
       Assertions.assertEquals(request.getDateAtLocation(), testLocationHistory.getDateAtLocation());
     }
 
     if (request.getY() != null) {
-
       Assertions.assertEquals(request.getY(), testLocationHistory.getY());
     }
 
     if (request.getZ() != null) {
-
       Assertions.assertEquals(request.getZ(), testLocationHistory.getZ());
-    }
-
-    if (request.getX() != null) {
-
-      Assertions.assertEquals(request.getX(), testLocationHistory.getX());
     }
 
     if (request.getRoomId() != null) {
@@ -146,13 +138,15 @@ public class LocationHistoryControllerTest {
       Assertions.assertEquals(request.getMappedPOIId(), testLocationHistory.getMappedPOI().getId());
     }
 
-    if (request.getLon() != null) {
+    if (request.getX() != null) {
+      Assertions.assertEquals(request.getX(), testLocationHistory.getX());
+    }
 
+    if (request.getLon() != null) {
       Assertions.assertEquals(request.getLon(), testLocationHistory.getLon());
     }
 
     if (request.getLat() != null) {
-
       Assertions.assertEquals(request.getLat(), testLocationHistory.getLat());
     }
   }

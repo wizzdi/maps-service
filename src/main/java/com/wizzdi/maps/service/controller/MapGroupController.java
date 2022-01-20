@@ -33,16 +33,18 @@ public class MapGroupController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupCreate mapGroupCreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapGroupService.validate(mapGroupCreate, securityContext);
     return mapGroupService.createMapGroup(mapGroupCreate, securityContext);
   }
 
-  @Operation(summary = "updateMapGroup", description = "Updates MapGroup")
   @PutMapping("updateMapGroup")
+  @Operation(summary = "updateMapGroup", description = "Updates MapGroup")
   public MapGroup updateMapGroup(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupUpdate mapGroupUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String mapGroupId = mapGroupUpdate.getId();
     MapGroup mapGroup =
         mapGroupService.getByIdOrNull(
@@ -56,12 +58,13 @@ public class MapGroupController implements Plugin {
     return mapGroupService.updateMapGroup(mapGroupUpdate, securityContext);
   }
 
-  @Operation(summary = "getAllMapGroups", description = "Gets All MapGroups Filtered")
   @PostMapping("getAllMapGroups")
+  @Operation(summary = "getAllMapGroups", description = "lists MapGroups")
   public PaginationResponse<MapGroup> getAllMapGroups(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupFilter mapGroupFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapGroupService.validate(mapGroupFilter, securityContext);
     return mapGroupService.getAllMapGroups(mapGroupFilter, securityContext);
   }

@@ -27,32 +27,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class BuildingRepository implements Plugin, IBuildingRepository {
+public class BuildingRepository implements Plugin {
   @PersistenceContext private EntityManager em;
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
-   * @param filtering Object Used to List Building
+   * @param buildingFilter Object Used to List Building
    * @param securityContext
    * @return List of Building
    */
-  @Override
   public List<Building> listAllBuildings(
-      BuildingFilter filtering, SecurityContextBase securityContext) {
+      BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Building> q = cb.createQuery(Building.class);
     Root<Building> r = q.from(Building.class);
     List<Predicate> preds = new ArrayList<>();
-    addBuildingPredicate(filtering, cb, q, r, preds, securityContext);
+    addBuildingPredicate(buildingFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<Building> query = em.createQuery(q);
-    BasicRepository.addPagination(filtering, query);
+    BasicRepository.addPagination(buildingFilter, query);
     return query.getResultList();
   }
 
-  @Override
   public <T extends Building> void addBuildingPredicate(
-      BuildingFilter filtering,
+      BuildingFilter buildingFilter,
       CriteriaBuilder cb,
       CommonAbstractCriteria q,
       From<?, T> r,
@@ -60,45 +58,48 @@ public class BuildingRepository implements Plugin, IBuildingRepository {
       SecurityContextBase securityContext) {
 
     this.securedBasicRepository.addSecuredBasicPredicates(
-        filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
+        buildingFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getMappedPOI() != null && !filtering.getMappedPOI().isEmpty()) {
+    if (buildingFilter.getMappedPOI() != null && !buildingFilter.getMappedPOI().isEmpty()) {
       Set<String> ids =
-          filtering.getMappedPOI().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+          buildingFilter.getMappedPOI().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
       Join<T, MappedPOI> join = r.join(Building_.mappedPOI);
       preds.add(join.get(Basic_.id).in(ids));
     }
+
+    if (buildingFilter.getExternalId() != null && !buildingFilter.getExternalId().isEmpty()) {
+      preds.add(r.get(Building_.externalId).in(buildingFilter.getExternalId()));
+    }
   }
   /**
-   * @param filtering Object Used to List Building
+   * @param buildingFilter Object Used to List Building
    * @param securityContext
    * @return count of Building
    */
-  @Override
-  public Long countAllBuildings(BuildingFilter filtering, SecurityContextBase securityContext) {
+  public Long countAllBuildings(
+      BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
     Root<Building> r = q.from(Building.class);
     List<Predicate> preds = new ArrayList<>();
-    addBuildingPredicate(filtering, cb, q, r, preds, securityContext);
+    addBuildingPredicate(buildingFilter, cb, q, r, preds, securityContext);
     q.select(cb.count(r)).where(preds.toArray(new Predicate[0]));
     TypedQuery<Long> query = em.createQuery(q);
     return query.getSingleResult();
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -107,7 +108,6 @@ public class BuildingRepository implements Plugin, IBuildingRepository {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -116,29 +116,24 @@ public class BuildingRepository implements Plugin, IBuildingRepository {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  @Override
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  @Override
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

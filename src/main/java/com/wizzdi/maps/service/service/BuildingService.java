@@ -31,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class BuildingService implements Plugin, IBuildingService {
+public class BuildingService implements Plugin {
 
   @Autowired private BuildingRepository repository;
 
@@ -42,7 +42,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @return created Building
    */
-  @Override
   public Building createBuilding(
       BuildingCreate buildingCreate, SecurityContextBase securityContext) {
     Building building = createBuildingNoMerge(buildingCreate, securityContext);
@@ -55,7 +54,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @return created Building unmerged
    */
-  @Override
   public Building createBuildingNoMerge(
       BuildingCreate buildingCreate, SecurityContextBase securityContext) {
     Building building = new Building();
@@ -72,7 +70,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param building
    * @return if building was updated
    */
-  @Override
   public boolean updateBuildingNoMerge(Building building, BuildingCreate buildingCreate) {
     boolean update = basicService.updateBasicNoMerge(buildingCreate, building);
 
@@ -96,7 +93,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @return building
    */
-  @Override
   public Building updateBuilding(
       BuildingUpdate buildingUpdate, SecurityContextBase securityContext) {
     Building building = buildingUpdate.getBuilding();
@@ -111,7 +107,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @return PaginationResponse containing paging information for Building
    */
-  @Override
   public PaginationResponse<Building> getAllBuildings(
       BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     List<Building> list = listAllBuildings(buildingFilter, securityContext);
@@ -124,7 +119,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @return List of Building
    */
-  @Override
   public List<Building> listAllBuildings(
       BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     return this.repository.listAllBuildings(buildingFilter, securityContext);
@@ -135,7 +129,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @throws ResponseStatusException if buildingFilter is not valid
    */
-  @Override
   public void validate(BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     basicService.validate(buildingFilter, securityContext);
 
@@ -152,8 +145,7 @@ public class BuildingService implements Plugin, IBuildingService {
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
     mappedPOIIds.removeAll(mappedPOI.keySet());
     if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with ids " + mappedPOIIds);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
     }
     buildingFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
   }
@@ -163,7 +155,6 @@ public class BuildingService implements Plugin, IBuildingService {
    * @param securityContext
    * @throws ResponseStatusException if buildingCreate is not valid
    */
-  @Override
   public void validate(BuildingCreate buildingCreate, SecurityContextBase securityContext) {
     basicService.validate(buildingCreate, securityContext);
 
@@ -180,19 +171,16 @@ public class BuildingService implements Plugin, IBuildingService {
     buildingCreate.setMappedPOI(mappedPOI);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -201,7 +189,6 @@ public class BuildingService implements Plugin, IBuildingService {
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -210,28 +197,23 @@ public class BuildingService implements Plugin, IBuildingService {
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }

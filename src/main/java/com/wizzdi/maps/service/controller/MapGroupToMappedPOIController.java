@@ -33,17 +33,19 @@ public class MapGroupToMappedPOIController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupToMappedPOICreate mapGroupToMappedPOICreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapGroupToMappedPOIService.validate(mapGroupToMappedPOICreate, securityContext);
     return mapGroupToMappedPOIService.createMapGroupToMappedPOI(
         mapGroupToMappedPOICreate, securityContext);
   }
 
-  @Operation(summary = "updateMapGroupToMappedPOI", description = "Updates MapGroupToMappedPOI")
   @PutMapping("updateMapGroupToMappedPOI")
+  @Operation(summary = "updateMapGroupToMappedPOI", description = "Updates MapGroupToMappedPOI")
   public MapGroupToMappedPOI updateMapGroupToMappedPOI(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupToMappedPOIUpdate mapGroupToMappedPOIUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String mapGroupToMappedPOIId = mapGroupToMappedPOIUpdate.getId();
     MapGroupToMappedPOI mapGroupToMappedPOI =
         mapGroupToMappedPOIService.getByIdOrNull(
@@ -61,14 +63,13 @@ public class MapGroupToMappedPOIController implements Plugin {
         mapGroupToMappedPOIUpdate, securityContext);
   }
 
-  @Operation(
-      summary = "getAllMapGroupToMappedPOIs",
-      description = "Gets All MapGroupToMappedPOIs Filtered")
   @PostMapping("getAllMapGroupToMappedPOIs")
+  @Operation(summary = "getAllMapGroupToMappedPOIs", description = "lists MapGroupToMappedPOIs")
   public PaginationResponse<MapGroupToMappedPOI> getAllMapGroupToMappedPOIs(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody MapGroupToMappedPOIFilter mapGroupToMappedPOIFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     mapGroupToMappedPOIService.validate(mapGroupToMappedPOIFilter, securityContext);
     return mapGroupToMappedPOIService.getAllMapGroupToMappedPOIs(
         mapGroupToMappedPOIFilter, securityContext);

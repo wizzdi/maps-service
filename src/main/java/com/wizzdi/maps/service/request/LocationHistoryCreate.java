@@ -6,117 +6,168 @@ import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
 import java.time.OffsetDateTime;
 
+/** Object Used to Create LocationHistory */
 public class LocationHistoryCreate extends BasicCreate {
-
-  private OffsetDateTime dateAtLocation;
-
-  private Double y;
-
-  private Double z;
-
-  @JsonIgnore private Room room;
-
-  @JsonIgnore private MappedPOI mappedPOI;
 
   private Double x;
 
-  private String roomId;
+  private OffsetDateTime dateAtLocation;
 
   private String mappedPOIId;
 
   private Double lon;
 
+  @JsonIgnore private Room room;
+
   private Double lat;
 
-  public OffsetDateTime getDateAtLocation() {
-    return this.dateAtLocation;
-  }
+  private Double z;
 
-  public <T extends LocationHistoryCreate> T setDateAtLocation(OffsetDateTime dateAtLocation) {
-    this.dateAtLocation = dateAtLocation;
-    return (T) this;
-  }
+  private Double y;
 
-  public Double getY() {
-    return this.y;
-  }
+  private String roomId;
 
-  public <T extends LocationHistoryCreate> T setY(Double y) {
-    this.y = y;
-    return (T) this;
-  }
+  @JsonIgnore private MappedPOI mappedPOI;
 
-  public Double getZ() {
-    return this.z;
-  }
-
-  public <T extends LocationHistoryCreate> T setZ(Double z) {
-    this.z = z;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public Room getRoom() {
-    return this.room;
-  }
-
-  public <T extends LocationHistoryCreate> T setRoom(Room room) {
-    this.room = room;
-    return (T) this;
-  }
-
-  @JsonIgnore
-  public MappedPOI getMappedPOI() {
-    return this.mappedPOI;
-  }
-
-  public <T extends LocationHistoryCreate> T setMappedPOI(MappedPOI mappedPOI) {
-    this.mappedPOI = mappedPOI;
-    return (T) this;
-  }
-
+  /** @return x */
   public Double getX() {
     return this.x;
   }
 
+  /**
+   * @param x x to set
+   * @return LocationHistoryCreate
+   */
   public <T extends LocationHistoryCreate> T setX(Double x) {
     this.x = x;
     return (T) this;
   }
 
-  public String getRoomId() {
-    return this.roomId;
+  /** @return dateAtLocation */
+  public OffsetDateTime getDateAtLocation() {
+    return this.dateAtLocation;
   }
 
-  public <T extends LocationHistoryCreate> T setRoomId(String roomId) {
-    this.roomId = roomId;
+  /**
+   * @param dateAtLocation dateAtLocation to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setDateAtLocation(OffsetDateTime dateAtLocation) {
+    this.dateAtLocation = dateAtLocation;
     return (T) this;
   }
 
+  /** @return mappedPOIId */
   public String getMappedPOIId() {
     return this.mappedPOIId;
   }
 
+  /**
+   * @param mappedPOIId mappedPOIId to set
+   * @return LocationHistoryCreate
+   */
   public <T extends LocationHistoryCreate> T setMappedPOIId(String mappedPOIId) {
     this.mappedPOIId = mappedPOIId;
     return (T) this;
   }
 
+  /** @return lon */
   public Double getLon() {
     return this.lon;
   }
 
+  /**
+   * @param lon lon to set
+   * @return LocationHistoryCreate
+   */
   public <T extends LocationHistoryCreate> T setLon(Double lon) {
     this.lon = lon;
     return (T) this;
   }
 
+  /** @return room */
+  @JsonIgnore
+  public Room getRoom() {
+    return this.room;
+  }
+
+  /**
+   * @param room room to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setRoom(Room room) {
+    this.room = room;
+    return (T) this;
+  }
+
+  /** @return lat */
   public Double getLat() {
     return this.lat;
   }
 
+  /**
+   * @param lat lat to set
+   * @return LocationHistoryCreate
+   */
   public <T extends LocationHistoryCreate> T setLat(Double lat) {
     this.lat = lat;
+    return (T) this;
+  }
+
+  /** @return z */
+  public Double getZ() {
+    return this.z;
+  }
+
+  /**
+   * @param z z to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setZ(Double z) {
+    this.z = z;
+    return (T) this;
+  }
+
+  /** @return y */
+  public Double getY() {
+    return this.y;
+  }
+
+  /**
+   * @param y y to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setY(Double y) {
+    this.y = y;
+    return (T) this;
+  }
+
+  /** @return roomId */
+  public String getRoomId() {
+    return this.roomId;
+  }
+
+  /**
+   * @param roomId roomId to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setRoomId(String roomId) {
+    this.roomId = roomId;
+    return (T) this;
+  }
+
+  /** @return mappedPOI */
+  @JsonIgnore
+  public MappedPOI getMappedPOI() {
+    return this.mappedPOI;
+  }
+
+  /**
+   * @param mappedPOI mappedPOI to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setMappedPOI(MappedPOI mappedPOI) {
+    this.mappedPOI = mappedPOI;
     return (T) this;
   }
 }
