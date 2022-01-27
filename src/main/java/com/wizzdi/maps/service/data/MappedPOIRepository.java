@@ -85,8 +85,11 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
       Join<T, MapGroupToMappedPOI> join1 = r.join(MappedPOI_.mapGroupToMappedPOIS);
       Join<MapGroupToMappedPOI, MapGroup> join = join1.join(MapGroupToMappedPOI_.mapGroup);
 
-      if (mappedPOIFilter.getRelatedType() != null && !mappedPOIFilter.getRelatedType().isEmpty()) {
-        preds.add(r.get(MappedPOI_.relatedType).in(mappedPOIFilter.getRelatedType()));
+      if (filtering.getRelatedType() != null && !filtering.getRelatedType().isEmpty()) {
+        preds.add(r.get(MappedPOI_.relatedType).in(filtering.getRelatedType()));
+      }
+      if (filtering.getRelatedId() != null && !filtering.getRelatedId().isEmpty()) {
+        preds.add(r.get(MappedPOI_.relatedId).in(filtering.getRelatedId()));
       }
 
       mapGroupRepository.addMapGroupPredicate(filtering.getMapGroupFilter(), cb, q, join, preds, securityContext);

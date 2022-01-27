@@ -25,6 +25,7 @@ public class MappedPOICreate extends BasicCreate {
   private String externalId;
   private Boolean keepHistory;
   private String relatedType;
+  private String relatedId;
 
 
 
@@ -158,6 +159,20 @@ public class MappedPOICreate extends BasicCreate {
    */
   public <T extends MappedPOICreate> T setRelatedType(String relatedType) {
     this.relatedType = relatedType;
+    return (T) this;
+  }
+
+  /** @return relatedId */
+  public String getRelatedId() {
+    return this.relatedId;
+  }
+
+  /**
+   * @param relatedId relatedId to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setRelatedId(String relatedId) {
+    this.relatedId = relatedId;
     return (T) this;
   }
 

@@ -65,6 +65,8 @@ public class MappedPOIControllerTest {
 
 
 
+    request.setRelatedId("test-string");
+
     request.setY(10D);
 
 
@@ -115,6 +117,10 @@ public class MappedPOIControllerTest {
   public void assertMappedPOI(MappedPOICreate request, MappedPOI testMappedPOI) {
     Assertions.assertNotNull(testMappedPOI);
 
+
+    if (request.getRelatedId() != null) {
+      Assertions.assertEquals(request.getRelatedId(), testMappedPOI.getRelatedId());
+    }
 
     if (request.getY() != null) {
 

@@ -164,6 +164,13 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
       update = true;
     }
 
+    if (mappedPOICreate.getRelatedId() != null
+            && (!mappedPOICreate.getRelatedId().equals(mappedPOI.getRelatedId()))) {
+      mappedPOI.setRelatedId(mappedPOICreate.getRelatedId());
+      update = true;
+    }
+
+
     return update;
   }
 
