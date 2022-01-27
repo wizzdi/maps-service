@@ -161,6 +161,10 @@ public class MappedPOIRepository implements Plugin {
       preds.add(r.get(MappedPOI_.lon).in(mappedPOIFilter.getLon()));
     }
 
+    if (mappedPOIFilter.getRelatedType() != null && !mappedPOIFilter.getRelatedType().isEmpty()) {
+      preds.add(r.get(MappedPOI_.relatedType).in(mappedPOIFilter.getRelatedType()));
+    }
+
     if (mappedPOIFilter.getGeoHash5() != null && !mappedPOIFilter.getGeoHash5().isEmpty()) {
       preds.add(r.get(MappedPOI_.geoHash5).in(mappedPOIFilter.getGeoHash5()));
     }

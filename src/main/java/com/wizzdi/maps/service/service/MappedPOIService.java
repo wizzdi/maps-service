@@ -201,6 +201,12 @@ public class MappedPOIService implements Plugin {
       update = true;
     }
 
+    if (mappedPOICreate.getRelatedType() != null
+        && (!mappedPOICreate.getRelatedType().equals(mappedPOI.getRelatedType()))) {
+      mappedPOI.setRelatedType(mappedPOICreate.getRelatedType());
+      update = true;
+    }
+
     if (mappedPOICreate.getGeoHash5() != null
         && (!mappedPOICreate.getGeoHash5().equals(mappedPOI.getGeoHash5()))) {
       mappedPOI.setGeoHash5(mappedPOICreate.getGeoHash5());

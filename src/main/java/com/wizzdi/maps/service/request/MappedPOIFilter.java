@@ -40,6 +40,8 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash3;
 
+  private Set<String> relatedType;
+
   private Set<String> roomIds;
 
   private Set<Boolean> keepHistory;
@@ -260,6 +262,20 @@ public class MappedPOIFilter extends PaginationFilter {
    */
   public <T extends MappedPOIFilter> T setGeoHash3(Set<String> geoHash3) {
     this.geoHash3 = geoHash3;
+    return (T) this;
+  }
+
+  /** @return relatedType */
+  public Set<String> getRelatedType() {
+    return this.relatedType;
+  }
+
+  /**
+   * @param relatedType relatedType to set
+   * @return MappedPOIFilter
+   */
+  public <T extends MappedPOIFilter> T setRelatedType(Set<String> relatedType) {
+    this.relatedType = relatedType;
     return (T) this;
   }
 

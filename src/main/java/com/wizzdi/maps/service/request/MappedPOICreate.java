@@ -43,6 +43,8 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash10;
 
+  private String relatedType;
+
   @JsonIgnore private Room room;
 
   private String geoHash1;
@@ -295,6 +297,20 @@ public class MappedPOICreate extends BasicCreate {
    */
   public <T extends MappedPOICreate> T setGeoHash10(String geoHash10) {
     this.geoHash10 = geoHash10;
+    return (T) this;
+  }
+
+  /** @return relatedType */
+  public String getRelatedType() {
+    return this.relatedType;
+  }
+
+  /**
+   * @param relatedType relatedType to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setRelatedType(String relatedType) {
+    this.relatedType = relatedType;
     return (T) this;
   }
 

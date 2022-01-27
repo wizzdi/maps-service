@@ -103,6 +103,8 @@ public class MappedPOIControllerTest {
 
     request.setLon(10D);
 
+    request.setRelatedType("test-string");
+
     request.setGeoHash5("test-string");
 
     ResponseEntity<MappedPOI> response =
@@ -216,6 +218,10 @@ public class MappedPOIControllerTest {
 
     if (request.getLon() != null) {
       Assertions.assertEquals(request.getLon(), testMappedPOI.getLon());
+    }
+
+    if (request.getRelatedType() != null) {
+      Assertions.assertEquals(request.getRelatedType(), testMappedPOI.getRelatedType());
     }
 
     if (request.getGeoHash5() != null) {
