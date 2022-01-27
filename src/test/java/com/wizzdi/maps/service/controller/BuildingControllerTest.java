@@ -99,7 +99,6 @@ public class BuildingControllerTest {
     }
 
     if (request.getExternalId() != null) {
-
       Assertions.assertEquals(request.getExternalId(), testBuilding.getExternalId());
     }
   }

@@ -3,27 +3,39 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.maps.model.Room;
 
+/** Object Used to Update Room */
 public class RoomUpdate extends RoomCreate {
 
-  private String id;
   @JsonIgnore private Room room;
 
-  public String getId() {
-    return id;
+  private String id;
+
+  /** @return room */
+  @JsonIgnore
+  public Room getRoom() {
+    return this.room;
   }
 
-  public <T extends RoomUpdate> T setId(String id) {
-    this.id = id;
+  /**
+   * @param room room to set
+   * @return RoomUpdate
+   */
+  public <T extends RoomUpdate> T setRoom(Room room) {
+    this.room = room;
     return (T) this;
   }
 
-  @JsonIgnore
-  public Room getRoom() {
-    return room;
+  /** @return id */
+  public String getId() {
+    return this.id;
   }
 
-  public <T extends RoomUpdate> T setRoom(Room room) {
-    this.room = room;
+  /**
+   * @param id id to set
+   * @return RoomUpdate
+   */
+  public <T extends RoomUpdate> T setId(String id) {
+    this.id = id;
     return (T) this;
   }
 }

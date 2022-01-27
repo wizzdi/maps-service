@@ -63,9 +63,9 @@ public class MapGroupToMappedPOIControllerTest {
     String name = UUID.randomUUID().toString();
     MapGroupToMappedPOICreate request = new MapGroupToMappedPOICreate().setName(name);
 
-    request.setMapGroupId(this.mapGroup.getId());
-
     request.setMappedPOIId(this.mappedPOI.getId());
+
+    request.setMapGroupId(this.mapGroup.getId());
 
     ResponseEntity<MapGroupToMappedPOI> response =
         this.restTemplate.postForEntity(
@@ -102,18 +102,18 @@ public class MapGroupToMappedPOIControllerTest {
       MapGroupToMappedPOICreate request, MapGroupToMappedPOI testMapGroupToMappedPOI) {
     Assertions.assertNotNull(testMapGroupToMappedPOI);
 
-    if (request.getMapGroupId() != null) {
-
-      Assertions.assertNotNull(testMapGroupToMappedPOI.getMapGroup());
-      Assertions.assertEquals(
-          request.getMapGroupId(), testMapGroupToMappedPOI.getMapGroup().getId());
-    }
-
     if (request.getMappedPOIId() != null) {
 
       Assertions.assertNotNull(testMapGroupToMappedPOI.getMappedPOI());
       Assertions.assertEquals(
           request.getMappedPOIId(), testMapGroupToMappedPOI.getMappedPOI().getId());
+    }
+
+    if (request.getMapGroupId() != null) {
+
+      Assertions.assertNotNull(testMapGroupToMappedPOI.getMapGroup());
+      Assertions.assertEquals(
+          request.getMapGroupId(), testMapGroupToMappedPOI.getMapGroup().getId());
     }
   }
 

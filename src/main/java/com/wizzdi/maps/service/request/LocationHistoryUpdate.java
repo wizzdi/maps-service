@@ -3,27 +3,39 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.maps.model.LocationHistory;
 
+/** Object Used to Update LocationHistory */
 public class LocationHistoryUpdate extends LocationHistoryCreate {
 
-  private String id;
   @JsonIgnore private LocationHistory locationHistory;
 
-  public String getId() {
-    return id;
+  private String id;
+
+  /** @return locationHistory */
+  @JsonIgnore
+  public LocationHistory getLocationHistory() {
+    return this.locationHistory;
   }
 
-  public <T extends LocationHistoryUpdate> T setId(String id) {
-    this.id = id;
+  /**
+   * @param locationHistory locationHistory to set
+   * @return LocationHistoryUpdate
+   */
+  public <T extends LocationHistoryUpdate> T setLocationHistory(LocationHistory locationHistory) {
+    this.locationHistory = locationHistory;
     return (T) this;
   }
 
-  @JsonIgnore
-  public LocationHistory getLocationHistory() {
-    return locationHistory;
+  /** @return id */
+  public String getId() {
+    return this.id;
   }
 
-  public <T extends LocationHistoryUpdate> T setLocationHistory(LocationHistory locationHistory) {
-    this.locationHistory = locationHistory;
+  /**
+   * @param id id to set
+   * @return LocationHistoryUpdate
+   */
+  public <T extends LocationHistoryUpdate> T setId(String id) {
+    this.id = id;
     return (T) this;
   }
 }

@@ -88,7 +88,6 @@ public class MapGroupControllerTest {
     Assertions.assertNotNull(testMapGroup);
 
     if (request.getExternalId() != null) {
-
       Assertions.assertEquals(request.getExternalId(), testMapGroup.getExternalId());
     }
   }

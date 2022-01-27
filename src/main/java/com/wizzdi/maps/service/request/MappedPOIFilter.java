@@ -25,6 +25,7 @@ public class MappedPOIFilter extends PaginationFilter {
   private Set<String> roomIds;
   private MapGroupFilter mapGroupFilter;
   private Set<String> externalId;
+  private Set<String> relatedType;
 
 
 
@@ -98,6 +99,19 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setExternalId(Set<String> externalId) {
     this.externalId = externalId;
+    return (T) this;
+  }
+  /** @return relatedType */
+  public Set<String> getRelatedType() {
+    return this.relatedType;
+  }
+
+  /**
+   * @param relatedType relatedType to set
+   * @return MappedPOIFilter
+   */
+  public <T extends MappedPOIFilter> T setRelatedType(Set<String> relatedType) {
+    this.relatedType = relatedType;
     return (T) this;
   }
 }

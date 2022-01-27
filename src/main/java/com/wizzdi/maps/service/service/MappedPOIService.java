@@ -154,8 +154,13 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     }
 
     if (mappedPOICreate.isKeepHistory() != null
-        && (!mappedPOICreate.isKeepHistory().equals(mappedPOI.isKeepHistory()))) {
+            && (!mappedPOICreate.isKeepHistory().equals(mappedPOI.isKeepHistory()))) {
       mappedPOI.setKeepHistory(mappedPOICreate.isKeepHistory());
+      update = true;
+    }
+    if (mappedPOICreate.getRelatedType() != null
+            && (!mappedPOICreate.getRelatedType().equals(mappedPOI.getRelatedType()))) {
+      mappedPOI.setRelatedType(mappedPOICreate.getRelatedType());
       update = true;
     }
 

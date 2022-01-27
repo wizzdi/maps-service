@@ -33,16 +33,18 @@ public class BuildingController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody BuildingCreate buildingCreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     buildingService.validate(buildingCreate, securityContext);
     return buildingService.createBuilding(buildingCreate, securityContext);
   }
 
-  @Operation(summary = "updateBuilding", description = "Updates Building")
   @PutMapping("updateBuilding")
+  @Operation(summary = "updateBuilding", description = "Updates Building")
   public Building updateBuilding(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody BuildingUpdate buildingUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String buildingId = buildingUpdate.getId();
     Building building =
         buildingService.getByIdOrNull(
@@ -56,12 +58,13 @@ public class BuildingController implements Plugin {
     return buildingService.updateBuilding(buildingUpdate, securityContext);
   }
 
-  @Operation(summary = "getAllBuildings", description = "Gets All Buildings Filtered")
   @PostMapping("getAllBuildings")
+  @Operation(summary = "getAllBuildings", description = "lists Buildings")
   public PaginationResponse<Building> getAllBuildings(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody BuildingFilter buildingFilter,
       @RequestAttribute SecurityContextBase securityContext) {
+
     buildingService.validate(buildingFilter, securityContext);
     return buildingService.getAllBuildings(buildingFilter, securityContext);
   }

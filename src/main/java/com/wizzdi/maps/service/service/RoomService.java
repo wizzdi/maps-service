@@ -31,7 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class RoomService implements Plugin, IRoomService {
+public class RoomService implements Plugin {
 
   @Autowired private RoomRepository repository;
 
@@ -42,7 +42,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @return created Room
    */
-  @Override
   public Room createRoom(RoomCreate roomCreate, SecurityContextBase securityContext) {
     Room room = createRoomNoMerge(roomCreate, securityContext);
     this.repository.merge(room);
@@ -54,7 +53,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @return created Room unmerged
    */
-  @Override
   public Room createRoomNoMerge(RoomCreate roomCreate, SecurityContextBase securityContext) {
     Room room = new Room();
     room.setId(UUID.randomUUID().toString());
@@ -70,7 +68,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param room
    * @return if room was updated
    */
-  @Override
   public boolean updateRoomNoMerge(Room room, RoomCreate roomCreate) {
     boolean update = basicService.updateBasicNoMerge(roomCreate, room);
 
@@ -81,24 +78,24 @@ public class RoomService implements Plugin, IRoomService {
       update = true;
     }
 
-    if (roomCreate.getX() != null && (!roomCreate.getX().equals(room.getX()))) {
-      room.setX(roomCreate.getX());
-      update = true;
-    }
-
-    if (roomCreate.getY() != null && (!roomCreate.getY().equals(room.getY()))) {
-      room.setY(roomCreate.getY());
-      update = true;
-    }
-
     if (roomCreate.getZ() != null && (!roomCreate.getZ().equals(room.getZ()))) {
       room.setZ(roomCreate.getZ());
+      update = true;
+    }
+
+    if (roomCreate.getX() != null && (!roomCreate.getX().equals(room.getX()))) {
+      room.setX(roomCreate.getX());
       update = true;
     }
 
     if (roomCreate.getExternalId() != null
         && (!roomCreate.getExternalId().equals(room.getExternalId()))) {
       room.setExternalId(roomCreate.getExternalId());
+      update = true;
+    }
+
+    if (roomCreate.getY() != null && (!roomCreate.getY().equals(room.getY()))) {
+      room.setY(roomCreate.getY());
       update = true;
     }
 
@@ -109,7 +106,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @return room
    */
-  @Override
   public Room updateRoom(RoomUpdate roomUpdate, SecurityContextBase securityContext) {
     Room room = roomUpdate.getRoom();
     if (updateRoomNoMerge(room, roomUpdate)) {
@@ -123,7 +119,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @return PaginationResponse containing paging information for Room
    */
-  @Override
   public PaginationResponse<Room> getAllRooms(
       RoomFilter roomFilter, SecurityContextBase securityContext) {
     List<Room> list = listAllRooms(roomFilter, securityContext);
@@ -136,7 +131,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @return List of Room
    */
-  @Override
   public List<Room> listAllRooms(RoomFilter roomFilter, SecurityContextBase securityContext) {
     return this.repository.listAllRooms(roomFilter, securityContext);
   }
@@ -146,7 +140,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @throws ResponseStatusException if roomFilter is not valid
    */
-  @Override
   public void validate(RoomFilter roomFilter, SecurityContextBase securityContext) {
     basicService.validate(roomFilter, securityContext);
 
@@ -161,8 +154,7 @@ public class RoomService implements Plugin, IRoomService {
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
     buildingIds.removeAll(building.keySet());
     if (!buildingIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No Building with ids " + buildingIds);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + buildingIds);
     }
     roomFilter.setBuilding(new ArrayList<>(building.values()));
   }
@@ -172,7 +164,6 @@ public class RoomService implements Plugin, IRoomService {
    * @param securityContext
    * @throws ResponseStatusException if roomCreate is not valid
    */
-  @Override
   public void validate(RoomCreate roomCreate, SecurityContextBase securityContext) {
     basicService.validate(roomCreate, securityContext);
 
@@ -189,19 +180,16 @@ public class RoomService implements Plugin, IRoomService {
     roomCreate.setBuilding(building);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -210,7 +198,6 @@ public class RoomService implements Plugin, IRoomService {
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -219,28 +206,23 @@ public class RoomService implements Plugin, IRoomService {
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }

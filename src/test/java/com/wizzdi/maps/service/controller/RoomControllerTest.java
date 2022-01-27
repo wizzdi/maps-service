@@ -60,6 +60,8 @@ public class RoomControllerTest {
     String name = UUID.randomUUID().toString();
     RoomCreate request = new RoomCreate().setName(name);
 
+    request.setBuildingId(this.building.getId());
+
     request.setZ(10D);
 
     request.setX(10D);
@@ -67,8 +69,6 @@ public class RoomControllerTest {
     request.setExternalId("test-string");
 
     request.setY(10D);
-
-    request.setBuildingId(this.building.getId());
 
     ResponseEntity<Room> response =
         this.restTemplate.postForEntity("/Room/createRoom", request, Room.class);
@@ -97,30 +97,26 @@ public class RoomControllerTest {
   public void assertRoom(RoomCreate request, Room testRoom) {
     Assertions.assertNotNull(testRoom);
 
-    if (request.getZ() != null) {
-
-      Assertions.assertEquals(request.getZ(), testRoom.getZ());
-    }
-
-    if (request.getX() != null) {
-
-      Assertions.assertEquals(request.getX(), testRoom.getX());
-    }
-
-    if (request.getExternalId() != null) {
-
-      Assertions.assertEquals(request.getExternalId(), testRoom.getExternalId());
-    }
-
-    if (request.getY() != null) {
-
-      Assertions.assertEquals(request.getY(), testRoom.getY());
-    }
-
     if (request.getBuildingId() != null) {
 
       Assertions.assertNotNull(testRoom.getBuilding());
       Assertions.assertEquals(request.getBuildingId(), testRoom.getBuilding().getId());
+    }
+
+    if (request.getZ() != null) {
+      Assertions.assertEquals(request.getZ(), testRoom.getZ());
+    }
+
+    if (request.getX() != null) {
+      Assertions.assertEquals(request.getX(), testRoom.getX());
+    }
+
+    if (request.getExternalId() != null) {
+      Assertions.assertEquals(request.getExternalId(), testRoom.getExternalId());
+    }
+
+    if (request.getY() != null) {
+      Assertions.assertEquals(request.getY(), testRoom.getY());
     }
   }
 

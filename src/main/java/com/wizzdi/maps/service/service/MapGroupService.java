@@ -23,7 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class MapGroupService implements Plugin, IMapGroupService {
+public class MapGroupService implements Plugin {
 
   @Autowired private MapGroupRepository repository;
 
@@ -34,7 +34,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @return created MapGroup
    */
-  @Override
   public MapGroup createMapGroup(
       MapGroupCreate mapGroupCreate, SecurityContextBase securityContext) {
     MapGroup mapGroup = createMapGroupNoMerge(mapGroupCreate, securityContext);
@@ -47,7 +46,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @return created MapGroup unmerged
    */
-  @Override
   public MapGroup createMapGroupNoMerge(
       MapGroupCreate mapGroupCreate, SecurityContextBase securityContext) {
     MapGroup mapGroup = new MapGroup();
@@ -64,7 +62,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param mapGroup
    * @return if mapGroup was updated
    */
-  @Override
   public boolean updateMapGroupNoMerge(MapGroup mapGroup, MapGroupCreate mapGroupCreate) {
     boolean update = basicService.updateBasicNoMerge(mapGroupCreate, mapGroup);
 
@@ -81,7 +78,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @return mapGroup
    */
-  @Override
   public MapGroup updateMapGroup(
       MapGroupUpdate mapGroupUpdate, SecurityContextBase securityContext) {
     MapGroup mapGroup = mapGroupUpdate.getMapGroup();
@@ -96,7 +92,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @return PaginationResponse containing paging information for MapGroup
    */
-  @Override
   public PaginationResponse<MapGroup> getAllMapGroups(
       MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
     List<MapGroup> list = listAllMapGroups(mapGroupFilter, securityContext);
@@ -109,7 +104,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @return List of MapGroup
    */
-  @Override
   public List<MapGroup> listAllMapGroups(
       MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMapGroups(mapGroupFilter, securityContext);
@@ -120,7 +114,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @throws ResponseStatusException if mapGroupFilter is not valid
    */
-  @Override
   public void validate(MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
     basicService.validate(mapGroupFilter, securityContext);
   }
@@ -130,24 +123,20 @@ public class MapGroupService implements Plugin, IMapGroupService {
    * @param securityContext
    * @throws ResponseStatusException if mapGroupCreate is not valid
    */
-  @Override
   public void validate(MapGroupCreate mapGroupCreate, SecurityContextBase securityContext) {
     basicService.validate(mapGroupCreate, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -156,7 +145,6 @@ public class MapGroupService implements Plugin, IMapGroupService {
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -165,28 +153,23 @@ public class MapGroupService implements Plugin, IMapGroupService {
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }

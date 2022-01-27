@@ -33,16 +33,29 @@ public class LocationHistoryController implements Plugin {
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody LocationHistoryCreate locationHistoryCreate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     locationHistoryService.validate(locationHistoryCreate, securityContext);
     return locationHistoryService.createLocationHistory(locationHistoryCreate, securityContext);
   }
 
-  @Operation(summary = "updateLocationHistory", description = "Updates LocationHistory")
+  @PostMapping("getAllLocationHistories")
+  @Operation(summary = "getAllLocationHistories", description = "lists LocationHistories")
+  public PaginationResponse<LocationHistory> getAllLocationHistories(
+      @RequestHeader("authenticationKey") String authenticationKey,
+      @RequestBody LocationHistoryFilter locationHistoryFilter,
+      @RequestAttribute SecurityContextBase securityContext) {
+
+    locationHistoryService.validate(locationHistoryFilter, securityContext);
+    return locationHistoryService.getAllLocationHistories(locationHistoryFilter, securityContext);
+  }
+
   @PutMapping("updateLocationHistory")
+  @Operation(summary = "updateLocationHistory", description = "Updates LocationHistory")
   public LocationHistory updateLocationHistory(
       @RequestHeader("authenticationKey") String authenticationKey,
       @RequestBody LocationHistoryUpdate locationHistoryUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
+
     String locationHistoryId = locationHistoryUpdate.getId();
     LocationHistory locationHistory =
         locationHistoryService.getByIdOrNull(
@@ -54,17 +67,5 @@ public class LocationHistoryController implements Plugin {
     locationHistoryUpdate.setLocationHistory(locationHistory);
     locationHistoryService.validate(locationHistoryUpdate, securityContext);
     return locationHistoryService.updateLocationHistory(locationHistoryUpdate, securityContext);
-  }
-
-  @Operation(
-      summary = "getAllLocationHistories",
-      description = "Gets All LocationHistories Filtered")
-  @PostMapping("getAllLocationHistories")
-  public PaginationResponse<LocationHistory> getAllLocationHistories(
-      @RequestHeader("authenticationKey") String authenticationKey,
-      @RequestBody LocationHistoryFilter locationHistoryFilter,
-      @RequestAttribute SecurityContextBase securityContext) {
-    locationHistoryService.validate(locationHistoryFilter, securityContext);
-    return locationHistoryService.getAllLocationHistories(locationHistoryFilter, securityContext);
   }
 }

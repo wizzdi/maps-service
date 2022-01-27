@@ -27,32 +27,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class MapIconRepository implements Plugin, IMapIconRepository {
+public class MapIconRepository implements Plugin {
   @PersistenceContext private EntityManager em;
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
-   * @param filtering Object Used to List MapIcon
+   * @param mapIconFilter Object Used to List MapIcon
    * @param securityContext
    * @return List of MapIcon
    */
-  @Override
   public List<MapIcon> listAllMapIcons(
-      MapIconFilter filtering, SecurityContextBase securityContext) {
+      MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<MapIcon> q = cb.createQuery(MapIcon.class);
     Root<MapIcon> r = q.from(MapIcon.class);
     List<Predicate> preds = new ArrayList<>();
-    addMapIconPredicate(filtering, cb, q, r, preds, securityContext);
+    addMapIconPredicate(mapIconFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<MapIcon> query = em.createQuery(q);
-    BasicRepository.addPagination(filtering, query);
+    BasicRepository.addPagination(mapIconFilter, query);
     return query.getResultList();
   }
 
-  @Override
   public <T extends MapIcon> void addMapIconPredicate(
-      MapIconFilter filtering,
+      MapIconFilter mapIconFilter,
       CriteriaBuilder cb,
       CommonAbstractCriteria q,
       From<?, T> r,
@@ -60,47 +58,47 @@ public class MapIconRepository implements Plugin, IMapIconRepository {
       SecurityContextBase securityContext) {
 
     this.securedBasicRepository.addSecuredBasicPredicates(
-        filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
+        mapIconFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getFileResource() != null && !filtering.getFileResource().isEmpty()) {
+    if (mapIconFilter.getFileResource() != null && !mapIconFilter.getFileResource().isEmpty()) {
       Set<String> ids =
-          filtering.getFileResource().parallelStream()
+          mapIconFilter.getFileResource().parallelStream()
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, FileResource> join = r.join(MapIcon_.fileResource);
       preds.add(join.get(Basic_.id).in(ids));
     }
+
+    if (mapIconFilter.getExternalId() != null && !mapIconFilter.getExternalId().isEmpty()) {
+      preds.add(r.get(MapIcon_.externalId).in(mapIconFilter.getExternalId()));
+    }
   }
   /**
-   * @param filtering Object Used to List MapIcon
+   * @param mapIconFilter Object Used to List MapIcon
    * @param securityContext
    * @return count of MapIcon
    */
-  @Override
-  public Long countAllMapIcons(MapIconFilter filtering, SecurityContextBase securityContext) {
+  public Long countAllMapIcons(MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
     Root<MapIcon> r = q.from(MapIcon.class);
     List<Predicate> preds = new ArrayList<>();
-    addMapIconPredicate(filtering, cb, q, r, preds, securityContext);
+    addMapIconPredicate(mapIconFilter, cb, q, r, preds, securityContext);
     q.select(cb.count(r)).where(preds.toArray(new Predicate[0]));
     TypedQuery<Long> query = em.createQuery(q);
     return query.getSingleResult();
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -109,7 +107,6 @@ public class MapIconRepository implements Plugin, IMapIconRepository {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -118,29 +115,24 @@ public class MapIconRepository implements Plugin, IMapIconRepository {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  @Override
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  @Override
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

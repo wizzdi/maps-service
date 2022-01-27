@@ -3,27 +3,39 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.maps.model.MapGroup;
 
+/** Object Used to Update MapGroup */
 public class MapGroupUpdate extends MapGroupCreate {
 
-  private String id;
   @JsonIgnore private MapGroup mapGroup;
 
-  public String getId() {
-    return id;
+  private String id;
+
+  /** @return mapGroup */
+  @JsonIgnore
+  public MapGroup getMapGroup() {
+    return this.mapGroup;
   }
 
-  public <T extends MapGroupUpdate> T setId(String id) {
-    this.id = id;
+  /**
+   * @param mapGroup mapGroup to set
+   * @return MapGroupUpdate
+   */
+  public <T extends MapGroupUpdate> T setMapGroup(MapGroup mapGroup) {
+    this.mapGroup = mapGroup;
     return (T) this;
   }
 
-  @JsonIgnore
-  public MapGroup getMapGroup() {
-    return mapGroup;
+  /** @return id */
+  public String getId() {
+    return this.id;
   }
 
-  public <T extends MapGroupUpdate> T setMapGroup(MapGroup mapGroup) {
-    this.mapGroup = mapGroup;
+  /**
+   * @param id id to set
+   * @return MapGroupUpdate
+   */
+  public <T extends MapGroupUpdate> T setId(String id) {
+    this.id = id;
     return (T) this;
   }
 }

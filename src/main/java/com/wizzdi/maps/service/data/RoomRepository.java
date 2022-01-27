@@ -27,31 +27,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class RoomRepository implements Plugin, IRoomRepository {
+public class RoomRepository implements Plugin {
   @PersistenceContext private EntityManager em;
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
-   * @param filtering Object Used to List Room
+   * @param roomFilter Object Used to List Room
    * @param securityContext
    * @return List of Room
    */
-  @Override
-  public List<Room> listAllRooms(RoomFilter filtering, SecurityContextBase securityContext) {
+  public List<Room> listAllRooms(RoomFilter roomFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Room> q = cb.createQuery(Room.class);
     Root<Room> r = q.from(Room.class);
     List<Predicate> preds = new ArrayList<>();
-    addRoomPredicate(filtering, cb, q, r, preds, securityContext);
+    addRoomPredicate(roomFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<Room> query = em.createQuery(q);
-    BasicRepository.addPagination(filtering, query);
+    BasicRepository.addPagination(roomFilter, query);
     return query.getResultList();
   }
 
-  @Override
   public <T extends Room> void addRoomPredicate(
-      RoomFilter filtering,
+      RoomFilter roomFilter,
       CriteriaBuilder cb,
       CommonAbstractCriteria q,
       From<?, T> r,
@@ -59,45 +57,57 @@ public class RoomRepository implements Plugin, IRoomRepository {
       SecurityContextBase securityContext) {
 
     this.securedBasicRepository.addSecuredBasicPredicates(
-        filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
+        roomFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (filtering.getBuilding() != null && !filtering.getBuilding().isEmpty()) {
+    if (roomFilter.getBuilding() != null && !roomFilter.getBuilding().isEmpty()) {
       Set<String> ids =
-          filtering.getBuilding().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+          roomFilter.getBuilding().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
       Join<T, Building> join = r.join(Room_.building);
       preds.add(join.get(Basic_.id).in(ids));
     }
+
+    if (roomFilter.getZ() != null && !roomFilter.getZ().isEmpty()) {
+      preds.add(r.get(Room_.z).in(roomFilter.getZ()));
+    }
+
+    if (roomFilter.getX() != null && !roomFilter.getX().isEmpty()) {
+      preds.add(r.get(Room_.x).in(roomFilter.getX()));
+    }
+
+    if (roomFilter.getExternalId() != null && !roomFilter.getExternalId().isEmpty()) {
+      preds.add(r.get(Room_.externalId).in(roomFilter.getExternalId()));
+    }
+
+    if (roomFilter.getY() != null && !roomFilter.getY().isEmpty()) {
+      preds.add(r.get(Room_.y).in(roomFilter.getY()));
+    }
   }
   /**
-   * @param filtering Object Used to List Room
+   * @param roomFilter Object Used to List Room
    * @param securityContext
    * @return count of Room
    */
-  @Override
-  public Long countAllRooms(RoomFilter filtering, SecurityContextBase securityContext) {
+  public Long countAllRooms(RoomFilter roomFilter, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
     Root<Room> r = q.from(Room.class);
     List<Predicate> preds = new ArrayList<>();
-    addRoomPredicate(filtering, cb, q, r, preds, securityContext);
+    addRoomPredicate(roomFilter, cb, q, r, preds, securityContext);
     q.select(cb.count(r)).where(preds.toArray(new Predicate[0]));
     TypedQuery<Long> query = em.createQuery(q);
     return query.getSingleResult();
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -106,7 +116,6 @@ public class RoomRepository implements Plugin, IRoomRepository {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -115,29 +124,24 @@ public class RoomRepository implements Plugin, IRoomRepository {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  @Override
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  @Override
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

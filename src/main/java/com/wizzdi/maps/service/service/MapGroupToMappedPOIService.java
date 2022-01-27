@@ -32,7 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIService {
+public class MapGroupToMappedPOIService implements Plugin {
 
   @Autowired private MapGroupToMappedPOIRepository repository;
 
@@ -43,7 +43,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @return created MapGroupToMappedPOI
    */
-  @Override
   public MapGroupToMappedPOI createMapGroupToMappedPOI(
       MapGroupToMappedPOICreate mapGroupToMappedPOICreate, SecurityContextBase securityContext) {
     MapGroupToMappedPOI mapGroupToMappedPOI =
@@ -57,7 +56,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @return created MapGroupToMappedPOI unmerged
    */
-  @Override
   public MapGroupToMappedPOI createMapGroupToMappedPOINoMerge(
       MapGroupToMappedPOICreate mapGroupToMappedPOICreate, SecurityContextBase securityContext) {
     MapGroupToMappedPOI mapGroupToMappedPOI = new MapGroupToMappedPOI();
@@ -74,7 +72,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param mapGroupToMappedPOI
    * @return if mapGroupToMappedPOI was updated
    */
-  @Override
   public boolean updateMapGroupToMappedPOINoMerge(
       MapGroupToMappedPOI mapGroupToMappedPOI,
       MapGroupToMappedPOICreate mapGroupToMappedPOICreate) {
@@ -108,7 +105,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @return mapGroupToMappedPOI
    */
-  @Override
   public MapGroupToMappedPOI updateMapGroupToMappedPOI(
       MapGroupToMappedPOIUpdate mapGroupToMappedPOIUpdate, SecurityContextBase securityContext) {
     MapGroupToMappedPOI mapGroupToMappedPOI = mapGroupToMappedPOIUpdate.getMapGroupToMappedPOI();
@@ -123,7 +119,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @return PaginationResponse containing paging information for MapGroupToMappedPOI
    */
-  @Override
   public PaginationResponse<MapGroupToMappedPOI> getAllMapGroupToMappedPOIs(
       MapGroupToMappedPOIFilter mapGroupToMappedPOIFilter, SecurityContextBase securityContext) {
     List<MapGroupToMappedPOI> list =
@@ -138,7 +133,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @return List of MapGroupToMappedPOI
    */
-  @Override
   public List<MapGroupToMappedPOI> listAllMapGroupToMappedPOIs(
       MapGroupToMappedPOIFilter mapGroupToMappedPOIFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMapGroupToMappedPOIs(mapGroupToMappedPOIFilter, securityContext);
@@ -149,28 +143,10 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @throws ResponseStatusException if mapGroupToMappedPOIFilter is not valid
    */
-  @Override
   public void validate(
       MapGroupToMappedPOIFilter mapGroupToMappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mapGroupToMappedPOIFilter, securityContext);
 
-    Set<String> mapGroupIds =
-        mapGroupToMappedPOIFilter.getMapGroupIds() == null
-            ? new HashSet<>()
-            : mapGroupToMappedPOIFilter.getMapGroupIds();
-    Map<String, MapGroup> mapGroup =
-        mapGroupIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MapGroup.class, mapGroupIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mapGroupIds.removeAll(mapGroup.keySet());
-    if (!mapGroupIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MapGroup with ids " + mapGroupIds);
-    }
-    mapGroupToMappedPOIFilter.setMapGroup(new ArrayList<>(mapGroup.values()));
     Set<String> mappedPOIIds =
         mapGroupToMappedPOIFilter.getMappedPOIIds() == null
             ? new HashSet<>()
@@ -184,10 +160,25 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
                 .collect(Collectors.toMap(f -> f.getId(), f -> f));
     mappedPOIIds.removeAll(mappedPOI.keySet());
     if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with ids " + mappedPOIIds);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
     }
     mapGroupToMappedPOIFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
+    Set<String> mapGroupIds =
+        mapGroupToMappedPOIFilter.getMapGroupIds() == null
+            ? new HashSet<>()
+            : mapGroupToMappedPOIFilter.getMapGroupIds();
+    Map<String, MapGroup> mapGroup =
+        mapGroupIds.isEmpty()
+            ? new HashMap<>()
+            : this.repository
+                .listByIds(MapGroup.class, mapGroupIds, SecuredBasic_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+    mapGroupIds.removeAll(mapGroup.keySet());
+    if (!mapGroupIds.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mapGroupIds);
+    }
+    mapGroupToMappedPOIFilter.setMapGroup(new ArrayList<>(mapGroup.values()));
   }
 
   /**
@@ -195,22 +186,9 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
    * @param securityContext
    * @throws ResponseStatusException if mapGroupToMappedPOICreate is not valid
    */
-  @Override
   public void validate(
       MapGroupToMappedPOICreate mapGroupToMappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mapGroupToMappedPOICreate, securityContext);
-
-    String mapGroupId = mapGroupToMappedPOICreate.getMapGroupId();
-    MapGroup mapGroup =
-        mapGroupId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mapGroupId, MapGroup.class, SecuredBasic_.security, securityContext);
-    if (mapGroupId != null && mapGroup == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MapGroup with id " + mapGroupId);
-    }
-    mapGroupToMappedPOICreate.setMapGroup(mapGroup);
 
     String mappedPOIId = mapGroupToMappedPOICreate.getMappedPOIId();
     MappedPOI mappedPOI =
@@ -223,21 +201,30 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
           HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
     }
     mapGroupToMappedPOICreate.setMappedPOI(mappedPOI);
+
+    String mapGroupId = mapGroupToMappedPOICreate.getMapGroupId();
+    MapGroup mapGroup =
+        mapGroupId == null
+            ? null
+            : this.repository.getByIdOrNull(
+                mapGroupId, MapGroup.class, SecuredBasic_.security, securityContext);
+    if (mapGroupId != null && mapGroup == null) {
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST, "No MapGroup with id " + mapGroupId);
+    }
+    mapGroupToMappedPOICreate.setMapGroup(mapGroup);
   }
 
-  @Override
   public <T extends Baseclass> List<T> listByIds(
       Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return this.repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
   public <T extends Baseclass> T getByIdOrNull(
       String id, Class<T> c, SecurityContextBase securityContext) {
     return this.repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
       String id,
       Class<T> c,
@@ -246,7 +233,6 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
     return this.repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
       Class<T> c,
       Set<String> ids,
@@ -255,28 +241,23 @@ public class MapGroupToMappedPOIService implements Plugin, IMapGroupToMappedPOIS
     return this.repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
   public <D extends Basic, T extends D> List<T> findByIds(
       Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return this.repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return this.repository.findByIds(c, requested);
   }
 
-  @Override
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return this.repository.findByIdOrNull(type, id);
   }
 
-  @Override
   public void merge(java.lang.Object base) {
     this.repository.merge(base);
   }
 
-  @Override
   public void massMerge(List<?> toMerge) {
     this.repository.massMerge(toMerge);
   }
