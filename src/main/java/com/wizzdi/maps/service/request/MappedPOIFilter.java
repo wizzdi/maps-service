@@ -22,6 +22,8 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash7;
 
+  private Set<String> relatedId;
+
   private Set<String> geoHash10;
 
   private BasicPropertiesFilter basicPropertiesFilter;
@@ -134,6 +136,20 @@ public class MappedPOIFilter extends PaginationFilter {
    */
   public <T extends MappedPOIFilter> T setGeoHash7(Set<String> geoHash7) {
     this.geoHash7 = geoHash7;
+    return (T) this;
+  }
+
+  /** @return relatedId */
+  public Set<String> getRelatedId() {
+    return this.relatedId;
+  }
+
+  /**
+   * @param relatedId relatedId to set
+   * @return MappedPOIFilter
+   */
+  public <T extends MappedPOIFilter> T setRelatedId(Set<String> relatedId) {
+    this.relatedId = relatedId;
     return (T) this;
   }
 

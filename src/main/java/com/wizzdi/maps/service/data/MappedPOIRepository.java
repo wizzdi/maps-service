@@ -78,6 +78,10 @@ public class MappedPOIRepository implements Plugin {
       preds.add(r.get(MappedPOI_.geoHash2).in(mappedPOIFilter.getGeoHash2()));
     }
 
+    if (mappedPOIFilter.getRelatedId() != null && !mappedPOIFilter.getRelatedId().isEmpty()) {
+      preds.add(r.get(MappedPOI_.relatedId).in(mappedPOIFilter.getRelatedId()));
+    }
+
     if (mappedPOIFilter.getY() != null && !mappedPOIFilter.getY().isEmpty()) {
       preds.add(r.get(MappedPOI_.y).in(mappedPOIFilter.getY()));
     }

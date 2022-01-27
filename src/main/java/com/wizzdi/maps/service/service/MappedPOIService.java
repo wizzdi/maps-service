@@ -99,6 +99,12 @@ public class MappedPOIService implements Plugin {
       update = true;
     }
 
+    if (mappedPOICreate.getRelatedId() != null
+        && (!mappedPOICreate.getRelatedId().equals(mappedPOI.getRelatedId()))) {
+      mappedPOI.setRelatedId(mappedPOICreate.getRelatedId());
+      update = true;
+    }
+
     if (mappedPOICreate.getY() != null && (!mappedPOICreate.getY().equals(mappedPOI.getY()))) {
       mappedPOI.setY(mappedPOICreate.getY());
       update = true;

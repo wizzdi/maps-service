@@ -71,6 +71,8 @@ public class MappedPOIControllerTest {
 
     request.setGeoHash2("test-string");
 
+    request.setRelatedId("test-string");
+
     request.setY(10D);
 
     request.setGeoHash11("test-string");
@@ -150,6 +152,10 @@ public class MappedPOIControllerTest {
 
     if (request.getGeoHash2() != null) {
       Assertions.assertEquals(request.getGeoHash2(), testMappedPOI.getGeoHash2());
+    }
+
+    if (request.getRelatedId() != null) {
+      Assertions.assertEquals(request.getRelatedId(), testMappedPOI.getRelatedId());
     }
 
     if (request.getY() != null) {

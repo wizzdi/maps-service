@@ -13,6 +13,8 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash4;
 
+  private String relatedId;
+
   private String addressId;
 
   private String roomId;
@@ -86,6 +88,20 @@ public class MappedPOICreate extends BasicCreate {
    */
   public <T extends MappedPOICreate> T setGeoHash4(String geoHash4) {
     this.geoHash4 = geoHash4;
+    return (T) this;
+  }
+
+  /** @return relatedId */
+  public String getRelatedId() {
+    return this.relatedId;
+  }
+
+  /**
+   * @param relatedId relatedId to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setRelatedId(String relatedId) {
+    this.relatedId = relatedId;
     return (T) this;
   }
 
