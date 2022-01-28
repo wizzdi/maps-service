@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Extension
 @Component
-public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
+public class MappedPOIRepository implements Plugin {
   @PersistenceContext
   private EntityManager em;
   @Autowired
@@ -42,7 +42,6 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
    * @param securityContext
    * @return List of MappedPOI
    */
-  @Override
   public List<MappedPOI> listAllMappedPOIs(
           MappedPOIFilter filtering, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -56,7 +55,6 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return query.getResultList();
   }
 
-  @Override
   public <T extends MappedPOI> void addMappedPOIPredicate(
           MappedPOIFilter filtering,
           CriteriaBuilder cb,
@@ -102,7 +100,6 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
    * @param securityContext
    * @return count of MappedPOI
    */
-  @Override
   public Long countAllMappedPOIs(MappedPOIFilter filtering, SecurityContextBase securityContext) {
     CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Long> q = cb.createQuery(Long.class);
@@ -114,19 +111,19 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return query.getSingleResult();
   }
 
-  @Override
+  
   public <T extends Baseclass> List<T> listByIds(
           Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  @Override
+  
   public <T extends Baseclass> T getByIdOrNull(
           String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
           String id,
           Class<T> c,
@@ -135,7 +132,7 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
           Class<T> c,
           Set<String> ids,
@@ -144,29 +141,29 @@ public class MappedPOIRepository implements Plugin, IMappedPOIRepository {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, T extends D> List<T> findByIds(
           Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
+  
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  @Override
+  
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  @Override
+  
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  @Override
+  
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

@@ -43,7 +43,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
-public class MappedPOIService implements Plugin, IMappedPOIService {
+public class MappedPOIService implements Plugin {
 
   private static final Logger logger= LoggerFactory.getLogger(MappedPOIService.class);
   @Autowired
@@ -59,7 +59,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @return created MappedPOI
    */
-  @Override
+  
   public MappedPOI createMappedPOI(
           MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = createMappedPOINoMerge(mappedPOICreate, securityContext);
@@ -72,7 +72,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @return created MappedPOI unmerged
    */
-  @Override
+  
   public MappedPOI createMappedPOINoMerge(
           MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = new MappedPOI();
@@ -89,7 +89,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param mappedPOI
    * @return if mappedPOI was updated
    */
-  @Override
+  
   public boolean updateMappedPOINoMerge(MappedPOICreate mappedPOICreate, MappedPOI mappedPOI) {
     boolean update = basicService.updateBasicNoMerge(mappedPOICreate, mappedPOI);
     boolean updateLocation = false;
@@ -212,7 +212,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @return mappedPOI
    */
-  @Override
+  
   public MappedPOI updateMappedPOI(
           MappedPOIUpdate mappedPOIUpdate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = mappedPOIUpdate.getMappedPOI();
@@ -227,7 +227,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @return PaginationResponse containing paging information for MappedPOI
    */
-  @Override
+  
   public PaginationResponse<MappedPOI> getAllMappedPOIs(
           MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
@@ -240,7 +240,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @return List of MappedPOI
    */
-  @Override
+  
   public List<MappedPOI> listAllMappedPOIs(
           MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     return repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
@@ -251,7 +251,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @throws ResponseStatusException if mappedPOIFilter is not valid
    */
-  @Override
+  
   public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mappedPOIFilter, securityContext);
 
@@ -284,7 +284,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
    * @param securityContext
    * @throws ResponseStatusException if mappedPOICreate is not valid
    */
-  @Override
+  
   public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mappedPOICreate, securityContext);
 
@@ -322,19 +322,19 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     mappedPOICreate.setRoom(room);
   }
 
-  @Override
+  
   public <T extends Baseclass> List<T> listByIds(
           Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return repository.listByIds(c, ids, securityContext);
   }
 
-  @Override
+  
   public <T extends Baseclass> T getByIdOrNull(
           String id, Class<T> c, SecurityContextBase securityContext) {
     return repository.getByIdOrNull(id, c, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
           String id,
           Class<T> c,
@@ -343,7 +343,7 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     return repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
           Class<T> c,
           Set<String> ids,
@@ -352,28 +352,28 @@ public class MappedPOIService implements Plugin, IMappedPOIService {
     return repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  @Override
+  
   public <D extends Basic, T extends D> List<T> findByIds(
           Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return repository.findByIds(c, ids, idAttribute);
   }
 
-  @Override
+  
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return repository.findByIds(c, requested);
   }
 
-  @Override
+  
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return repository.findByIdOrNull(type, id);
   }
 
-  @Override
+  
   public void merge(java.lang.Object base) {
     repository.merge(base);
   }
 
-  @Override
+  
   public void massMerge(List<?> toMerge) {
     repository.massMerge(toMerge);
   }
