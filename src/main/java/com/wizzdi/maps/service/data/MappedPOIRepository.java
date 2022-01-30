@@ -111,19 +111,19 @@ public class MappedPOIRepository implements Plugin {
     return query.getSingleResult();
   }
 
-  
+
   public <T extends Baseclass> List<T> listByIds(
           Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return securedBasicRepository.listByIds(c, ids, securityContext);
   }
 
-  
+
   public <T extends Baseclass> T getByIdOrNull(
           String id, Class<T> c, SecurityContextBase securityContext) {
     return securedBasicRepository.getByIdOrNull(id, c, securityContext);
   }
 
-  
+
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
           String id,
           Class<T> c,
@@ -132,7 +132,7 @@ public class MappedPOIRepository implements Plugin {
     return securedBasicRepository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  
+
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
           Class<T> c,
           Set<String> ids,
@@ -141,29 +141,29 @@ public class MappedPOIRepository implements Plugin {
     return securedBasicRepository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  
+
   public <D extends Basic, T extends D> List<T> findByIds(
           Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return securedBasicRepository.findByIds(c, ids, idAttribute);
   }
 
-  
+
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return securedBasicRepository.findByIds(c, requested);
   }
 
-  
+
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return securedBasicRepository.findByIdOrNull(type, id);
   }
 
-  
+
   @Transactional
   public void merge(java.lang.Object base) {
     securedBasicRepository.merge(base);
   }
 
-  
+
   @Transactional
   public void massMerge(List<?> toMerge) {
     securedBasicRepository.massMerge(toMerge);

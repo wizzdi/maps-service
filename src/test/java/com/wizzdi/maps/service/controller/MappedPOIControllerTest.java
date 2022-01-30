@@ -77,7 +77,8 @@ public class MappedPOIControllerTest {
     request.setMapIconId(this.mapIcon.getId());
 
     request.setLat(10D);
-    request.setKeepHistory(true);
+    request.setKeepLocationHistory(true);
+    request.setKeepStatusHistory(true);
 
     request.setX(10D);
     request.setRoomId(this.room.getId());
@@ -160,11 +161,14 @@ public class MappedPOIControllerTest {
 
       Assertions.assertEquals(request.getExternalId(), testMappedPOI.getExternalId());
     }
-    if (request.isKeepHistory() != null) {
 
-      Assertions.assertEquals(request.isKeepHistory(), testMappedPOI.isKeepHistory());
+    if (request.getKeepLocationHistory() != null) {
+      Assertions.assertEquals(
+              request.getKeepLocationHistory(), testMappedPOI.isKeepLocationHistory());
     }
-
+    if (request.getKeepStatusHistory() != null) {
+      Assertions.assertEquals(request.getKeepStatusHistory(), testMappedPOI.isKeepStatusHistory());
+    }
 
   }
 

@@ -59,7 +59,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @return created MappedPOI
    */
-  
+
   public MappedPOI createMappedPOI(
           MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = createMappedPOINoMerge(mappedPOICreate, securityContext);
@@ -72,7 +72,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @return created MappedPOI unmerged
    */
-  
+
   public MappedPOI createMappedPOINoMerge(
           MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = new MappedPOI();
@@ -89,7 +89,7 @@ public class MappedPOIService implements Plugin {
    * @param mappedPOI
    * @return if mappedPOI was updated
    */
-  
+
   public boolean updateMappedPOINoMerge(MappedPOICreate mappedPOICreate, MappedPOI mappedPOI) {
     boolean update = basicService.updateBasicNoMerge(mappedPOICreate, mappedPOI);
     boolean updateLocation = false;
@@ -153,9 +153,9 @@ public class MappedPOIService implements Plugin {
       generateGeoHash(mappedPOI);
     }
 
-    if (mappedPOICreate.isKeepHistory() != null
-            && (!mappedPOICreate.isKeepHistory().equals(mappedPOI.isKeepHistory()))) {
-      mappedPOI.setKeepHistory(mappedPOICreate.isKeepHistory());
+    if (mappedPOICreate.getKeepLocationHistory() != null
+            && (!mappedPOICreate.getKeepLocationHistory().equals(mappedPOI.isKeepLocationHistory()))) {
+      mappedPOI.setKeepLocationHistory(mappedPOICreate.getKeepLocationHistory());
       update = true;
     }
     if (mappedPOICreate.getRelatedType() != null
@@ -167,6 +167,11 @@ public class MappedPOIService implements Plugin {
     if (mappedPOICreate.getRelatedId() != null
             && (!mappedPOICreate.getRelatedId().equals(mappedPOI.getRelatedId()))) {
       mappedPOI.setRelatedId(mappedPOICreate.getRelatedId());
+      update = true;
+    }
+    if (mappedPOICreate.getKeepStatusHistory() != null
+            && (!mappedPOICreate.getKeepStatusHistory().equals(mappedPOI.isKeepStatusHistory()))) {
+      mappedPOI.setKeepStatusHistory(mappedPOICreate.getKeepStatusHistory());
       update = true;
     }
 
@@ -212,7 +217,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @return mappedPOI
    */
-  
+
   public MappedPOI updateMappedPOI(
           MappedPOIUpdate mappedPOIUpdate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = mappedPOIUpdate.getMappedPOI();
@@ -227,7 +232,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @return PaginationResponse containing paging information for MappedPOI
    */
-  
+
   public PaginationResponse<MappedPOI> getAllMappedPOIs(
           MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
@@ -240,7 +245,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @return List of MappedPOI
    */
-  
+
   public List<MappedPOI> listAllMappedPOIs(
           MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     return repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
@@ -251,7 +256,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @throws ResponseStatusException if mappedPOIFilter is not valid
    */
-  
+
   public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mappedPOIFilter, securityContext);
 
@@ -284,7 +289,7 @@ public class MappedPOIService implements Plugin {
    * @param securityContext
    * @throws ResponseStatusException if mappedPOICreate is not valid
    */
-  
+
   public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mappedPOICreate, securityContext);
 
@@ -322,19 +327,19 @@ public class MappedPOIService implements Plugin {
     mappedPOICreate.setRoom(room);
   }
 
-  
+
   public <T extends Baseclass> List<T> listByIds(
           Class<T> c, Set<String> ids, SecurityContextBase securityContext) {
     return repository.listByIds(c, ids, securityContext);
   }
 
-  
+
   public <T extends Baseclass> T getByIdOrNull(
           String id, Class<T> c, SecurityContextBase securityContext) {
     return repository.getByIdOrNull(id, c, securityContext);
   }
 
-  
+
   public <D extends Basic, E extends Baseclass, T extends D> T getByIdOrNull(
           String id,
           Class<T> c,
@@ -343,7 +348,7 @@ public class MappedPOIService implements Plugin {
     return repository.getByIdOrNull(id, c, baseclassAttribute, securityContext);
   }
 
-  
+
   public <D extends Basic, E extends Baseclass, T extends D> List<T> listByIds(
           Class<T> c,
           Set<String> ids,
@@ -352,28 +357,28 @@ public class MappedPOIService implements Plugin {
     return repository.listByIds(c, ids, baseclassAttribute, securityContext);
   }
 
-  
+
   public <D extends Basic, T extends D> List<T> findByIds(
           Class<T> c, Set<String> ids, SingularAttribute<D, String> idAttribute) {
     return repository.findByIds(c, ids, idAttribute);
   }
 
-  
+
   public <T extends Basic> List<T> findByIds(Class<T> c, Set<String> requested) {
     return repository.findByIds(c, requested);
   }
 
-  
+
   public <T> T findByIdOrNull(Class<T> type, String id) {
     return repository.findByIdOrNull(type, id);
   }
 
-  
+
   public void merge(java.lang.Object base) {
     repository.merge(base);
   }
 
-  
+
   public void massMerge(List<?> toMerge) {
     repository.massMerge(toMerge);
   }

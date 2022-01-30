@@ -23,9 +23,10 @@ public class MappedPOICreate extends BasicCreate {
   private Room room;
   private String roomId;
   private String externalId;
-  private Boolean keepHistory;
+  private Boolean keepLocationHistory;
   private String relatedType;
   private String relatedId;
+  private Boolean keepStatusHistory;
 
 
 
@@ -139,14 +140,7 @@ public class MappedPOICreate extends BasicCreate {
     this.externalId = externalId;
     return (T) this;
   }
-  public Boolean isKeepHistory() {
-    return this.keepHistory;
-  }
 
-  public <T extends MappedPOICreate> T setKeepHistory(Boolean keepHistory) {
-    this.keepHistory = keepHistory;
-    return (T) this;
-  }
 
   /** @return relatedType */
   public String getRelatedType() {
@@ -175,5 +169,33 @@ public class MappedPOICreate extends BasicCreate {
     this.relatedId = relatedId;
     return (T) this;
   }
+  /** @return keepStatusHistory */
+  public Boolean getKeepStatusHistory() {
+    return this.keepStatusHistory;
+  }
+
+  /**
+   * @param keepStatusHistory keepStatusHistory to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setKeepStatusHistory(Boolean keepStatusHistory) {
+    this.keepStatusHistory = keepStatusHistory;
+    return (T) this;
+  }
+
+  /** @return keepLocationHistory */
+  public Boolean getKeepLocationHistory() {
+    return this.keepLocationHistory;
+  }
+
+  /**
+   * @param keepLocationHistory keepLocationHistory to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setKeepLocationHistory(Boolean keepLocationHistory) {
+    this.keepLocationHistory = keepLocationHistory;
+    return (T) this;
+  }
+
 
 }
