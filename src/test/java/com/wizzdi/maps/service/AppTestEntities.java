@@ -41,6 +41,7 @@ import com.wizzdi.maps.model.MapGroupToMappedPOI;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.StatusHistory;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -113,6 +114,7 @@ public class AppTestEntities {
                 MapIcon.class,
                 Building.class,
                 MapGroupToMappedPOI.class,
+                StatusHistory.class,
                 LocationHistory.class,
                 FileResource.class,
                 JsonConverter.class,

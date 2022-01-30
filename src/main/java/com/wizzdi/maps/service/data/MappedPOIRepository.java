@@ -66,32 +66,12 @@ public class MappedPOIRepository implements Plugin {
       preds.add(r.get(MappedPOI_.geoHash7).in(mappedPOIFilter.getGeoHash7()));
     }
 
-    if (mappedPOIFilter.getExternalId() != null && !mappedPOIFilter.getExternalId().isEmpty()) {
-      preds.add(r.get(MappedPOI_.externalId).in(mappedPOIFilter.getExternalId()));
-    }
-
     if (mappedPOIFilter.getGeoHash10() != null && !mappedPOIFilter.getGeoHash10().isEmpty()) {
       preds.add(r.get(MappedPOI_.geoHash10).in(mappedPOIFilter.getGeoHash10()));
     }
 
-    if (mappedPOIFilter.getGeoHash2() != null && !mappedPOIFilter.getGeoHash2().isEmpty()) {
-      preds.add(r.get(MappedPOI_.geoHash2).in(mappedPOIFilter.getGeoHash2()));
-    }
-
     if (mappedPOIFilter.getRelatedId() != null && !mappedPOIFilter.getRelatedId().isEmpty()) {
       preds.add(r.get(MappedPOI_.relatedId).in(mappedPOIFilter.getRelatedId()));
-    }
-
-    if (mappedPOIFilter.getY() != null && !mappedPOIFilter.getY().isEmpty()) {
-      preds.add(r.get(MappedPOI_.y).in(mappedPOIFilter.getY()));
-    }
-
-    if (mappedPOIFilter.getGeoHash11() != null && !mappedPOIFilter.getGeoHash11().isEmpty()) {
-      preds.add(r.get(MappedPOI_.geoHash11).in(mappedPOIFilter.getGeoHash11()));
-    }
-
-    if (mappedPOIFilter.getGeoHash4() != null && !mappedPOIFilter.getGeoHash4().isEmpty()) {
-      preds.add(r.get(MappedPOI_.geoHash4).in(mappedPOIFilter.getGeoHash4()));
     }
 
     if (mappedPOIFilter.getGeoHash6() != null && !mappedPOIFilter.getGeoHash6().isEmpty()) {
@@ -104,6 +84,52 @@ public class MappedPOIRepository implements Plugin {
 
     if (mappedPOIFilter.getZ() != null && !mappedPOIFilter.getZ().isEmpty()) {
       preds.add(r.get(MappedPOI_.z).in(mappedPOIFilter.getZ()));
+    }
+
+    if (mappedPOIFilter.getRoom() != null && !mappedPOIFilter.getRoom().isEmpty()) {
+      Set<String> ids =
+          mappedPOIFilter.getRoom().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, Room> join = r.join(MappedPOI_.room);
+      preds.add(join.get(Basic_.id).in(ids));
+    }
+
+    if (mappedPOIFilter.getLat() != null && !mappedPOIFilter.getLat().isEmpty()) {
+      preds.add(r.get(MappedPOI_.lat).in(mappedPOIFilter.getLat()));
+    }
+
+    if (mappedPOIFilter.getKeepLocationHistory() != null
+        && !mappedPOIFilter.getKeepLocationHistory().isEmpty()) {
+      preds.add(r.get(MappedPOI_.keepLocationHistory).in(mappedPOIFilter.getKeepLocationHistory()));
+    }
+
+    if (mappedPOIFilter.getGeoHash12() != null && !mappedPOIFilter.getGeoHash12().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash12).in(mappedPOIFilter.getGeoHash12()));
+    }
+
+    if (mappedPOIFilter.getRelatedType() != null && !mappedPOIFilter.getRelatedType().isEmpty()) {
+      preds.add(r.get(MappedPOI_.relatedType).in(mappedPOIFilter.getRelatedType()));
+    }
+
+    if (mappedPOIFilter.getExternalId() != null && !mappedPOIFilter.getExternalId().isEmpty()) {
+      preds.add(r.get(MappedPOI_.externalId).in(mappedPOIFilter.getExternalId()));
+    }
+
+    if (mappedPOIFilter.getGeoHash2() != null && !mappedPOIFilter.getGeoHash2().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash2).in(mappedPOIFilter.getGeoHash2()));
+    }
+
+    if (mappedPOIFilter.getY() != null && !mappedPOIFilter.getY().isEmpty()) {
+      preds.add(r.get(MappedPOI_.y).in(mappedPOIFilter.getY()));
+    }
+
+    if (mappedPOIFilter.getGeoHash11() != null && !mappedPOIFilter.getGeoHash11().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash11).in(mappedPOIFilter.getGeoHash11()));
+    }
+
+    if (mappedPOIFilter.getGeoHash4() != null && !mappedPOIFilter.getGeoHash4().isEmpty()) {
+      preds.add(r.get(MappedPOI_.geoHash4).in(mappedPOIFilter.getGeoHash4()));
     }
 
     if (mappedPOIFilter.getGeoHash1() != null && !mappedPOIFilter.getGeoHash1().isEmpty()) {
@@ -127,25 +153,13 @@ public class MappedPOIRepository implements Plugin {
       preds.add(r.get(MappedPOI_.geoHash9).in(mappedPOIFilter.getGeoHash9()));
     }
 
-    if (mappedPOIFilter.getRoom() != null && !mappedPOIFilter.getRoom().isEmpty()) {
-      Set<String> ids =
-          mappedPOIFilter.getRoom().parallelStream()
-              .map(f -> f.getId())
-              .collect(Collectors.toSet());
-      Join<T, Room> join = r.join(MappedPOI_.room);
-      preds.add(join.get(Basic_.id).in(ids));
-    }
-
-    if (mappedPOIFilter.getLat() != null && !mappedPOIFilter.getLat().isEmpty()) {
-      preds.add(r.get(MappedPOI_.lat).in(mappedPOIFilter.getLat()));
-    }
-
     if (mappedPOIFilter.getX() != null && !mappedPOIFilter.getX().isEmpty()) {
       preds.add(r.get(MappedPOI_.x).in(mappedPOIFilter.getX()));
     }
 
-    if (mappedPOIFilter.getKeepHistory() != null && !mappedPOIFilter.getKeepHistory().isEmpty()) {
-      preds.add(r.get(MappedPOI_.keepHistory).in(mappedPOIFilter.getKeepHistory()));
+    if (mappedPOIFilter.getKeepStatusHistory() != null
+        && !mappedPOIFilter.getKeepStatusHistory().isEmpty()) {
+      preds.add(r.get(MappedPOI_.keepStatusHistory).in(mappedPOIFilter.getKeepStatusHistory()));
     }
 
     if (mappedPOIFilter.getAddress() != null && !mappedPOIFilter.getAddress().isEmpty()) {
@@ -157,16 +171,8 @@ public class MappedPOIRepository implements Plugin {
       preds.add(join.get(Basic_.id).in(ids));
     }
 
-    if (mappedPOIFilter.getGeoHash12() != null && !mappedPOIFilter.getGeoHash12().isEmpty()) {
-      preds.add(r.get(MappedPOI_.geoHash12).in(mappedPOIFilter.getGeoHash12()));
-    }
-
     if (mappedPOIFilter.getLon() != null && !mappedPOIFilter.getLon().isEmpty()) {
       preds.add(r.get(MappedPOI_.lon).in(mappedPOIFilter.getLon()));
-    }
-
-    if (mappedPOIFilter.getRelatedType() != null && !mappedPOIFilter.getRelatedType().isEmpty()) {
-      preds.add(r.get(MappedPOI_.relatedType).in(mappedPOIFilter.getRelatedType()));
     }
 
     if (mappedPOIFilter.getGeoHash5() != null && !mappedPOIFilter.getGeoHash5().isEmpty()) {

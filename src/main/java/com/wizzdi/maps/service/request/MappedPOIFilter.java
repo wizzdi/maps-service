@@ -30,6 +30,8 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> geoHash11;
 
+  private Set<Boolean> keepStatusHistory;
+
   private Set<String> geoHash12;
 
   private Set<String> geoHash9;
@@ -46,7 +48,7 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> roomIds;
 
-  private Set<Boolean> keepHistory;
+  private Set<Boolean> keepLocationHistory;
 
   private Set<String> geoHash2;
 
@@ -196,6 +198,20 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
+  /** @return keepStatusHistory */
+  public Set<Boolean> getKeepStatusHistory() {
+    return this.keepStatusHistory;
+  }
+
+  /**
+   * @param keepStatusHistory keepStatusHistory to set
+   * @return MappedPOIFilter
+   */
+  public <T extends MappedPOIFilter> T setKeepStatusHistory(Set<Boolean> keepStatusHistory) {
+    this.keepStatusHistory = keepStatusHistory;
+    return (T) this;
+  }
+
   /** @return geoHash12 */
   public Set<String> getGeoHash12() {
     return this.geoHash12;
@@ -309,17 +325,17 @@ public class MappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
-  /** @return keepHistory */
-  public Set<Boolean> getKeepHistory() {
-    return this.keepHistory;
+  /** @return keepLocationHistory */
+  public Set<Boolean> getKeepLocationHistory() {
+    return this.keepLocationHistory;
   }
 
   /**
-   * @param keepHistory keepHistory to set
+   * @param keepLocationHistory keepLocationHistory to set
    * @return MappedPOIFilter
    */
-  public <T extends MappedPOIFilter> T setKeepHistory(Set<Boolean> keepHistory) {
-    this.keepHistory = keepHistory;
+  public <T extends MappedPOIFilter> T setKeepLocationHistory(Set<Boolean> keepLocationHistory) {
+    this.keepLocationHistory = keepLocationHistory;
     return (T) this;
   }
 

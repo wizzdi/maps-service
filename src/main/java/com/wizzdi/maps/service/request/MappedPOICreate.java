@@ -29,7 +29,7 @@ public class MappedPOICreate extends BasicCreate {
 
   private String geoHash3;
 
-  private Boolean keepHistory;
+  private Boolean keepLocationHistory;
 
   private Double y;
 
@@ -42,6 +42,8 @@ public class MappedPOICreate extends BasicCreate {
   private String geoHash9;
 
   private String geoHash8;
+
+  private Boolean keepStatusHistory;
 
   private String geoHash10;
 
@@ -203,17 +205,17 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
-  /** @return keepHistory */
-  public Boolean getKeepHistory() {
-    return this.keepHistory;
+  /** @return keepLocationHistory */
+  public Boolean getKeepLocationHistory() {
+    return this.keepLocationHistory;
   }
 
   /**
-   * @param keepHistory keepHistory to set
+   * @param keepLocationHistory keepLocationHistory to set
    * @return MappedPOICreate
    */
-  public <T extends MappedPOICreate> T setKeepHistory(Boolean keepHistory) {
-    this.keepHistory = keepHistory;
+  public <T extends MappedPOICreate> T setKeepLocationHistory(Boolean keepLocationHistory) {
+    this.keepLocationHistory = keepLocationHistory;
     return (T) this;
   }
 
@@ -299,6 +301,20 @@ public class MappedPOICreate extends BasicCreate {
    */
   public <T extends MappedPOICreate> T setGeoHash8(String geoHash8) {
     this.geoHash8 = geoHash8;
+    return (T) this;
+  }
+
+  /** @return keepStatusHistory */
+  public Boolean getKeepStatusHistory() {
+    return this.keepStatusHistory;
+  }
+
+  /**
+   * @param keepStatusHistory keepStatusHistory to set
+   * @return MappedPOICreate
+   */
+  public <T extends MappedPOICreate> T setKeepStatusHistory(Boolean keepStatusHistory) {
+    this.keepStatusHistory = keepStatusHistory;
     return (T) this;
   }
 

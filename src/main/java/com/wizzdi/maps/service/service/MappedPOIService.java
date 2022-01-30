@@ -81,44 +81,15 @@ public class MappedPOIService implements Plugin {
       update = true;
     }
 
-    if (mappedPOICreate.getExternalId() != null
-        && (!mappedPOICreate.getExternalId().equals(mappedPOI.getExternalId()))) {
-      mappedPOI.setExternalId(mappedPOICreate.getExternalId());
-      update = true;
-    }
-
     if (mappedPOICreate.getGeoHash10() != null
         && (!mappedPOICreate.getGeoHash10().equals(mappedPOI.getGeoHash10()))) {
       mappedPOI.setGeoHash10(mappedPOICreate.getGeoHash10());
       update = true;
     }
 
-    if (mappedPOICreate.getGeoHash2() != null
-        && (!mappedPOICreate.getGeoHash2().equals(mappedPOI.getGeoHash2()))) {
-      mappedPOI.setGeoHash2(mappedPOICreate.getGeoHash2());
-      update = true;
-    }
-
     if (mappedPOICreate.getRelatedId() != null
         && (!mappedPOICreate.getRelatedId().equals(mappedPOI.getRelatedId()))) {
       mappedPOI.setRelatedId(mappedPOICreate.getRelatedId());
-      update = true;
-    }
-
-    if (mappedPOICreate.getY() != null && (!mappedPOICreate.getY().equals(mappedPOI.getY()))) {
-      mappedPOI.setY(mappedPOICreate.getY());
-      update = true;
-    }
-
-    if (mappedPOICreate.getGeoHash11() != null
-        && (!mappedPOICreate.getGeoHash11().equals(mappedPOI.getGeoHash11()))) {
-      mappedPOI.setGeoHash11(mappedPOICreate.getGeoHash11());
-      update = true;
-    }
-
-    if (mappedPOICreate.getGeoHash4() != null
-        && (!mappedPOICreate.getGeoHash4().equals(mappedPOI.getGeoHash4()))) {
-      mappedPOI.setGeoHash4(mappedPOICreate.getGeoHash4());
       update = true;
     }
 
@@ -136,6 +107,66 @@ public class MappedPOIService implements Plugin {
 
     if (mappedPOICreate.getZ() != null && (!mappedPOICreate.getZ().equals(mappedPOI.getZ()))) {
       mappedPOI.setZ(mappedPOICreate.getZ());
+      update = true;
+    }
+
+    if (mappedPOICreate.getRoom() != null
+        && (mappedPOI.getRoom() == null
+            || !mappedPOICreate.getRoom().getId().equals(mappedPOI.getRoom().getId()))) {
+      mappedPOI.setRoom(mappedPOICreate.getRoom());
+      update = true;
+    }
+
+    if (mappedPOICreate.getLat() != null
+        && (!mappedPOICreate.getLat().equals(mappedPOI.getLat()))) {
+      mappedPOI.setLat(mappedPOICreate.getLat());
+      update = true;
+    }
+
+    if (mappedPOICreate.getKeepLocationHistory() != null
+        && (!mappedPOICreate.getKeepLocationHistory().equals(mappedPOI.isKeepLocationHistory()))) {
+      mappedPOI.setKeepLocationHistory(mappedPOICreate.getKeepLocationHistory());
+      update = true;
+    }
+
+    if (mappedPOICreate.getGeoHash12() != null
+        && (!mappedPOICreate.getGeoHash12().equals(mappedPOI.getGeoHash12()))) {
+      mappedPOI.setGeoHash12(mappedPOICreate.getGeoHash12());
+      update = true;
+    }
+
+    if (mappedPOICreate.getRelatedType() != null
+        && (!mappedPOICreate.getRelatedType().equals(mappedPOI.getRelatedType()))) {
+      mappedPOI.setRelatedType(mappedPOICreate.getRelatedType());
+      update = true;
+    }
+
+    if (mappedPOICreate.getExternalId() != null
+        && (!mappedPOICreate.getExternalId().equals(mappedPOI.getExternalId()))) {
+      mappedPOI.setExternalId(mappedPOICreate.getExternalId());
+      update = true;
+    }
+
+    if (mappedPOICreate.getGeoHash2() != null
+        && (!mappedPOICreate.getGeoHash2().equals(mappedPOI.getGeoHash2()))) {
+      mappedPOI.setGeoHash2(mappedPOICreate.getGeoHash2());
+      update = true;
+    }
+
+    if (mappedPOICreate.getY() != null && (!mappedPOICreate.getY().equals(mappedPOI.getY()))) {
+      mappedPOI.setY(mappedPOICreate.getY());
+      update = true;
+    }
+
+    if (mappedPOICreate.getGeoHash11() != null
+        && (!mappedPOICreate.getGeoHash11().equals(mappedPOI.getGeoHash11()))) {
+      mappedPOI.setGeoHash11(mappedPOICreate.getGeoHash11());
+      update = true;
+    }
+
+    if (mappedPOICreate.getGeoHash4() != null
+        && (!mappedPOICreate.getGeoHash4().equals(mappedPOI.getGeoHash4()))) {
+      mappedPOI.setGeoHash4(mappedPOICreate.getGeoHash4());
       update = true;
     }
 
@@ -164,27 +195,14 @@ public class MappedPOIService implements Plugin {
       update = true;
     }
 
-    if (mappedPOICreate.getRoom() != null
-        && (mappedPOI.getRoom() == null
-            || !mappedPOICreate.getRoom().getId().equals(mappedPOI.getRoom().getId()))) {
-      mappedPOI.setRoom(mappedPOICreate.getRoom());
-      update = true;
-    }
-
-    if (mappedPOICreate.getLat() != null
-        && (!mappedPOICreate.getLat().equals(mappedPOI.getLat()))) {
-      mappedPOI.setLat(mappedPOICreate.getLat());
-      update = true;
-    }
-
     if (mappedPOICreate.getX() != null && (!mappedPOICreate.getX().equals(mappedPOI.getX()))) {
       mappedPOI.setX(mappedPOICreate.getX());
       update = true;
     }
 
-    if (mappedPOICreate.getKeepHistory() != null
-        && (!mappedPOICreate.getKeepHistory().equals(mappedPOI.isKeepHistory()))) {
-      mappedPOI.setKeepHistory(mappedPOICreate.getKeepHistory());
+    if (mappedPOICreate.getKeepStatusHistory() != null
+        && (!mappedPOICreate.getKeepStatusHistory().equals(mappedPOI.isKeepStatusHistory()))) {
+      mappedPOI.setKeepStatusHistory(mappedPOICreate.getKeepStatusHistory());
       update = true;
     }
 
@@ -195,21 +213,9 @@ public class MappedPOIService implements Plugin {
       update = true;
     }
 
-    if (mappedPOICreate.getGeoHash12() != null
-        && (!mappedPOICreate.getGeoHash12().equals(mappedPOI.getGeoHash12()))) {
-      mappedPOI.setGeoHash12(mappedPOICreate.getGeoHash12());
-      update = true;
-    }
-
     if (mappedPOICreate.getLon() != null
         && (!mappedPOICreate.getLon().equals(mappedPOI.getLon()))) {
       mappedPOI.setLon(mappedPOICreate.getLon());
-      update = true;
-    }
-
-    if (mappedPOICreate.getRelatedType() != null
-        && (!mappedPOICreate.getRelatedType().equals(mappedPOI.getRelatedType()))) {
-      mappedPOI.setRelatedType(mappedPOICreate.getRelatedType());
       update = true;
     }
 
@@ -265,20 +271,6 @@ public class MappedPOIService implements Plugin {
   public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     basicService.validate(mappedPOIFilter, securityContext);
 
-    Set<String> mapIconIds =
-        mappedPOIFilter.getMapIconIds() == null ? new HashSet<>() : mappedPOIFilter.getMapIconIds();
-    Map<String, MapIcon> mapIcon =
-        mapIconIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MapIcon.class, mapIconIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mapIconIds.removeAll(mapIcon.keySet());
-    if (!mapIconIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mapIconIds);
-    }
-    mappedPOIFilter.setMapIcon(new ArrayList<>(mapIcon.values()));
     Set<String> roomIds =
         mappedPOIFilter.getRoomIds() == null ? new HashSet<>() : mappedPOIFilter.getRoomIds();
     Map<String, Room> room =
@@ -293,6 +285,20 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + roomIds);
     }
     mappedPOIFilter.setRoom(new ArrayList<>(room.values()));
+    Set<String> mapIconIds =
+        mappedPOIFilter.getMapIconIds() == null ? new HashSet<>() : mappedPOIFilter.getMapIconIds();
+    Map<String, MapIcon> mapIcon =
+        mapIconIds.isEmpty()
+            ? new HashMap<>()
+            : this.repository
+                .listByIds(MapIcon.class, mapIconIds, SecuredBasic_.security, securityContext)
+                .parallelStream()
+                .collect(Collectors.toMap(f -> f.getId(), f -> f));
+    mapIconIds.removeAll(mapIcon.keySet());
+    if (!mapIconIds.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mapIconIds);
+    }
+    mappedPOIFilter.setMapIcon(new ArrayList<>(mapIcon.values()));
     Set<String> addressIds =
         mappedPOIFilter.getAddressIds() == null ? new HashSet<>() : mappedPOIFilter.getAddressIds();
     Map<String, Address> address =
@@ -317,17 +323,6 @@ public class MappedPOIService implements Plugin {
   public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     basicService.validate(mappedPOICreate, securityContext);
 
-    String mapIconId = mappedPOICreate.getMapIconId();
-    MapIcon mapIcon =
-        mapIconId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
-    if (mapIconId != null && mapIcon == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
-    }
-    mappedPOICreate.setMapIcon(mapIcon);
-
     String roomId = mappedPOICreate.getRoomId();
     Room room =
         roomId == null
@@ -338,6 +333,17 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
     }
     mappedPOICreate.setRoom(room);
+
+    String mapIconId = mappedPOICreate.getMapIconId();
+    MapIcon mapIcon =
+        mapIconId == null
+            ? null
+            : this.repository.getByIdOrNull(
+                mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
+    if (mapIconId != null && mapIcon == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
+    }
+    mappedPOICreate.setMapIcon(mapIcon);
 
     String addressId = mappedPOICreate.getAddressId();
     Address address =
