@@ -14,4 +14,11 @@ public class StatusHistoryGroupedResponse {
         this.statusHistoryGroupedEntries = statusHistoryGroupedEntries;
         return (T) this;
     }
+
+    @Override
+    public String toString() {
+        return "StatusHistoryGroupedResponse{" +
+                "statusHistoryGroupedEntries=" + statusHistoryGroupedEntries +
+                '}';
+    }
 }

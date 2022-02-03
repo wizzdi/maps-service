@@ -24,4 +24,12 @@ public class StatusHistoryGroupedEntry {
         this.count = count;
         return (T) this;
     }
+
+    @Override
+    public String toString() {
+        return "StatusHistoryGroupedEntry{" +
+                "mapIcon=" + mapIcon +
+                ", count=" + count +
+                '}';
+    }
 }

@@ -11,6 +11,7 @@ import com.wizzdi.maps.service.request.StatusHistoryCreate;
 import com.wizzdi.maps.service.request.StatusHistoryFilter;
 import com.wizzdi.maps.service.request.StatusHistoryUpdate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -113,7 +114,7 @@ public class StatusHistoryControllerTest {
     }
 
     if (request.getDateAtStatus() != null) {
-      Assertions.assertEquals(request.getDateAtStatus(), testStatusHistory.getDateAtStatus());
+      Assertions.assertEquals(request.getDateAtStatus().atZoneSameInstant(ZoneId.systemDefault()), testStatusHistory.getDateAtStatus().atZoneSameInstant(ZoneId.systemDefault()));
     }
   }
 

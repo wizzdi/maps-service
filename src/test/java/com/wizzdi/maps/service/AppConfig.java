@@ -24,9 +24,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class AppConfig {
 
+    public static final String ON = "on";
+    public static final String OFF = "off";
+    public static final String UNKNOWN = "unknown";
     @Autowired
     private RoomService roomService;
 
@@ -55,6 +62,19 @@ public class AppConfig {
     @Bean
     public MappedPOI second() {
         return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06207103256403).setLon(34.777958888094304).setName("second"), securityContext);
+    }
+
+
+    @Bean
+    @Qualifier("historyIcons")
+    public Map<String,MapIcon> historyIcons(){
+        String type="test";
+        Map<String,MapIcon> map=new HashMap<>();
+        for (String statusName : Arrays.asList(ON, OFF, UNKNOWN)) {
+            String externalId=type+"_"+statusName;
+            map.put(statusName,mapIconService.createMapIcon(new MapIconCreate().setExternalId(externalId).setName(statusName),securityContext));
+        }
+        return map;
     }
 
     @Bean
