@@ -18,10 +18,10 @@
         
 
         <flexicore-territories-model.version>3.0.1</flexicore-territories-model.version>
+
+                <flexicore-file-model.version>1.0.0</flexicore-file-model.version>
         
-        <flexicore-file-model.version>1.0.0</flexicore-file-model.version>
-        
-        <maps-model.version>1.0.0</maps-model.version>
+        <maps-model.version>1.1.0</maps-model.version>
         
 
     </properties>
