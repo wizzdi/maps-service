@@ -58,7 +58,7 @@ public class MapFilterComponentService implements Plugin {
         if(o instanceof Basic){
             Basic basic= (Basic) o;
             return mapFilterComponent.setId(basic.getId())
-                    .setName(mapFilterComponent.getName());
+                    .setName(basic.getName());
         }
         if(o instanceof String){
             String s= (String) o;

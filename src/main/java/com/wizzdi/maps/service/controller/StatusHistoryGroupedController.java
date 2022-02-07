@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("StatusHistoryGrouped")
 @Extension
-@Tag(name = "@RequestMapping(\"StatusHistoryGrouped\")\n")
+@Tag(name = "StatusHistoryGrouped")
 @OperationsInside
 public class StatusHistoryGroupedController implements Plugin {
 
