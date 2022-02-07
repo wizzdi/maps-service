@@ -13,6 +13,8 @@ public enum FilterComponentType {
     COUNTRY(Country.class, Arrays.asList(MappedPOI_.address, Address_.street, Street_.city, City_.country)),
     CITY(City.class, Arrays.asList(MappedPOI_.address, Address_.street, Street_.city)),
     STREET(Street.class, Arrays.asList(MappedPOI_.address, Address_.street)),
+    NEIGHBOURHOOD(Neighbourhood.class, Arrays.asList(MappedPOI_.address, Address_.neighbourhood)),
+    STATE(State.class, Arrays.asList(MappedPOI_.address, Address_.street, Street_.city, City_.state)),
     MAP_ICON(MapIcon.class, Arrays.asList(MappedPOI_.mapIcon)),
     MAP_GROUPS(MapGroup.class, Arrays.asList(MappedPOI_.mapGroupToMappedPOIS, MapGroupToMappedPOI_.mapGroup)),
     TENANTS(SecurityTenant.class, Arrays.asList(MappedPOI_.security, Baseclass_.tenant)),

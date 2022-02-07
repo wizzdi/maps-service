@@ -89,27 +89,27 @@ public class MappedPOIRepository implements Plugin {
             Join<T, Address> join = r.join(MappedPOI_.address);
             addressRepository.addAddressPredicate(addressFilter, q, cb, join, preds, securityContext);
         }
+
+        if (filtering.getRelatedType() != null && !filtering.getRelatedType().isEmpty()) {
+            preds.add(r.get(MappedPOI_.relatedType).in(filtering.getRelatedType()));
+        }
+        if (filtering.getRelatedId() != null && !filtering.getRelatedId().isEmpty()) {
+            preds.add(r.get(MappedPOI_.relatedId).in(filtering.getRelatedId()));
+        }
+        LocationArea locationArea = filtering.getLocationArea();
+        if (locationArea != null) {
+            if (locationArea.getLatStart() != null && locationArea.getLatEnd() != null) {
+                preds.add(cb.between(r.get(MappedPOI_.lat), locationArea.getLatStart(), locationArea.getLatEnd()));
+            }
+            if (locationArea.getLonStart() != null && locationArea.getLonEnd() != null) {
+                preds.add(cb.between(r.get(MappedPOI_.lon), locationArea.getLonStart(), locationArea.getLonEnd()));
+            }
+
+        }
+
         if (filtering.getMapGroupFilter() != null) {
             Join<T, MapGroupToMappedPOI> join1 = r.join(MappedPOI_.mapGroupToMappedPOIS);
             Join<MapGroupToMappedPOI, MapGroup> join = join1.join(MapGroupToMappedPOI_.mapGroup);
-
-            if (filtering.getRelatedType() != null && !filtering.getRelatedType().isEmpty()) {
-                preds.add(r.get(MappedPOI_.relatedType).in(filtering.getRelatedType()));
-            }
-            if (filtering.getRelatedId() != null && !filtering.getRelatedId().isEmpty()) {
-                preds.add(r.get(MappedPOI_.relatedId).in(filtering.getRelatedId()));
-            }
-            LocationArea locationArea = filtering.getLocationArea();
-            if (locationArea != null) {
-                if (locationArea.getLatStart() != null && locationArea.getLatEnd() != null) {
-                    preds.add(cb.between(r.get(MappedPOI_.lat), locationArea.getLatStart(), locationArea.getLatEnd()));
-                }
-                if (locationArea.getLonStart() != null && locationArea.getLonEnd() != null) {
-                    preds.add(cb.between(r.get(MappedPOI_.lon), locationArea.getLonStart(), locationArea.getLonEnd()));
-                }
-
-            }
-
             mapGroupRepository.addMapGroupPredicate(filtering.getMapGroupFilter(), cb, q, join, preds, securityContext);
             preds.add(cb.isFalse(join1.get(Basic_.softDelete)));
         }
