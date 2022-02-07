@@ -5,6 +5,8 @@ import com.flexicore.model.Basic;
 import com.flexicore.model.Basic_;
 import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
+import com.flexicore.territories.data.AddressRepository;
+import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.data.BasicRepository;
@@ -37,6 +39,8 @@ public class MappedPOIRepository implements Plugin {
     private SecuredBasicRepository securedBasicRepository;
     @Autowired
     private MapGroupRepository mapGroupRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     /**
      * @param filtering
@@ -80,6 +84,11 @@ public class MappedPOIRepository implements Plugin {
             Join<T, Room> join = r.join(MappedPOI_.room);
             preds.add(join.get(Basic_.id).in(ids));
         }
+        AddressFilter addressFilter = filtering.getAddressFilter();
+        if (addressFilter != null) {
+            Join<T, Address> join = r.join(MappedPOI_.address);
+            addressRepository.addAddressPredicate(addressFilter, q, cb, join, preds, securityContext);
+        }
         if (filtering.getMapGroupFilter() != null) {
             Join<T, MapGroupToMappedPOI> join1 = r.join(MappedPOI_.mapGroupToMappedPOIS);
             Join<MapGroupToMappedPOI, MapGroup> join = join1.join(MapGroupToMappedPOI_.mapGroup);
@@ -91,11 +100,11 @@ public class MappedPOIRepository implements Plugin {
                 preds.add(r.get(MappedPOI_.relatedId).in(filtering.getRelatedId()));
             }
             LocationArea locationArea = filtering.getLocationArea();
-            if (locationArea != null ) {
-                if(locationArea.getLatStart()!=null&&locationArea.getLatEnd()!=null){
+            if (locationArea != null) {
+                if (locationArea.getLatStart() != null && locationArea.getLatEnd() != null) {
                     preds.add(cb.between(r.get(MappedPOI_.lat), locationArea.getLatStart(), locationArea.getLatEnd()));
                 }
-                if(locationArea.getLonStart()!=null&&locationArea.getLonEnd()!=null){
+                if (locationArea.getLonStart() != null && locationArea.getLonEnd() != null) {
                     preds.add(cb.between(r.get(MappedPOI_.lon), locationArea.getLonStart(), locationArea.getLonEnd()));
                 }
 

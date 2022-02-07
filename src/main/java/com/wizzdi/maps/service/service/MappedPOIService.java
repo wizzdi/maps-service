@@ -6,6 +6,7 @@ import com.flexicore.model.Basic;
 import com.flexicore.model.SecuredBasic_;
 import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
+import com.flexicore.territories.service.AddressService;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
@@ -51,6 +52,8 @@ public class MappedPOIService implements Plugin {
 
   @Autowired
   private BasicService basicService;
+  @Autowired
+  private AddressService addressService;
   private static final Map<String, Method> setterCache = new ConcurrentHashMap<>();
 
 
@@ -282,6 +285,9 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with ids " + roomIds);
     }
     mappedPOIFilter.setRoom(new ArrayList<>(room.values()));
+    if(mappedPOIFilter.getAddressFilter()!=null){
+      addressService.validate(mappedPOIFilter.getAddressFilter(),securityContext);
+    }
   }
 
   /**

@@ -2,6 +2,7 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
+import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
@@ -10,23 +11,27 @@ import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.Room;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MappedPOIFilter extends PaginationFilter {
 
-  private Set<String> addressIds;
+  private Set<String> addressIds=new HashSet<>();
   @JsonIgnore
   private List<Address> address;
   private BasicPropertiesFilter basicPropertiesFilter;
   private LocationArea locationArea;
   @JsonIgnore
   private List<Room> room;
-  private Set<String> roomIds;
+  private Set<String> roomIds=new HashSet<>();
   private MapGroupFilter mapGroupFilter;
   private Set<String> externalId;
   private Set<String> relatedType;
   private Set<String> relatedId;
+  private AddressFilter addressFilter;
+
+
 
 
 
@@ -127,6 +132,15 @@ public class MappedPOIFilter extends PaginationFilter {
    */
   public <T extends MappedPOIFilter> T setRelatedId(Set<String> relatedId) {
     this.relatedId = relatedId;
+    return (T) this;
+  }
+
+  public AddressFilter getAddressFilter() {
+    return addressFilter;
+  }
+
+  public <T extends MappedPOIFilter> T setAddressFilter(AddressFilter addressFilter) {
+    this.addressFilter = addressFilter;
     return (T) this;
   }
 }

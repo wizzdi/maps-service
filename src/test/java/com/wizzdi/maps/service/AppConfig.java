@@ -1,6 +1,9 @@
 package com.wizzdi.maps.service;
 
+import com.flexicore.model.territories.*;
 import com.flexicore.security.SecurityContextBase;
+import com.flexicore.territories.request.*;
+import com.flexicore.territories.service.*;
 import com.wizzdi.maps.model.Building;
 import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MapIcon;
@@ -53,6 +56,18 @@ public class AppConfig {
 
     @Autowired
     private MapGroupService mapGroupService;
+    @Autowired
+    private AddressService addressService;
+    @Autowired
+    private CountryService countryService;
+    @Autowired
+    private CityService cityService;
+    @Autowired
+    private StreetService streetService;
+    @Autowired
+    private NeighbourhoodService neighbourhoodService;
+    @Autowired
+    private StateService stateService;
 
     @Bean
     public MappedPOI first() {
@@ -106,4 +121,64 @@ public class AppConfig {
         MapIconCreate mapIconCreate = new MapIconCreate();
         return mapIconService.createMapIcon(mapIconCreate, securityContext);
     }
+
+    @Bean
+    public Country israel(){
+        return countryService.createCountry(new CountryCreate().setCountryCode("IL").setName("Israel"),securityContext);
+    }
+
+
+    @Bean
+    public City telAviv(Country israel){
+        return cityService.createCity(new CityCreate().setExternalId("tlv").setCountry(israel).setName("Tel Aviv"),securityContext);
+    }
+    @Bean
+    public Street hertzel(City telAviv){
+        return streetService.createStreet(new StreetCreate().setExternalId("hertzel").setCity(telAviv).setName("Hertzel"),securityContext);
+    }
+
+    @Bean
+    public Neighbourhood yadEliyahu(City telAviv){
+        return neighbourhoodService.createNeighbourhood(new NeighbourhoodCreate().setCity(telAviv).setExternalId("yadEliayhu").setCity(telAviv).setName("Yad Eliyahu"),securityContext);
+    }
+
+    @Bean
+    public Address telAvivAddress(Neighbourhood yadEliyahu,Street hertzel){
+        return addressService.createAddress(new AddressCreate().setStreet(hertzel).setNeighbourhood(yadEliyahu).setExternalId("tvl1").setName("Tel Aviv Address"),securityContext);
+    }
+
+
+
+
+    @Bean
+    public Country usa(){
+        return countryService.createCountry(new CountryCreate().setCountryCode("US").setName("USA"),securityContext);
+    }
+
+    @Bean
+    public State newYork(Country usa){
+        return stateService.createState(new StateCreate().setCountry(usa).setExternalId("NY").setName("New York"),securityContext);
+    }
+
+
+    @Bean
+    public City newYorkCity(Country usa,State newYork){
+        return cityService.createCity(new CityCreate().setState(newYork).setExternalId("NYC").setCountry(usa).setName("New York City"),securityContext);
+    }
+    @Bean
+    public Street broadway(City newYorkCity){
+        return streetService.createStreet(new StreetCreate().setExternalId("broadway").setCity(newYorkCity).setName("Broadway"),securityContext);
+    }
+
+    @Bean
+    public Neighbourhood manhattan(City newYorkCity){
+        return neighbourhoodService.createNeighbourhood(new NeighbourhoodCreate().setCity(newYorkCity).setExternalId("manhattan").setCity(newYorkCity).setName("Manhattan"),securityContext);
+    }
+
+    @Bean
+    public Address newyorkAddress(Neighbourhood manhattan,Street broadway){
+        return addressService.createAddress(new AddressCreate().setStreet(broadway).setNeighbourhood(manhattan).setExternalId("nyc1").setName("New York Address"),securityContext);
+    }
+
+
 }
