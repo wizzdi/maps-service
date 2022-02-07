@@ -234,7 +234,7 @@
                                         <Plugin-Id>${artifactId}</Plugin-Id>
                                         <Plugin-Version>${version}</Plugin-Version>
                                         <!--suppress UnresolvedMavenProperty -->
-                                        <Plugin-Dependencies>flexicore-territories-service@&gt;=${flexicore-territories-service.version}</Plugin-Dependencies>
+                                        <Plugin-Dependencies>flexicore-territories-service@&gt;=4.0.1</Plugin-Dependencies>
 
                                     </manifestEntries>
                                 </transformer>
