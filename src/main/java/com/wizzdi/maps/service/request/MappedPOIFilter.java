@@ -1,6 +1,7 @@
 package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flexicore.model.SecurityTenant;
 import com.flexicore.model.territories.Address;
 import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.file.model.FileResource;
@@ -30,6 +31,10 @@ public class MappedPOIFilter extends PaginationFilter {
   private Set<String> relatedType;
   private Set<String> relatedId;
   private AddressFilter addressFilter;
+  private List<MapIcon> mapIcons;
+  private Set<String> mapIconsIds=new HashSet<>();
+  private List<SecurityTenant> tenants;
+  private Set<String> tenantIds=new HashSet<>();
 
 
 
@@ -141,6 +146,44 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setAddressFilter(AddressFilter addressFilter) {
     this.addressFilter = addressFilter;
+    return (T) this;
+  }
+
+  @JsonIgnore
+  public List<MapIcon> getMapIcons() {
+    return mapIcons;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIcons(List<MapIcon> mapIcons) {
+    this.mapIcons = mapIcons;
+    return (T) this;
+  }
+
+  public Set<String> getMapIconsIds() {
+    return mapIconsIds;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIconsIds(Set<String> mapIconsIds) {
+    this.mapIconsIds = mapIconsIds;
+    return (T) this;
+  }
+
+  @JsonIgnore
+  public List<SecurityTenant> getTenants() {
+    return tenants;
+  }
+
+  public <T extends MappedPOIFilter> T setTenants(List<SecurityTenant> tenants) {
+    this.tenants = tenants;
+    return (T) this;
+  }
+
+  public Set<String> getTenantIds() {
+    return tenantIds;
+  }
+
+  public <T extends MappedPOIFilter> T setTenantIds(Set<String> tenantIds) {
+    this.tenantIds = tenantIds;
     return (T) this;
   }
 }

@@ -1,8 +1,6 @@
 package com.wizzdi.maps.service.data;
 
-import com.flexicore.model.Baseclass;
-import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
+import com.flexicore.model.*;
 import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.flexicore.territories.data.AddressRepository;
@@ -82,6 +80,19 @@ public class MappedPOIRepository implements Plugin {
             Set<String> ids =
                     filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
             Join<T, Room> join = r.join(MappedPOI_.room);
+            preds.add(join.get(Basic_.id).in(ids));
+        }
+        if (filtering.getTenants() != null && !filtering.getTenants().isEmpty()) {
+            Set<String> ids =
+                    filtering.getTenants().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+            Join<T, Baseclass> join = r.join(MappedPOI_.security);
+            Join<Baseclass, SecurityTenant> tenantJoin = join.join(Baseclass_.tenant);
+            preds.add(tenantJoin.get(Basic_.id).in(ids));
+        }
+        if (filtering.getMapIcons() != null && !filtering.getMapIcons().isEmpty()) {
+            Set<String> ids =
+                    filtering.getMapIcons().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+            Join<T, MapIcon> join = r.join(MappedPOI_.mapIcon);
             preds.add(join.get(Basic_.id).in(ids));
         }
         AddressFilter addressFilter = filtering.getAddressFilter();
