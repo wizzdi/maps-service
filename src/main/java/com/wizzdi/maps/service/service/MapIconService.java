@@ -72,6 +72,12 @@ public class MapIconService implements Plugin {
   public boolean updateMapIconNoMerge(MapIcon mapIcon, MapIconCreate mapIconCreate) {
     boolean update = basicService.updateBasicNoMerge(mapIconCreate, mapIcon);
 
+    if (mapIconCreate.getRelatedType() != null
+        && (!mapIconCreate.getRelatedType().equals(mapIcon.getRelatedType()))) {
+      mapIcon.setRelatedType(mapIconCreate.getRelatedType());
+      update = true;
+    }
+
     if (mapIconCreate.getFileResource() != null
         && (mapIcon.getFileResource() == null
             || !mapIconCreate
