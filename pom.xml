@@ -6,7 +6,7 @@
 
     <groupId>com.wizzdi</groupId>
     <artifactId>maps-service</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
 
     <properties>
         <version.compiler.plugin>3.3</version.compiler.plugin>
@@ -21,7 +21,7 @@
 
         <flexicore-file-model.version>1.0.0</flexicore-file-model.version>
 
-        <maps-model.version>1.1.0</maps-model.version>
+        <maps-model.version>1.1.1</maps-model.version>
 
 
         <flexicore-territories-service.version>4.0.2-SNAPSHOT</flexicore-territories-service.version>
