@@ -57,6 +57,8 @@ public class MapIconControllerTest {
     String name = UUID.randomUUID().toString();
     MapIconCreate request = new MapIconCreate().setName(name);
 
+    request.setRelatedType("test-string");
+
     request.setExternalId("test-string");
 
     ResponseEntity<MapIcon> response =
@@ -86,6 +88,10 @@ public class MapIconControllerTest {
 
   public void assertMapIcon(MapIconCreate request, MapIcon testMapIcon) {
     Assertions.assertNotNull(testMapIcon);
+
+    if (request.getRelatedType() != null) {
+      Assertions.assertEquals(request.getRelatedType(), testMapIcon.getRelatedType());
+    }
 
     if (request.getExternalId() != null) {
       Assertions.assertEquals(request.getExternalId(), testMapIcon.getExternalId());

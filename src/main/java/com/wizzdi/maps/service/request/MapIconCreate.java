@@ -11,6 +11,8 @@ public class MapIconCreate extends BasicCreate {
 
   @JsonIgnore private FileResource fileResource;
 
+  private String relatedType;
+
   private String externalId;
 
   /** @return fileResourceId */
@@ -39,6 +41,20 @@ public class MapIconCreate extends BasicCreate {
    */
   public <T extends MapIconCreate> T setFileResource(FileResource fileResource) {
     this.fileResource = fileResource;
+    return (T) this;
+  }
+
+  /** @return relatedType */
+  public String getRelatedType() {
+    return this.relatedType;
+  }
+
+  /**
+   * @param relatedType relatedType to set
+   * @return MapIconCreate
+   */
+  public <T extends MapIconCreate> T setRelatedType(String relatedType) {
+    this.relatedType = relatedType;
     return (T) this;
   }
 

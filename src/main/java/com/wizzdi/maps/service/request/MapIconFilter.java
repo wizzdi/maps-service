@@ -14,6 +14,8 @@ public class MapIconFilter extends PaginationFilter {
 
   @JsonIgnore private List<FileResource> fileResource;
 
+  private Set<String> relatedType;
+
   private Set<String> fileResourceIds;
 
   private BasicPropertiesFilter basicPropertiesFilter;
@@ -44,6 +46,20 @@ public class MapIconFilter extends PaginationFilter {
    */
   public <T extends MapIconFilter> T setFileResource(List<FileResource> fileResource) {
     this.fileResource = fileResource;
+    return (T) this;
+  }
+
+  /** @return relatedType */
+  public Set<String> getRelatedType() {
+    return this.relatedType;
+  }
+
+  /**
+   * @param relatedType relatedType to set
+   * @return MapIconFilter
+   */
+  public <T extends MapIconFilter> T setRelatedType(Set<String> relatedType) {
+    this.relatedType = relatedType;
     return (T) this;
   }
 

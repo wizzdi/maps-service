@@ -60,6 +60,10 @@ public class MapIconRepository implements Plugin {
     this.securedBasicRepository.addSecuredBasicPredicates(
         mapIconFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
+    if (mapIconFilter.getRelatedType() != null && !mapIconFilter.getRelatedType().isEmpty()) {
+      preds.add(r.get(MapIcon_.relatedType).in(mapIconFilter.getRelatedType()));
+    }
+
     if (mapIconFilter.getFileResource() != null && !mapIconFilter.getFileResource().isEmpty()) {
       Set<String> ids =
           mapIconFilter.getFileResource().parallelStream()
