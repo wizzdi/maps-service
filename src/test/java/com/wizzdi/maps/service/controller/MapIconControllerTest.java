@@ -11,7 +11,13 @@ import com.wizzdi.maps.service.request.MapIconUpdate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +28,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -54,8 +61,7 @@ public class MapIconControllerTest {
   @Test
   @Order(1)
   public void testMapIconCreate() {
-    String name = UUID.randomUUID().toString();
-    MapIconCreate request = new MapIconCreate().setName(name);
+    MapIconCreate request = new MapIconCreate().setName(UUID.randomUUID().toString());
 
     request.setRelatedType("test-string");
 
@@ -101,8 +107,8 @@ public class MapIconControllerTest {
   @Test
   @Order(3)
   public void testMapIconUpdate() {
-    String name = UUID.randomUUID().toString();
-    MapIconUpdate request = new MapIconUpdate().setId(testMapIcon.getId()).setName(name);
+    MapIconUpdate request =
+        new MapIconUpdate().setId(testMapIcon.getId()).setName(UUID.randomUUID().toString());
     ResponseEntity<MapIcon> response =
         this.restTemplate.exchange(
             "/MapIcon/updateMapIcon", HttpMethod.PUT, new HttpEntity<>(request), MapIcon.class);

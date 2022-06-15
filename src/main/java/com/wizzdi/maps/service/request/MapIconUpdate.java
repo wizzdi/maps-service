@@ -1,9 +1,17 @@
 package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MapIcon;
 
 /** Object Used to Update MapIcon */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "mapIcon",
+      field = "id",
+      fieldType = com.wizzdi.maps.model.MapIcon.class,
+      groups = {com.wizzdi.flexicore.security.validation.Update.class})
+})
 public class MapIconUpdate extends MapIconCreate {
 
   private String id;

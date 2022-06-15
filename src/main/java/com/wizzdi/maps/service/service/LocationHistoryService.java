@@ -2,33 +2,23 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.SecuredBasic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
 import com.wizzdi.maps.model.LocationHistory;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.data.LocationHistoryRepository;
 import com.wizzdi.maps.service.request.LocationHistoryCreate;
 import com.wizzdi.maps.service.request.LocationHistoryFilter;
 import com.wizzdi.maps.service.request.LocationHistoryUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -84,15 +74,15 @@ public class LocationHistoryService implements Plugin {
       update = true;
     }
 
-    if (locationHistoryCreate.getY() != null
-        && (!locationHistoryCreate.getY().equals(locationHistory.getY()))) {
-      locationHistory.setY(locationHistoryCreate.getY());
-      update = true;
-    }
-
     if (locationHistoryCreate.getZ() != null
         && (!locationHistoryCreate.getZ().equals(locationHistory.getZ()))) {
       locationHistory.setZ(locationHistoryCreate.getZ());
+      update = true;
+    }
+
+    if (locationHistoryCreate.getY() != null
+        && (!locationHistoryCreate.getY().equals(locationHistory.getY()))) {
+      locationHistory.setY(locationHistoryCreate.getY());
       update = true;
     }
 
@@ -153,13 +143,13 @@ public class LocationHistoryService implements Plugin {
   /**
    * @param locationHistoryFilter Object Used to List LocationHistory
    * @param securityContext
-   * @return PaginationResponse containing paging information for LocationHistory
+   * @return PaginationResponse<LocationHistory> containing paging information for LocationHistory
    */
   public PaginationResponse<LocationHistory> getAllLocationHistories(
       LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
     List<LocationHistory> list = listAllLocationHistories(locationHistoryFilter, securityContext);
     long count = this.repository.countAllLocationHistories(locationHistoryFilter, securityContext);
-    return new PaginationResponse<>(list, locationHistoryFilter, count);
+    return new PaginationResponse<>(list, locationHistoryFilter.getPageSize(), count);
   }
 
   /**
@@ -170,82 +160,6 @@ public class LocationHistoryService implements Plugin {
   public List<LocationHistory> listAllLocationHistories(
       LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
     return this.repository.listAllLocationHistories(locationHistoryFilter, securityContext);
-  }
-
-  /**
-   * @param locationHistoryFilter Object Used to List LocationHistory
-   * @param securityContext
-   * @throws ResponseStatusException if locationHistoryFilter is not valid
-   */
-  public void validate(
-      LocationHistoryFilter locationHistoryFilter, SecurityContextBase securityContext) {
-    basicService.validate(locationHistoryFilter, securityContext);
-
-    Set<String> roomIds =
-        locationHistoryFilter.getRoomIds() == null
-            ? new HashSet<>()
-            : locationHistoryFilter.getRoomIds();
-    Map<String, Room> room =
-        roomIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(Room.class, roomIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    roomIds.removeAll(room.keySet());
-    if (!roomIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + roomIds);
-    }
-    locationHistoryFilter.setRoom(new ArrayList<>(room.values()));
-    Set<String> mappedPOIIds =
-        locationHistoryFilter.getMappedPOIIds() == null
-            ? new HashSet<>()
-            : locationHistoryFilter.getMappedPOIIds();
-    Map<String, MappedPOI> mappedPOI =
-        mappedPOIIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MappedPOI.class, mappedPOIIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mappedPOIIds.removeAll(mappedPOI.keySet());
-    if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
-    }
-    locationHistoryFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
-  }
-
-  /**
-   * @param locationHistoryCreate Object Used to Create LocationHistory
-   * @param securityContext
-   * @throws ResponseStatusException if locationHistoryCreate is not valid
-   */
-  public void validate(
-      LocationHistoryCreate locationHistoryCreate, SecurityContextBase securityContext) {
-    basicService.validate(locationHistoryCreate, securityContext);
-
-    String roomId = locationHistoryCreate.getRoomId();
-    Room room =
-        roomId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                roomId, Room.class, SecuredBasic_.security, securityContext);
-    if (roomId != null && room == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
-    }
-    locationHistoryCreate.setRoom(room);
-
-    String mappedPOIId = locationHistoryCreate.getMappedPOIId();
-    MappedPOI mappedPOI =
-        mappedPOIId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mappedPOIId, MappedPOI.class, SecuredBasic_.security, securityContext);
-    if (mappedPOIId != null && mappedPOI == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
-    }
-    locationHistoryCreate.setMappedPOI(mappedPOI);
   }
 
   public <T extends Baseclass> List<T> listByIds(

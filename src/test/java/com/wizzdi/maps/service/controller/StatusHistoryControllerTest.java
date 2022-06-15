@@ -11,10 +11,17 @@ import com.wizzdi.maps.service.request.StatusHistoryCreate;
 import com.wizzdi.maps.service.request.StatusHistoryFilter;
 import com.wizzdi.maps.service.request.StatusHistoryUpdate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +32,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -61,8 +69,7 @@ public class StatusHistoryControllerTest {
   @Test
   @Order(1)
   public void testStatusHistoryCreate() {
-    String name = UUID.randomUUID().toString();
-    StatusHistoryCreate request = new StatusHistoryCreate().setName(name);
+    StatusHistoryCreate request = new StatusHistoryCreate().setName(UUID.randomUUID().toString());
 
     request.setMappedPOIId(this.mappedPOI.getId());
 
@@ -113,16 +120,19 @@ public class StatusHistoryControllerTest {
     }
 
     if (request.getDateAtStatus() != null) {
-      Assertions.assertEquals(request.getDateAtStatus(), testStatusHistory.getDateAtStatus());
+      Assertions.assertEquals(
+          request.getDateAtStatus().atZoneSameInstant(ZoneId.systemDefault()),
+          testStatusHistory.getDateAtStatus().atZoneSameInstant(ZoneId.systemDefault()));
     }
   }
 
   @Test
   @Order(3)
   public void testStatusHistoryUpdate() {
-    String name = UUID.randomUUID().toString();
     StatusHistoryUpdate request =
-        new StatusHistoryUpdate().setId(testStatusHistory.getId()).setName(name);
+        new StatusHistoryUpdate()
+            .setId(testStatusHistory.getId())
+            .setName(UUID.randomUUID().toString());
     ResponseEntity<StatusHistory> response =
         this.restTemplate.exchange(
             "/StatusHistory/updateStatusHistory",

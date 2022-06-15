@@ -2,46 +2,51 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
 import java.time.OffsetDateTime;
 
 /** Object Used to Create LocationHistory */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "room",
+      field = "roomId",
+      fieldType = com.wizzdi.maps.model.Room.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Create.class,
+        com.wizzdi.flexicore.security.validation.Update.class
+      }),
+  @IdValid(
+      targetField = "mappedPOI",
+      field = "mappedPOIId",
+      fieldType = com.wizzdi.maps.model.MappedPOI.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Update.class,
+        com.wizzdi.flexicore.security.validation.Create.class
+      })
+})
 public class LocationHistoryCreate extends BasicCreate {
-
-  private Double x;
 
   private OffsetDateTime dateAtLocation;
 
-  private String mappedPOIId;
+  private Double lat;
 
   private Double lon;
 
+  @JsonIgnore private MappedPOI mappedPOI;
+
+  private String mappedPOIId;
+
   @JsonIgnore private Room room;
-
-  private Double lat;
-
-  private Double z;
-
-  private Double y;
 
   private String roomId;
 
-  @JsonIgnore private MappedPOI mappedPOI;
+  private Double x;
 
-  /** @return x */
-  public Double getX() {
-    return this.x;
-  }
+  private Double y;
 
-  /**
-   * @param x x to set
-   * @return LocationHistoryCreate
-   */
-  public <T extends LocationHistoryCreate> T setX(Double x) {
-    this.x = x;
-    return (T) this;
-  }
+  private Double z;
 
   /** @return dateAtLocation */
   public OffsetDateTime getDateAtLocation() {
@@ -57,17 +62,17 @@ public class LocationHistoryCreate extends BasicCreate {
     return (T) this;
   }
 
-  /** @return mappedPOIId */
-  public String getMappedPOIId() {
-    return this.mappedPOIId;
+  /** @return lat */
+  public Double getLat() {
+    return this.lat;
   }
 
   /**
-   * @param mappedPOIId mappedPOIId to set
+   * @param lat lat to set
    * @return LocationHistoryCreate
    */
-  public <T extends LocationHistoryCreate> T setMappedPOIId(String mappedPOIId) {
-    this.mappedPOIId = mappedPOIId;
+  public <T extends LocationHistoryCreate> T setLat(Double lat) {
+    this.lat = lat;
     return (T) this;
   }
 
@@ -82,6 +87,35 @@ public class LocationHistoryCreate extends BasicCreate {
    */
   public <T extends LocationHistoryCreate> T setLon(Double lon) {
     this.lon = lon;
+    return (T) this;
+  }
+
+  /** @return mappedPOI */
+  @JsonIgnore
+  public MappedPOI getMappedPOI() {
+    return this.mappedPOI;
+  }
+
+  /**
+   * @param mappedPOI mappedPOI to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setMappedPOI(MappedPOI mappedPOI) {
+    this.mappedPOI = mappedPOI;
+    return (T) this;
+  }
+
+  /** @return mappedPOIId */
+  public String getMappedPOIId() {
+    return this.mappedPOIId;
+  }
+
+  /**
+   * @param mappedPOIId mappedPOIId to set
+   * @return LocationHistoryCreate
+   */
+  public <T extends LocationHistoryCreate> T setMappedPOIId(String mappedPOIId) {
+    this.mappedPOIId = mappedPOIId;
     return (T) this;
   }
 
@@ -100,31 +134,31 @@ public class LocationHistoryCreate extends BasicCreate {
     return (T) this;
   }
 
-  /** @return lat */
-  public Double getLat() {
-    return this.lat;
+  /** @return roomId */
+  public String getRoomId() {
+    return this.roomId;
   }
 
   /**
-   * @param lat lat to set
+   * @param roomId roomId to set
    * @return LocationHistoryCreate
    */
-  public <T extends LocationHistoryCreate> T setLat(Double lat) {
-    this.lat = lat;
+  public <T extends LocationHistoryCreate> T setRoomId(String roomId) {
+    this.roomId = roomId;
     return (T) this;
   }
 
-  /** @return z */
-  public Double getZ() {
-    return this.z;
+  /** @return x */
+  public Double getX() {
+    return this.x;
   }
 
   /**
-   * @param z z to set
+   * @param x x to set
    * @return LocationHistoryCreate
    */
-  public <T extends LocationHistoryCreate> T setZ(Double z) {
-    this.z = z;
+  public <T extends LocationHistoryCreate> T setX(Double x) {
+    this.x = x;
     return (T) this;
   }
 
@@ -142,32 +176,17 @@ public class LocationHistoryCreate extends BasicCreate {
     return (T) this;
   }
 
-  /** @return roomId */
-  public String getRoomId() {
-    return this.roomId;
+  /** @return z */
+  public Double getZ() {
+    return this.z;
   }
 
   /**
-   * @param roomId roomId to set
+   * @param z z to set
    * @return LocationHistoryCreate
    */
-  public <T extends LocationHistoryCreate> T setRoomId(String roomId) {
-    this.roomId = roomId;
-    return (T) this;
-  }
-
-  /** @return mappedPOI */
-  @JsonIgnore
-  public MappedPOI getMappedPOI() {
-    return this.mappedPOI;
-  }
-
-  /**
-   * @param mappedPOI mappedPOI to set
-   * @return LocationHistoryCreate
-   */
-  public <T extends LocationHistoryCreate> T setMappedPOI(MappedPOI mappedPOI) {
-    this.mappedPOI = mappedPOI;
+  public <T extends LocationHistoryCreate> T setZ(Double z) {
+    this.z = z;
     return (T) this;
   }
 }

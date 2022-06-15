@@ -1,9 +1,17 @@
 package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Building;
 
 /** Object Used to Update Building */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "building",
+      field = "id",
+      fieldType = com.wizzdi.maps.model.Building.class,
+      groups = {com.wizzdi.flexicore.security.validation.Update.class})
+})
 public class BuildingUpdate extends BuildingCreate {
 
   @JsonIgnore private Building building;

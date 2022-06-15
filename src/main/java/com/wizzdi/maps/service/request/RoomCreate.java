@@ -2,16 +2,27 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Building;
 
 /** Object Used to Create Room */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "building",
+      field = "buildingId",
+      fieldType = com.wizzdi.maps.model.Building.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Update.class,
+        com.wizzdi.flexicore.security.validation.Create.class
+      })
+})
 public class RoomCreate extends BasicCreate {
 
   @JsonIgnore private Building building;
 
-  private String externalId;
-
   private String buildingId;
+
+  private String externalId;
 
   private Double x;
 
@@ -34,20 +45,6 @@ public class RoomCreate extends BasicCreate {
     return (T) this;
   }
 
-  /** @return externalId */
-  public String getExternalId() {
-    return this.externalId;
-  }
-
-  /**
-   * @param externalId externalId to set
-   * @return RoomCreate
-   */
-  public <T extends RoomCreate> T setExternalId(String externalId) {
-    this.externalId = externalId;
-    return (T) this;
-  }
-
   /** @return buildingId */
   public String getBuildingId() {
     return this.buildingId;
@@ -59,6 +56,20 @@ public class RoomCreate extends BasicCreate {
    */
   public <T extends RoomCreate> T setBuildingId(String buildingId) {
     this.buildingId = buildingId;
+    return (T) this;
+  }
+
+  /** @return externalId */
+  public String getExternalId() {
+    return this.externalId;
+  }
+
+  /**
+   * @param externalId externalId to set
+   * @return RoomCreate
+   */
+  public <T extends RoomCreate> T setExternalId(String externalId) {
+    this.externalId = externalId;
     return (T) this;
   }
 

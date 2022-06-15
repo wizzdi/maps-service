@@ -11,10 +11,17 @@ import com.wizzdi.maps.service.request.LocationHistoryCreate;
 import com.wizzdi.maps.service.request.LocationHistoryFilter;
 import com.wizzdi.maps.service.request.LocationHistoryUpdate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +32,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -61,14 +69,14 @@ public class LocationHistoryControllerTest {
   @Test
   @Order(1)
   public void testLocationHistoryCreate() {
-    String name = UUID.randomUUID().toString();
-    LocationHistoryCreate request = new LocationHistoryCreate().setName(name);
+    LocationHistoryCreate request =
+        new LocationHistoryCreate().setName(UUID.randomUUID().toString());
 
     request.setDateAtLocation(OffsetDateTime.now());
 
-    request.setY(10D);
-
     request.setZ(10D);
+
+    request.setY(10D);
 
     request.setRoomId(this.room.getId());
 
@@ -115,15 +123,17 @@ public class LocationHistoryControllerTest {
     Assertions.assertNotNull(testLocationHistory);
 
     if (request.getDateAtLocation() != null) {
-      Assertions.assertEquals(request.getDateAtLocation(), testLocationHistory.getDateAtLocation());
-    }
-
-    if (request.getY() != null) {
-      Assertions.assertEquals(request.getY(), testLocationHistory.getY());
+      Assertions.assertEquals(
+          request.getDateAtLocation().atZoneSameInstant(ZoneId.systemDefault()),
+          testLocationHistory.getDateAtLocation().atZoneSameInstant(ZoneId.systemDefault()));
     }
 
     if (request.getZ() != null) {
       Assertions.assertEquals(request.getZ(), testLocationHistory.getZ());
+    }
+
+    if (request.getY() != null) {
+      Assertions.assertEquals(request.getY(), testLocationHistory.getY());
     }
 
     if (request.getRoomId() != null) {
@@ -154,9 +164,10 @@ public class LocationHistoryControllerTest {
   @Test
   @Order(3)
   public void testLocationHistoryUpdate() {
-    String name = UUID.randomUUID().toString();
     LocationHistoryUpdate request =
-        new LocationHistoryUpdate().setId(testLocationHistory.getId()).setName(name);
+        new LocationHistoryUpdate()
+            .setId(testLocationHistory.getId())
+            .setName(UUID.randomUUID().toString());
     ResponseEntity<LocationHistory> response =
         this.restTemplate.exchange(
             "/LocationHistory/updateLocationHistory",

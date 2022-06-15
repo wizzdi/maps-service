@@ -3,54 +3,51 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.LocationHistory;
+import com.wizzdi.maps.model.MappedPOI;
 import java.util.List;
 import java.util.Set;
 
 /** Object Used to List Room */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "building",
+      field = "buildingIds",
+      fieldType = com.wizzdi.maps.model.Building.class),
+  @IdValid(
+      targetField = "roomMappedPOIs",
+      field = "roomMappedPOIsIds",
+      fieldType = com.wizzdi.maps.model.MappedPOI.class),
+  @IdValid(
+      targetField = "roomLocationHistories",
+      field = "roomLocationHistoriesIds",
+      fieldType = com.wizzdi.maps.model.LocationHistory.class)
+})
 public class RoomFilter extends PaginationFilter {
-
-  private Set<String> buildingIds;
-
-  private Set<Double> z;
 
   private BasicPropertiesFilter basicPropertiesFilter;
 
+  @JsonIgnore private List<Building> building;
+
+  private Set<String> buildingIds;
+
   private Set<String> externalId;
 
-  private Set<Double> y;
+  @JsonIgnore private List<LocationHistory> roomLocationHistories;
+
+  private Set<String> roomLocationHistoriesIds;
+
+  @JsonIgnore private List<MappedPOI> roomMappedPOIs;
+
+  private Set<String> roomMappedPOIsIds;
 
   private Set<Double> x;
 
-  @JsonIgnore private List<Building> building;
+  private Set<Double> y;
 
-  /** @return buildingIds */
-  public Set<String> getBuildingIds() {
-    return this.buildingIds;
-  }
-
-  /**
-   * @param buildingIds buildingIds to set
-   * @return RoomFilter
-   */
-  public <T extends RoomFilter> T setBuildingIds(Set<String> buildingIds) {
-    this.buildingIds = buildingIds;
-    return (T) this;
-  }
-
-  /** @return z */
-  public Set<Double> getZ() {
-    return this.z;
-  }
-
-  /**
-   * @param z z to set
-   * @return RoomFilter
-   */
-  public <T extends RoomFilter> T setZ(Set<Double> z) {
-    this.z = z;
-    return (T) this;
-  }
+  private Set<Double> z;
 
   /** @return basicPropertiesFilter */
   public BasicPropertiesFilter getBasicPropertiesFilter() {
@@ -64,6 +61,35 @@ public class RoomFilter extends PaginationFilter {
   public <T extends RoomFilter> T setBasicPropertiesFilter(
       BasicPropertiesFilter basicPropertiesFilter) {
     this.basicPropertiesFilter = basicPropertiesFilter;
+    return (T) this;
+  }
+
+  /** @return building */
+  @JsonIgnore
+  public List<Building> getBuilding() {
+    return this.building;
+  }
+
+  /**
+   * @param building building to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setBuilding(List<Building> building) {
+    this.building = building;
+    return (T) this;
+  }
+
+  /** @return buildingIds */
+  public Set<String> getBuildingIds() {
+    return this.buildingIds;
+  }
+
+  /**
+   * @param buildingIds buildingIds to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setBuildingIds(Set<String> buildingIds) {
+    this.buildingIds = buildingIds;
     return (T) this;
   }
 
@@ -81,17 +107,63 @@ public class RoomFilter extends PaginationFilter {
     return (T) this;
   }
 
-  /** @return y */
-  public Set<Double> getY() {
-    return this.y;
+  /** @return roomLocationHistories */
+  @JsonIgnore
+  public List<LocationHistory> getRoomLocationHistories() {
+    return this.roomLocationHistories;
   }
 
   /**
-   * @param y y to set
+   * @param roomLocationHistories roomLocationHistories to set
    * @return RoomFilter
    */
-  public <T extends RoomFilter> T setY(Set<Double> y) {
-    this.y = y;
+  public <T extends RoomFilter> T setRoomLocationHistories(
+      List<LocationHistory> roomLocationHistories) {
+    this.roomLocationHistories = roomLocationHistories;
+    return (T) this;
+  }
+
+  /** @return roomLocationHistoriesIds */
+  public Set<String> getRoomLocationHistoriesIds() {
+    return this.roomLocationHistoriesIds;
+  }
+
+  /**
+   * @param roomLocationHistoriesIds roomLocationHistoriesIds to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setRoomLocationHistoriesIds(
+      Set<String> roomLocationHistoriesIds) {
+    this.roomLocationHistoriesIds = roomLocationHistoriesIds;
+    return (T) this;
+  }
+
+  /** @return roomMappedPOIs */
+  @JsonIgnore
+  public List<MappedPOI> getRoomMappedPOIs() {
+    return this.roomMappedPOIs;
+  }
+
+  /**
+   * @param roomMappedPOIs roomMappedPOIs to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setRoomMappedPOIs(List<MappedPOI> roomMappedPOIs) {
+    this.roomMappedPOIs = roomMappedPOIs;
+    return (T) this;
+  }
+
+  /** @return roomMappedPOIsIds */
+  public Set<String> getRoomMappedPOIsIds() {
+    return this.roomMappedPOIsIds;
+  }
+
+  /**
+   * @param roomMappedPOIsIds roomMappedPOIsIds to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setRoomMappedPOIsIds(Set<String> roomMappedPOIsIds) {
+    this.roomMappedPOIsIds = roomMappedPOIsIds;
     return (T) this;
   }
 
@@ -109,18 +181,31 @@ public class RoomFilter extends PaginationFilter {
     return (T) this;
   }
 
-  /** @return building */
-  @JsonIgnore
-  public List<Building> getBuilding() {
-    return this.building;
+  /** @return y */
+  public Set<Double> getY() {
+    return this.y;
   }
 
   /**
-   * @param building building to set
+   * @param y y to set
    * @return RoomFilter
    */
-  public <T extends RoomFilter> T setBuilding(List<Building> building) {
-    this.building = building;
+  public <T extends RoomFilter> T setY(Set<Double> y) {
+    this.y = y;
+    return (T) this;
+  }
+
+  /** @return z */
+  public Set<Double> getZ() {
+    return this.z;
+  }
+
+  /**
+   * @param z z to set
+   * @return RoomFilter
+   */
+  public <T extends RoomFilter> T setZ(Set<Double> z) {
+    this.z = z;
     return (T) this;
   }
 }

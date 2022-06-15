@@ -12,7 +12,13 @@ import com.wizzdi.maps.service.request.RoomUpdate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +29,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -57,8 +64,7 @@ public class RoomControllerTest {
   @Test
   @Order(1)
   public void testRoomCreate() {
-    String name = UUID.randomUUID().toString();
-    RoomCreate request = new RoomCreate().setName(name);
+    RoomCreate request = new RoomCreate().setName(UUID.randomUUID().toString());
 
     request.setBuildingId(this.building.getId());
 
@@ -123,8 +129,8 @@ public class RoomControllerTest {
   @Test
   @Order(3)
   public void testRoomUpdate() {
-    String name = UUID.randomUUID().toString();
-    RoomUpdate request = new RoomUpdate().setId(testRoom.getId()).setName(name);
+    RoomUpdate request =
+        new RoomUpdate().setId(testRoom.getId()).setName(UUID.randomUUID().toString());
     ResponseEntity<Room> response =
         this.restTemplate.exchange(
             "/Room/updateRoom", HttpMethod.PUT, new HttpEntity<>(request), Room.class);

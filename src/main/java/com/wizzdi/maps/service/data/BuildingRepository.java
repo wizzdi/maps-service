@@ -2,7 +2,6 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
@@ -10,6 +9,7 @@ import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.Building;
 import com.wizzdi.maps.model.Building_;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.service.request.BuildingFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class BuildingRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -45,7 +46,9 @@ public class BuildingRepository implements Plugin {
     addBuildingPredicate(buildingFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<Building> query = em.createQuery(q);
+
     BasicRepository.addPagination(buildingFilter, query);
+
     return query.getResultList();
   }
 
@@ -66,7 +69,7 @@ public class BuildingRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, MappedPOI> join = r.join(Building_.mappedPOI);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(MappedPOI_.id).in(ids));
     }
 
     if (buildingFilter.getExternalId() != null && !buildingFilter.getExternalId().isEmpty()) {

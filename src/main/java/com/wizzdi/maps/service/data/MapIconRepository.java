@@ -2,14 +2,18 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.file.model.FileResource;
+import com.wizzdi.flexicore.file.model.FileResource_;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MapIcon_;
+import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.MappedPOI_;
+import com.wizzdi.maps.model.StatusHistory;
+import com.wizzdi.maps.model.StatusHistory_;
 import com.wizzdi.maps.service.request.MapIconFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class MapIconRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -45,7 +50,9 @@ public class MapIconRepository implements Plugin {
     addMapIconPredicate(mapIconFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<MapIcon> query = em.createQuery(q);
+
     BasicRepository.addPagination(mapIconFilter, query);
+
     return query.getResultList();
   }
 
@@ -60,17 +67,37 @@ public class MapIconRepository implements Plugin {
     this.securedBasicRepository.addSecuredBasicPredicates(
         mapIconFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (mapIconFilter.getRelatedType() != null && !mapIconFilter.getRelatedType().isEmpty()) {
-      preds.add(r.get(MapIcon_.relatedType).in(mapIconFilter.getRelatedType()));
-    }
-
     if (mapIconFilter.getFileResource() != null && !mapIconFilter.getFileResource().isEmpty()) {
       Set<String> ids =
           mapIconFilter.getFileResource().parallelStream()
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, FileResource> join = r.join(MapIcon_.fileResource);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(FileResource_.id).in(ids));
+    }
+
+    if (mapIconFilter.getRelatedType() != null && !mapIconFilter.getRelatedType().isEmpty()) {
+      preds.add(r.get(MapIcon_.relatedType).in(mapIconFilter.getRelatedType()));
+    }
+
+    if (mapIconFilter.getMapIconMappedPOIs() != null
+        && !mapIconFilter.getMapIconMappedPOIs().isEmpty()) {
+      Set<String> ids =
+          mapIconFilter.getMapIconMappedPOIs().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, MappedPOI> join = r.join(MapIcon_.mapIconMappedPOIs);
+      preds.add(join.get(MappedPOI_.id).in(ids));
+    }
+
+    if (mapIconFilter.getMapIconStatusHistories() != null
+        && !mapIconFilter.getMapIconStatusHistories().isEmpty()) {
+      Set<String> ids =
+          mapIconFilter.getMapIconStatusHistories().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, StatusHistory> join = r.join(MapIcon_.mapIconStatusHistories);
+      preds.add(join.get(StatusHistory_.id).in(ids));
     }
 
     if (mapIconFilter.getExternalId() != null && !mapIconFilter.getExternalId().isEmpty()) {

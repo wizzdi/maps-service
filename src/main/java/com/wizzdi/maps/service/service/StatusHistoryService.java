@@ -2,33 +2,23 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.SecuredBasic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
-import com.wizzdi.maps.model.MapIcon;
-import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.StatusHistory;
 import com.wizzdi.maps.service.data.StatusHistoryRepository;
 import com.wizzdi.maps.service.request.StatusHistoryCreate;
 import com.wizzdi.maps.service.request.StatusHistoryFilter;
 import com.wizzdi.maps.service.request.StatusHistoryUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -120,13 +110,13 @@ public class StatusHistoryService implements Plugin {
   /**
    * @param statusHistoryFilter Object Used to List StatusHistory
    * @param securityContext
-   * @return PaginationResponse containing paging information for StatusHistory
+   * @return PaginationResponse<StatusHistory> containing paging information for StatusHistory
    */
   public PaginationResponse<StatusHistory> getAllStatusHistories(
       StatusHistoryFilter statusHistoryFilter, SecurityContextBase securityContext) {
     List<StatusHistory> list = listAllStatusHistories(statusHistoryFilter, securityContext);
     long count = this.repository.countAllStatusHistories(statusHistoryFilter, securityContext);
-    return new PaginationResponse<>(list, statusHistoryFilter, count);
+    return new PaginationResponse<>(list, statusHistoryFilter.getPageSize(), count);
   }
 
   /**
@@ -137,82 +127,6 @@ public class StatusHistoryService implements Plugin {
   public List<StatusHistory> listAllStatusHistories(
       StatusHistoryFilter statusHistoryFilter, SecurityContextBase securityContext) {
     return this.repository.listAllStatusHistories(statusHistoryFilter, securityContext);
-  }
-
-  /**
-   * @param statusHistoryFilter Object Used to List StatusHistory
-   * @param securityContext
-   * @throws ResponseStatusException if statusHistoryFilter is not valid
-   */
-  public void validate(
-      StatusHistoryFilter statusHistoryFilter, SecurityContextBase securityContext) {
-    basicService.validate(statusHistoryFilter, securityContext);
-
-    Set<String> mappedPOIIds =
-        statusHistoryFilter.getMappedPOIIds() == null
-            ? new HashSet<>()
-            : statusHistoryFilter.getMappedPOIIds();
-    Map<String, MappedPOI> mappedPOI =
-        mappedPOIIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MappedPOI.class, mappedPOIIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mappedPOIIds.removeAll(mappedPOI.keySet());
-    if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
-    }
-    statusHistoryFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
-    Set<String> mapIconIds =
-        statusHistoryFilter.getMapIconIds() == null
-            ? new HashSet<>()
-            : statusHistoryFilter.getMapIconIds();
-    Map<String, MapIcon> mapIcon =
-        mapIconIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MapIcon.class, mapIconIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mapIconIds.removeAll(mapIcon.keySet());
-    if (!mapIconIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mapIconIds);
-    }
-    statusHistoryFilter.setMapIcon(new ArrayList<>(mapIcon.values()));
-  }
-
-  /**
-   * @param statusHistoryCreate Object Used to Create StatusHistory
-   * @param securityContext
-   * @throws ResponseStatusException if statusHistoryCreate is not valid
-   */
-  public void validate(
-      StatusHistoryCreate statusHistoryCreate, SecurityContextBase securityContext) {
-    basicService.validate(statusHistoryCreate, securityContext);
-
-    String mappedPOIId = statusHistoryCreate.getMappedPOIId();
-    MappedPOI mappedPOI =
-        mappedPOIId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mappedPOIId, MappedPOI.class, SecuredBasic_.security, securityContext);
-    if (mappedPOIId != null && mappedPOI == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
-    }
-    statusHistoryCreate.setMappedPOI(mappedPOI);
-
-    String mapIconId = statusHistoryCreate.getMapIconId();
-    MapIcon mapIcon =
-        mapIconId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
-    if (mapIconId != null && mapIcon == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
-    }
-    statusHistoryCreate.setMapIcon(mapIcon);
   }
 
   public <T extends Baseclass> List<T> listByIds(

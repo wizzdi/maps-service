@@ -2,34 +2,23 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.SecuredBasic_;
-import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
-import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.service.data.MappedPOIRepository;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
 import com.wizzdi.maps.service.request.MappedPOIUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -244,13 +233,13 @@ public class MappedPOIService implements Plugin {
   /**
    * @param mappedPOIFilter Object Used to List MappedPOI
    * @param securityContext
-   * @return PaginationResponse containing paging information for MappedPOI
+   * @return PaginationResponse<MappedPOI> containing paging information for MappedPOI
    */
   public PaginationResponse<MappedPOI> getAllMappedPOIs(
       MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     List<MappedPOI> list = listAllMappedPOIs(mappedPOIFilter, securityContext);
     long count = this.repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
-    return new PaginationResponse<>(list, mappedPOIFilter, count);
+    return new PaginationResponse<>(list, mappedPOIFilter.getPageSize(), count);
   }
 
   /**
@@ -261,100 +250,6 @@ public class MappedPOIService implements Plugin {
   public List<MappedPOI> listAllMappedPOIs(
       MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMappedPOIs(mappedPOIFilter, securityContext);
-  }
-
-  /**
-   * @param mappedPOIFilter Object Used to List MappedPOI
-   * @param securityContext
-   * @throws ResponseStatusException if mappedPOIFilter is not valid
-   */
-  public void validate(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
-    basicService.validate(mappedPOIFilter, securityContext);
-
-    Set<String> roomIds =
-        mappedPOIFilter.getRoomIds() == null ? new HashSet<>() : mappedPOIFilter.getRoomIds();
-    Map<String, Room> room =
-        roomIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(Room.class, roomIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    roomIds.removeAll(room.keySet());
-    if (!roomIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + roomIds);
-    }
-    mappedPOIFilter.setRoom(new ArrayList<>(room.values()));
-    Set<String> mapIconIds =
-        mappedPOIFilter.getMapIconIds() == null ? new HashSet<>() : mappedPOIFilter.getMapIconIds();
-    Map<String, MapIcon> mapIcon =
-        mapIconIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MapIcon.class, mapIconIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mapIconIds.removeAll(mapIcon.keySet());
-    if (!mapIconIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mapIconIds);
-    }
-    mappedPOIFilter.setMapIcon(new ArrayList<>(mapIcon.values()));
-    Set<String> addressIds =
-        mappedPOIFilter.getAddressIds() == null ? new HashSet<>() : mappedPOIFilter.getAddressIds();
-    Map<String, Address> address =
-        addressIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(Address.class, addressIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    addressIds.removeAll(address.keySet());
-    if (!addressIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + addressIds);
-    }
-    mappedPOIFilter.setAddress(new ArrayList<>(address.values()));
-  }
-
-  /**
-   * @param mappedPOICreate Object Used to Create MappedPOI
-   * @param securityContext
-   * @throws ResponseStatusException if mappedPOICreate is not valid
-   */
-  public void validate(MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
-    basicService.validate(mappedPOICreate, securityContext);
-
-    String roomId = mappedPOICreate.getRoomId();
-    Room room =
-        roomId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                roomId, Room.class, SecuredBasic_.security, securityContext);
-    if (roomId != null && room == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
-    }
-    mappedPOICreate.setRoom(room);
-
-    String mapIconId = mappedPOICreate.getMapIconId();
-    MapIcon mapIcon =
-        mapIconId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
-    if (mapIconId != null && mapIcon == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
-    }
-    mappedPOICreate.setMapIcon(mapIcon);
-
-    String addressId = mappedPOICreate.getAddressId();
-    Address address =
-        addressId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                addressId, Address.class, SecuredBasic_.security, securityContext);
-    if (addressId != null && address == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with id " + addressId);
-    }
-    mappedPOICreate.setAddress(address);
   }
 
   public <T extends Baseclass> List<T> listByIds(

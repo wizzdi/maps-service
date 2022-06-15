@@ -2,32 +2,23 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.SecuredBasic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
 import com.wizzdi.maps.model.Building;
-import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.data.BuildingRepository;
 import com.wizzdi.maps.service.request.BuildingCreate;
 import com.wizzdi.maps.service.request.BuildingFilter;
 import com.wizzdi.maps.service.request.BuildingUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -105,13 +96,13 @@ public class BuildingService implements Plugin {
   /**
    * @param buildingFilter Object Used to List Building
    * @param securityContext
-   * @return PaginationResponse containing paging information for Building
+   * @return PaginationResponse<Building> containing paging information for Building
    */
   public PaginationResponse<Building> getAllBuildings(
       BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     List<Building> list = listAllBuildings(buildingFilter, securityContext);
     long count = this.repository.countAllBuildings(buildingFilter, securityContext);
-    return new PaginationResponse<>(list, buildingFilter, count);
+    return new PaginationResponse<>(list, buildingFilter.getPageSize(), count);
   }
 
   /**
@@ -122,53 +113,6 @@ public class BuildingService implements Plugin {
   public List<Building> listAllBuildings(
       BuildingFilter buildingFilter, SecurityContextBase securityContext) {
     return this.repository.listAllBuildings(buildingFilter, securityContext);
-  }
-
-  /**
-   * @param buildingFilter Object Used to List Building
-   * @param securityContext
-   * @throws ResponseStatusException if buildingFilter is not valid
-   */
-  public void validate(BuildingFilter buildingFilter, SecurityContextBase securityContext) {
-    basicService.validate(buildingFilter, securityContext);
-
-    Set<String> mappedPOIIds =
-        buildingFilter.getMappedPOIIds() == null
-            ? new HashSet<>()
-            : buildingFilter.getMappedPOIIds();
-    Map<String, MappedPOI> mappedPOI =
-        mappedPOIIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(MappedPOI.class, mappedPOIIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    mappedPOIIds.removeAll(mappedPOI.keySet());
-    if (!mappedPOIIds.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Set with ids " + mappedPOIIds);
-    }
-    buildingFilter.setMappedPOI(new ArrayList<>(mappedPOI.values()));
-  }
-
-  /**
-   * @param buildingCreate Object Used to Create Building
-   * @param securityContext
-   * @throws ResponseStatusException if buildingCreate is not valid
-   */
-  public void validate(BuildingCreate buildingCreate, SecurityContextBase securityContext) {
-    basicService.validate(buildingCreate, securityContext);
-
-    String mappedPOIId = buildingCreate.getMappedPOIId();
-    MappedPOI mappedPOI =
-        mappedPOIId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                mappedPOIId, MappedPOI.class, SecuredBasic_.security, securityContext);
-    if (mappedPOIId != null && mappedPOI == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No MappedPOI with id " + mappedPOIId);
-    }
-    buildingCreate.setMappedPOI(mappedPOI);
   }
 
   public <T extends Baseclass> List<T> listByIds(

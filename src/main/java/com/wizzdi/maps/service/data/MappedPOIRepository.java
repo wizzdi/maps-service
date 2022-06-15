@@ -2,16 +2,20 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.model.territories.Address;
+import com.flexicore.model.territories.Address_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
+import com.wizzdi.maps.model.LocationHistory;
+import com.wizzdi.maps.model.LocationHistory_;
 import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.model.MapIcon_;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.Room_;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class MappedPOIRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -47,7 +52,9 @@ public class MappedPOIRepository implements Plugin {
     addMappedPOIPredicate(mappedPOIFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<MappedPOI> query = em.createQuery(q);
+
     BasicRepository.addPagination(mappedPOIFilter, query);
+
     return query.getResultList();
   }
 
@@ -92,7 +99,7 @@ public class MappedPOIRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, Room> join = r.join(MappedPOI_.room);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(Room_.id).in(ids));
     }
 
     if (mappedPOIFilter.getLat() != null && !mappedPOIFilter.getLat().isEmpty()) {
@@ -102,6 +109,16 @@ public class MappedPOIRepository implements Plugin {
     if (mappedPOIFilter.getKeepLocationHistory() != null
         && !mappedPOIFilter.getKeepLocationHistory().isEmpty()) {
       preds.add(r.get(MappedPOI_.keepLocationHistory).in(mappedPOIFilter.getKeepLocationHistory()));
+    }
+
+    if (mappedPOIFilter.getMappedPOILocationHistories() != null
+        && !mappedPOIFilter.getMappedPOILocationHistories().isEmpty()) {
+      Set<String> ids =
+          mappedPOIFilter.getMappedPOILocationHistories().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, LocationHistory> join = r.join(MappedPOI_.mappedPOILocationHistories);
+      preds.add(join.get(LocationHistory_.id).in(ids));
     }
 
     if (mappedPOIFilter.getGeoHash12() != null && !mappedPOIFilter.getGeoHash12().isEmpty()) {
@@ -146,7 +163,7 @@ public class MappedPOIRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, MapIcon> join = r.join(MappedPOI_.mapIcon);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(MapIcon_.id).in(ids));
     }
 
     if (mappedPOIFilter.getGeoHash9() != null && !mappedPOIFilter.getGeoHash9().isEmpty()) {
@@ -168,7 +185,7 @@ public class MappedPOIRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, Address> join = r.join(MappedPOI_.address);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(Address_.id).in(ids));
     }
 
     if (mappedPOIFilter.getLon() != null && !mappedPOIFilter.getLon().isEmpty()) {

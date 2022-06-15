@@ -2,10 +2,8 @@ package com.wizzdi.maps.service.service;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.SecuredBasic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
@@ -14,20 +12,13 @@ import com.wizzdi.maps.service.data.MapIconRepository;
 import com.wizzdi.maps.service.request.MapIconCreate;
 import com.wizzdi.maps.service.request.MapIconFilter;
 import com.wizzdi.maps.service.request.MapIconUpdate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -72,12 +63,6 @@ public class MapIconService implements Plugin {
   public boolean updateMapIconNoMerge(MapIcon mapIcon, MapIconCreate mapIconCreate) {
     boolean update = basicService.updateBasicNoMerge(mapIconCreate, mapIcon);
 
-    if (mapIconCreate.getRelatedType() != null
-        && (!mapIconCreate.getRelatedType().equals(mapIcon.getRelatedType()))) {
-      mapIcon.setRelatedType(mapIconCreate.getRelatedType());
-      update = true;
-    }
-
     if (mapIconCreate.getFileResource() != null
         && (mapIcon.getFileResource() == null
             || !mapIconCreate
@@ -85,6 +70,12 @@ public class MapIconService implements Plugin {
                 .getId()
                 .equals(mapIcon.getFileResource().getId()))) {
       mapIcon.setFileResource(mapIconCreate.getFileResource());
+      update = true;
+    }
+
+    if (mapIconCreate.getRelatedType() != null
+        && (!mapIconCreate.getRelatedType().equals(mapIcon.getRelatedType()))) {
+      mapIcon.setRelatedType(mapIconCreate.getRelatedType());
       update = true;
     }
 
@@ -112,13 +103,13 @@ public class MapIconService implements Plugin {
   /**
    * @param mapIconFilter Object Used to List MapIcon
    * @param securityContext
-   * @return PaginationResponse containing paging information for MapIcon
+   * @return PaginationResponse<MapIcon> containing paging information for MapIcon
    */
   public PaginationResponse<MapIcon> getAllMapIcons(
       MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     List<MapIcon> list = listAllMapIcons(mapIconFilter, securityContext);
     long count = this.repository.countAllMapIcons(mapIconFilter, securityContext);
-    return new PaginationResponse<>(list, mapIconFilter, count);
+    return new PaginationResponse<>(list, mapIconFilter.getPageSize(), count);
   }
 
   /**
@@ -129,55 +120,6 @@ public class MapIconService implements Plugin {
   public List<MapIcon> listAllMapIcons(
       MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMapIcons(mapIconFilter, securityContext);
-  }
-
-  /**
-   * @param mapIconFilter Object Used to List MapIcon
-   * @param securityContext
-   * @throws ResponseStatusException if mapIconFilter is not valid
-   */
-  public void validate(MapIconFilter mapIconFilter, SecurityContextBase securityContext) {
-    basicService.validate(mapIconFilter, securityContext);
-
-    Set<String> fileResourceIds =
-        mapIconFilter.getFileResourceIds() == null
-            ? new HashSet<>()
-            : mapIconFilter.getFileResourceIds();
-    Map<String, FileResource> fileResource =
-        fileResourceIds.isEmpty()
-            ? new HashMap<>()
-            : this.repository
-                .listByIds(
-                    FileResource.class, fileResourceIds, SecuredBasic_.security, securityContext)
-                .parallelStream()
-                .collect(Collectors.toMap(f -> f.getId(), f -> f));
-    fileResourceIds.removeAll(fileResource.keySet());
-    if (!fileResourceIds.isEmpty()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No Set with ids " + fileResourceIds);
-    }
-    mapIconFilter.setFileResource(new ArrayList<>(fileResource.values()));
-  }
-
-  /**
-   * @param mapIconCreate Object Used to Create MapIcon
-   * @param securityContext
-   * @throws ResponseStatusException if mapIconCreate is not valid
-   */
-  public void validate(MapIconCreate mapIconCreate, SecurityContextBase securityContext) {
-    basicService.validate(mapIconCreate, securityContext);
-
-    String fileResourceId = mapIconCreate.getFileResourceId();
-    FileResource fileResource =
-        fileResourceId == null
-            ? null
-            : this.repository.getByIdOrNull(
-                fileResourceId, FileResource.class, SecuredBasic_.security, securityContext);
-    if (fileResourceId != null && fileResource == null) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "No FileResource with id " + fileResourceId);
-    }
-    mapIconCreate.setFileResource(fileResource);
   }
 
   public <T extends Baseclass> List<T> listByIds(

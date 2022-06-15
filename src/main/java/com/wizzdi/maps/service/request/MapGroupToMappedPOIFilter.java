@@ -3,37 +3,34 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MapGroup;
 import com.wizzdi.maps.model.MappedPOI;
 import java.util.List;
 import java.util.Set;
 
 /** Object Used to List MapGroupToMappedPOI */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "mapGroup",
+      field = "mapGroupIds",
+      fieldType = com.wizzdi.maps.model.MapGroup.class),
+  @IdValid(
+      targetField = "mappedPOI",
+      field = "mappedPOIIds",
+      fieldType = com.wizzdi.maps.model.MappedPOI.class)
+})
 public class MapGroupToMappedPOIFilter extends PaginationFilter {
 
-  private Set<String> mappedPOIIds;
-
   private BasicPropertiesFilter basicPropertiesFilter;
+
+  @JsonIgnore private List<MapGroup> mapGroup;
 
   private Set<String> mapGroupIds;
 
   @JsonIgnore private List<MappedPOI> mappedPOI;
 
-  @JsonIgnore private List<MapGroup> mapGroup;
-
-  /** @return mappedPOIIds */
-  public Set<String> getMappedPOIIds() {
-    return this.mappedPOIIds;
-  }
-
-  /**
-   * @param mappedPOIIds mappedPOIIds to set
-   * @return MapGroupToMappedPOIFilter
-   */
-  public <T extends MapGroupToMappedPOIFilter> T setMappedPOIIds(Set<String> mappedPOIIds) {
-    this.mappedPOIIds = mappedPOIIds;
-    return (T) this;
-  }
+  private Set<String> mappedPOIIds;
 
   /** @return basicPropertiesFilter */
   public BasicPropertiesFilter getBasicPropertiesFilter() {
@@ -47,6 +44,21 @@ public class MapGroupToMappedPOIFilter extends PaginationFilter {
   public <T extends MapGroupToMappedPOIFilter> T setBasicPropertiesFilter(
       BasicPropertiesFilter basicPropertiesFilter) {
     this.basicPropertiesFilter = basicPropertiesFilter;
+    return (T) this;
+  }
+
+  /** @return mapGroup */
+  @JsonIgnore
+  public List<MapGroup> getMapGroup() {
+    return this.mapGroup;
+  }
+
+  /**
+   * @param mapGroup mapGroup to set
+   * @return MapGroupToMappedPOIFilter
+   */
+  public <T extends MapGroupToMappedPOIFilter> T setMapGroup(List<MapGroup> mapGroup) {
+    this.mapGroup = mapGroup;
     return (T) this;
   }
 
@@ -79,18 +91,17 @@ public class MapGroupToMappedPOIFilter extends PaginationFilter {
     return (T) this;
   }
 
-  /** @return mapGroup */
-  @JsonIgnore
-  public List<MapGroup> getMapGroup() {
-    return this.mapGroup;
+  /** @return mappedPOIIds */
+  public Set<String> getMappedPOIIds() {
+    return this.mappedPOIIds;
   }
 
   /**
-   * @param mapGroup mapGroup to set
+   * @param mappedPOIIds mappedPOIIds to set
    * @return MapGroupToMappedPOIFilter
    */
-  public <T extends MapGroupToMappedPOIFilter> T setMapGroup(List<MapGroup> mapGroup) {
-    this.mapGroup = mapGroup;
+  public <T extends MapGroupToMappedPOIFilter> T setMappedPOIIds(Set<String> mappedPOIIds) {
+    this.mappedPOIIds = mappedPOIIds;
     return (T) this;
   }
 }
