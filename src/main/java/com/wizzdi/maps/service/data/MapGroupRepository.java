@@ -7,11 +7,14 @@ import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.MapGroup;
+import com.wizzdi.maps.model.MapGroupToMappedPOI;
+import com.wizzdi.maps.model.MapGroupToMappedPOI_;
 import com.wizzdi.maps.model.MapGroup_;
 import com.wizzdi.maps.service.request.MapGroupFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -22,10 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class MapGroupRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -42,7 +46,9 @@ public class MapGroupRepository implements Plugin {
     addMapGroupPredicate(mapGroupFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<MapGroup> query = em.createQuery(q);
+
     BasicRepository.addPagination(mapGroupFilter, query);
+
     return query.getResultList();
   }
 
@@ -56,6 +62,16 @@ public class MapGroupRepository implements Plugin {
 
     this.securedBasicRepository.addSecuredBasicPredicates(
         mapGroupFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
+
+    if (mapGroupFilter.getMapGroupMapGroupToMappedPOIs() != null
+        && !mapGroupFilter.getMapGroupMapGroupToMappedPOIs().isEmpty()) {
+      Set<String> ids =
+          mapGroupFilter.getMapGroupMapGroupToMappedPOIs().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, MapGroupToMappedPOI> join = r.join(MapGroup_.mapGroupMapGroupToMappedPOIs);
+      preds.add(join.get(MapGroupToMappedPOI_.id).in(ids));
+    }
 
     if (mapGroupFilter.getExternalId() != null && !mapGroupFilter.getExternalId().isEmpty()) {
       preds.add(r.get(MapGroup_.externalId).in(mapGroupFilter.getExternalId()));

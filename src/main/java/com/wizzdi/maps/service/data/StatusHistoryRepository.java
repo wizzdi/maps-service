@@ -2,13 +2,14 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.MapIcon;
+import com.wizzdi.maps.model.MapIcon_;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.model.StatusHistory;
 import com.wizzdi.maps.model.StatusHistory_;
 import com.wizzdi.maps.service.request.StatusHistoryFilter;
@@ -26,10 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class StatusHistoryRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -46,7 +48,9 @@ public class StatusHistoryRepository implements Plugin {
     addStatusHistoryPredicate(statusHistoryFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<StatusHistory> query = em.createQuery(q);
+
     BasicRepository.addPagination(statusHistoryFilter, query);
+
     return query.getResultList();
   }
 
@@ -68,7 +72,7 @@ public class StatusHistoryRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, MappedPOI> join = r.join(StatusHistory_.mappedPOI);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(MappedPOI_.id).in(ids));
     }
 
     if (statusHistoryFilter.getMapIcon() != null && !statusHistoryFilter.getMapIcon().isEmpty()) {
@@ -77,7 +81,7 @@ public class StatusHistoryRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, MapIcon> join = r.join(StatusHistory_.mapIcon);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(MapIcon_.id).in(ids));
     }
 
     if (statusHistoryFilter.getDateAtStatus() != null

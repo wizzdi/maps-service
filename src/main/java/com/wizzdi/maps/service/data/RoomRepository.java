@@ -2,12 +2,16 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.Building_;
+import com.wizzdi.maps.model.LocationHistory;
+import com.wizzdi.maps.model.LocationHistory_;
+import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.model.Room;
 import com.wizzdi.maps.model.Room_;
 import com.wizzdi.maps.service.request.RoomFilter;
@@ -25,10 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class RoomRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -44,7 +49,9 @@ public class RoomRepository implements Plugin {
     addRoomPredicate(roomFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<Room> query = em.createQuery(q);
+
     BasicRepository.addPagination(roomFilter, query);
+
     return query.getResultList();
   }
 
@@ -63,11 +70,30 @@ public class RoomRepository implements Plugin {
       Set<String> ids =
           roomFilter.getBuilding().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
       Join<T, Building> join = r.join(Room_.building);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(Building_.id).in(ids));
+    }
+
+    if (roomFilter.getRoomLocationHistories() != null
+        && !roomFilter.getRoomLocationHistories().isEmpty()) {
+      Set<String> ids =
+          roomFilter.getRoomLocationHistories().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, LocationHistory> join = r.join(Room_.roomLocationHistories);
+      preds.add(join.get(LocationHistory_.id).in(ids));
     }
 
     if (roomFilter.getZ() != null && !roomFilter.getZ().isEmpty()) {
       preds.add(r.get(Room_.z).in(roomFilter.getZ()));
+    }
+
+    if (roomFilter.getRoomMappedPOIs() != null && !roomFilter.getRoomMappedPOIs().isEmpty()) {
+      Set<String> ids =
+          roomFilter.getRoomMappedPOIs().parallelStream()
+              .map(f -> f.getId())
+              .collect(Collectors.toSet());
+      Join<T, MappedPOI> join = r.join(Room_.roomMappedPOIs);
+      preds.add(join.get(MappedPOI_.id).in(ids));
     }
 
     if (roomFilter.getX() != null && !roomFilter.getX().isEmpty()) {

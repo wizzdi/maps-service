@@ -1,9 +1,17 @@
 package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MappedPOI;
 
 /** Object Used to Update MappedPOI */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "mappedPOI",
+      field = "id",
+      fieldType = com.wizzdi.maps.model.MappedPOI.class,
+      groups = {com.wizzdi.flexicore.security.validation.Update.class})
+})
 public class MappedPOIUpdate extends MappedPOICreate {
 
   private String id;

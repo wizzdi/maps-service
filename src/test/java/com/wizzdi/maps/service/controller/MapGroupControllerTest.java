@@ -11,7 +11,13 @@ import com.wizzdi.maps.service.request.MapGroupUpdate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +28,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -54,8 +61,7 @@ public class MapGroupControllerTest {
   @Test
   @Order(1)
   public void testMapGroupCreate() {
-    String name = UUID.randomUUID().toString();
-    MapGroupCreate request = new MapGroupCreate().setName(name);
+    MapGroupCreate request = new MapGroupCreate().setName(UUID.randomUUID().toString());
 
     request.setExternalId("test-string");
 
@@ -95,8 +101,8 @@ public class MapGroupControllerTest {
   @Test
   @Order(3)
   public void testMapGroupUpdate() {
-    String name = UUID.randomUUID().toString();
-    MapGroupUpdate request = new MapGroupUpdate().setId(testMapGroup.getId()).setName(name);
+    MapGroupUpdate request =
+        new MapGroupUpdate().setId(testMapGroup.getId()).setName(UUID.randomUUID().toString());
     ResponseEntity<MapGroup> response =
         this.restTemplate.exchange(
             "/MapGroup/updateMapGroup", HttpMethod.PUT, new HttpEntity<>(request), MapGroup.class);

@@ -13,7 +13,13 @@ import com.wizzdi.maps.service.request.MappedPOIUpdate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +30,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = App.class)
@@ -60,8 +67,7 @@ public class MappedPOIControllerTest {
   @Test
   @Order(1)
   public void testMappedPOICreate() {
-    String name = UUID.randomUUID().toString();
-    MappedPOICreate request = new MappedPOICreate().setName(name);
+    MappedPOICreate request = new MappedPOICreate().setName(UUID.randomUUID().toString());
 
 
 
@@ -175,8 +181,8 @@ public class MappedPOIControllerTest {
   @Test
   @Order(3)
   public void testMappedPOIUpdate() {
-    String name = UUID.randomUUID().toString();
-    MappedPOIUpdate request = new MappedPOIUpdate().setId(testMappedPOI.getId()).setName(name);
+    MappedPOIUpdate request =
+        new MappedPOIUpdate().setId(testMappedPOI.getId()).setName(UUID.randomUUID().toString());
     ResponseEntity<MappedPOI> response =
             this.restTemplate.exchange(
                     "/MappedPOI/updateMappedPOI",

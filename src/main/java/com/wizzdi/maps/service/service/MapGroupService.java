@@ -19,7 +19,6 @@ import javax.persistence.metamodel.SingularAttribute;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Extension
@@ -90,13 +89,13 @@ public class MapGroupService implements Plugin {
   /**
    * @param mapGroupFilter Object Used to List MapGroup
    * @param securityContext
-   * @return PaginationResponse containing paging information for MapGroup
+   * @return PaginationResponse<MapGroup> containing paging information for MapGroup
    */
   public PaginationResponse<MapGroup> getAllMapGroups(
       MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
     List<MapGroup> list = listAllMapGroups(mapGroupFilter, securityContext);
     long count = this.repository.countAllMapGroups(mapGroupFilter, securityContext);
-    return new PaginationResponse<>(list, mapGroupFilter, count);
+    return new PaginationResponse<>(list, mapGroupFilter.getPageSize(), count);
   }
 
   /**
@@ -107,24 +106,6 @@ public class MapGroupService implements Plugin {
   public List<MapGroup> listAllMapGroups(
       MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
     return this.repository.listAllMapGroups(mapGroupFilter, securityContext);
-  }
-
-  /**
-   * @param mapGroupFilter Object Used to List MapGroup
-   * @param securityContext
-   * @throws ResponseStatusException if mapGroupFilter is not valid
-   */
-  public void validate(MapGroupFilter mapGroupFilter, SecurityContextBase securityContext) {
-    basicService.validate(mapGroupFilter, securityContext);
-  }
-
-  /**
-   * @param mapGroupCreate Object Used to Create MapGroup
-   * @param securityContext
-   * @throws ResponseStatusException if mapGroupCreate is not valid
-   */
-  public void validate(MapGroupCreate mapGroupCreate, SecurityContextBase securityContext) {
-    basicService.validate(mapGroupCreate, securityContext);
   }
 
   public <T extends Baseclass> List<T> listByIds(

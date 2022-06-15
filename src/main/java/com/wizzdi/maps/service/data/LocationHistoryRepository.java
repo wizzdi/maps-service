@@ -2,7 +2,6 @@ package com.wizzdi.maps.service.data;
 
 import com.flexicore.model.Baseclass;
 import com.flexicore.model.Basic;
-import com.flexicore.model.Basic_;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
@@ -10,7 +9,9 @@ import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.LocationHistory;
 import com.wizzdi.maps.model.LocationHistory_;
 import com.wizzdi.maps.model.MappedPOI;
+import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.Room_;
 import com.wizzdi.maps.service.request.LocationHistoryFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Extension
 @Component
+@Extension
 public class LocationHistoryRepository implements Plugin {
   @PersistenceContext private EntityManager em;
+
   @Autowired private SecuredBasicRepository securedBasicRepository;
 
   /**
@@ -46,7 +48,9 @@ public class LocationHistoryRepository implements Plugin {
     addLocationHistoryPredicate(locationHistoryFilter, cb, q, r, preds, securityContext);
     q.select(r).where(preds.toArray(new Predicate[0]));
     TypedQuery<LocationHistory> query = em.createQuery(q);
+
     BasicRepository.addPagination(locationHistoryFilter, query);
+
     return query.getResultList();
   }
 
@@ -67,12 +71,12 @@ public class LocationHistoryRepository implements Plugin {
           r.get(LocationHistory_.dateAtLocation).in(locationHistoryFilter.getDateAtLocation()));
     }
 
-    if (locationHistoryFilter.getY() != null && !locationHistoryFilter.getY().isEmpty()) {
-      preds.add(r.get(LocationHistory_.y).in(locationHistoryFilter.getY()));
-    }
-
     if (locationHistoryFilter.getZ() != null && !locationHistoryFilter.getZ().isEmpty()) {
       preds.add(r.get(LocationHistory_.z).in(locationHistoryFilter.getZ()));
+    }
+
+    if (locationHistoryFilter.getY() != null && !locationHistoryFilter.getY().isEmpty()) {
+      preds.add(r.get(LocationHistory_.y).in(locationHistoryFilter.getY()));
     }
 
     if (locationHistoryFilter.getRoom() != null && !locationHistoryFilter.getRoom().isEmpty()) {
@@ -81,7 +85,7 @@ public class LocationHistoryRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, Room> join = r.join(LocationHistory_.room);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(Room_.id).in(ids));
     }
 
     if (locationHistoryFilter.getMappedPOI() != null
@@ -91,7 +95,7 @@ public class LocationHistoryRepository implements Plugin {
               .map(f -> f.getId())
               .collect(Collectors.toSet());
       Join<T, MappedPOI> join = r.join(LocationHistory_.mappedPOI);
-      preds.add(join.get(Basic_.id).in(ids));
+      preds.add(join.get(MappedPOI_.id).in(ids));
     }
 
     if (locationHistoryFilter.getX() != null && !locationHistoryFilter.getX().isEmpty()) {
