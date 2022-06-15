@@ -3,9 +3,37 @@ package com.wizzdi.maps.service.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.Room;
 
+/** Object Used to Create MappedPOI */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "room",
+      field = "roomId",
+      fieldType = com.wizzdi.maps.model.Room.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Update.class,
+        com.wizzdi.flexicore.security.validation.Create.class
+      }),
+  @IdValid(
+      targetField = "mapIcon",
+      field = "mapIconId",
+      fieldType = com.wizzdi.maps.model.MapIcon.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Create.class,
+        com.wizzdi.flexicore.security.validation.Update.class
+      }),
+  @IdValid(
+      targetField = "address",
+      field = "addressId",
+      fieldType = com.flexicore.model.territories.Address.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Update.class,
+        com.wizzdi.flexicore.security.validation.Create.class
+      })
+})
 public class MappedPOICreate extends BasicCreate {
 
   private String mapIconId;

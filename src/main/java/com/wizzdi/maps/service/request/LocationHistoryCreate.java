@@ -2,11 +2,31 @@ package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicCreate;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
 
 import java.time.OffsetDateTime;
 
+/** Object Used to Create LocationHistory */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "room",
+      field = "roomId",
+      fieldType = com.wizzdi.maps.model.Room.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Create.class,
+        com.wizzdi.flexicore.security.validation.Update.class
+      }),
+  @IdValid(
+      targetField = "mappedPOI",
+      field = "mappedPOIId",
+      fieldType = com.wizzdi.maps.model.MappedPOI.class,
+      groups = {
+        com.wizzdi.flexicore.security.validation.Update.class,
+        com.wizzdi.flexicore.security.validation.Create.class
+      })
+})
 public class LocationHistoryCreate extends BasicCreate {
     private OffsetDateTime dateAtLocation;
     private Double y;

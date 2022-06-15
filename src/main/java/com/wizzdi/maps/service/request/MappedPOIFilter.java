@@ -7,6 +7,7 @@ import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
+import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Room;
 
 import com.wizzdi.maps.model.MapIcon;
@@ -16,6 +17,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/** Object Used to List MappedPOI */
+@com.wizzdi.flexicore.security.validation.IdValid.List({
+  @IdValid(
+      targetField = "address",
+      field = "addressIds",
+      fieldType = com.flexicore.model.territories.Address.class),
+  @IdValid(
+      targetField = "mapIcon",
+      field = "mapIconIds",
+      fieldType = com.wizzdi.maps.model.MapIcon.class),
+  @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class),
+  @IdValid(
+      targetField = "mappedPOILocationHistories",
+      field = "mappedPOILocationHistoriesIds",
+      fieldType = com.wizzdi.maps.model.LocationHistory.class)
+})
 public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> addressIds=new HashSet<>();
