@@ -38,19 +38,34 @@ public class MappedPOIFilter extends PaginationFilter {
   private Set<String> addressIds=new HashSet<>();
   @JsonIgnore
   private List<Address> address;
+  private boolean addressExclude;
   private BasicPropertiesFilter basicPropertiesFilter;
   private LocationArea locationArea;
   @JsonIgnore
   private List<Room> room;
+  private boolean roomExclude;
+
   private Set<String> roomIds=new HashSet<>();
   private MapGroupFilter mapGroupFilter;
   private Set<String> externalId;
+  private boolean externalIdExclude;
+
   private Set<String> relatedType;
+  private boolean relatedTypeExclude;
+
   private Set<String> relatedId;
+  private boolean relatedIdExclude;
+
   private AddressFilter addressFilter;
+  @JsonIgnore
   private List<MapIcon> mapIcons;
+  private boolean mapIconsExclude;
+
   private Set<String> mapIconsIds=new HashSet<>();
+  @JsonIgnore
   private List<SecurityTenant> tenants;
+  private boolean tenantsExclude;
+
   private Set<String> tenantIds=new HashSet<>();
 
 
@@ -201,6 +216,69 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setTenantIds(Set<String> tenantIds) {
     this.tenantIds = tenantIds;
+    return (T) this;
+  }
+
+  public boolean isAddressExclude() {
+    return addressExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setAddressExclude(boolean addressExclude) {
+    this.addressExclude = addressExclude;
+    return (T) this;
+  }
+
+  public boolean isRoomExclude() {
+    return roomExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setRoomExclude(boolean roomExclude) {
+    this.roomExclude = roomExclude;
+    return (T) this;
+  }
+
+  public boolean isExternalIdExclude() {
+    return externalIdExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setExternalIdExclude(boolean externalIdExclude) {
+    this.externalIdExclude = externalIdExclude;
+    return (T) this;
+  }
+
+  public boolean isRelatedTypeExclude() {
+    return relatedTypeExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setRelatedTypeExclude(boolean relatedTypeExclude) {
+    this.relatedTypeExclude = relatedTypeExclude;
+    return (T) this;
+  }
+
+  public boolean isRelatedIdExclude() {
+    return relatedIdExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setRelatedIdExclude(boolean relatedIdExclude) {
+    this.relatedIdExclude = relatedIdExclude;
+    return (T) this;
+  }
+
+  public boolean isMapIconsExclude() {
+    return mapIconsExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setMapIconsExclude(boolean mapIconsExclude) {
+    this.mapIconsExclude = mapIconsExclude;
+    return (T) this;
+  }
+
+  public boolean isTenantsExclude() {
+    return tenantsExclude;
+  }
+
+  public <T extends MappedPOIFilter> T setTenantsExclude(boolean tenantsExclude) {
+    this.tenantsExclude = tenantsExclude;
     return (T) this;
   }
 }

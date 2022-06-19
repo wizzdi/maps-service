@@ -73,27 +73,31 @@ public class MappedPOIRepository implements Plugin {
             Set<String> ids =
                     filtering.getAddress().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
             Join<T, Address> join = r.join(MappedPOI_.address);
-            preds.add(join.get(Basic_.id).in(ids));
+            Predicate in = join.get(Basic_.id).in(ids);
+            preds.add(filtering.isAddressExclude()?cb.not(in):in);
         }
 
         if (filtering.getRoom() != null && !filtering.getRoom().isEmpty()) {
             Set<String> ids =
                     filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
             Join<T, Room> join = r.join(MappedPOI_.room);
-            preds.add(join.get(Basic_.id).in(ids));
+            Predicate in = join.get(Basic_.id).in(ids);
+            preds.add(filtering.isRoomExclude()?cb.not(in):in);
         }
         if (filtering.getTenants() != null && !filtering.getTenants().isEmpty()) {
             Set<String> ids =
                     filtering.getTenants().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
             Join<T, Baseclass> join = r.join(MappedPOI_.security);
             Join<Baseclass, SecurityTenant> tenantJoin = join.join(Baseclass_.tenant);
-            preds.add(tenantJoin.get(Basic_.id).in(ids));
+            Predicate in = tenantJoin.get(Basic_.id).in(ids);
+            preds.add(filtering.isTenantsExclude()?cb.not(in):in);
         }
         if (filtering.getMapIcons() != null && !filtering.getMapIcons().isEmpty()) {
             Set<String> ids =
                     filtering.getMapIcons().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
             Join<T, MapIcon> join = r.join(MappedPOI_.mapIcon);
-            preds.add(join.get(Basic_.id).in(ids));
+            Predicate in = join.get(Basic_.id).in(ids);
+            preds.add(filtering.isMapIconsExclude()?cb.not(in):in);
         }
         AddressFilter addressFilter = filtering.getAddressFilter();
         if (addressFilter != null) {
@@ -102,10 +106,12 @@ public class MappedPOIRepository implements Plugin {
         }
 
         if (filtering.getRelatedType() != null && !filtering.getRelatedType().isEmpty()) {
-            preds.add(r.get(MappedPOI_.relatedType).in(filtering.getRelatedType()));
+            Predicate in = r.get(MappedPOI_.relatedType).in(filtering.getRelatedType());
+            preds.add(filtering.isRelatedTypeExclude()?cb.not(in):in);
         }
         if (filtering.getRelatedId() != null && !filtering.getRelatedId().isEmpty()) {
-            preds.add(r.get(MappedPOI_.relatedId).in(filtering.getRelatedId()));
+            Predicate in = r.get(MappedPOI_.relatedId).in(filtering.getRelatedId());
+            preds.add(filtering.isRelatedIdExclude()?cb.not(in):in);
         }
         LocationArea locationArea = filtering.getLocationArea();
         if (locationArea != null) {

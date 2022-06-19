@@ -30,6 +30,7 @@ public class MapIconFilter extends PaginationFilter {
   private BasicPropertiesFilter basicPropertiesFilter;
 
   private Set<String> externalId;
+  private boolean externalIdExclude;
 
   @JsonIgnore private List<FileResource> fileResource;
 
@@ -174,6 +175,15 @@ public class MapIconFilter extends PaginationFilter {
    */
   public <T extends MapIconFilter> T setRelatedType(Set<String> relatedType) {
     this.relatedType = relatedType;
+    return (T) this;
+  }
+
+  public boolean isExternalIdExclude() {
+    return externalIdExclude;
+  }
+
+  public <T extends MapIconFilter> T setExternalIdExclude(boolean externalIdExclude) {
+    this.externalIdExclude = externalIdExclude;
     return (T) this;
   }
 }

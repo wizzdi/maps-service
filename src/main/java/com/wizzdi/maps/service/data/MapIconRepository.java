@@ -101,7 +101,8 @@ public class MapIconRepository implements Plugin {
     }
 
     if (mapIconFilter.getExternalId() != null && !mapIconFilter.getExternalId().isEmpty()) {
-      preds.add(r.get(MapIcon_.externalId).in(mapIconFilter.getExternalId()));
+      Predicate in = r.get(MapIcon_.externalId).in(mapIconFilter.getExternalId());
+      preds.add(mapIconFilter.isExternalIdExclude()?cb.not(in):in);
     }
   }
   /**
