@@ -5,11 +5,14 @@ import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.service.data.MapFilterComponentRepository;
+import com.wizzdi.maps.service.request.FilterComponentPropertyProvider;
 import com.wizzdi.maps.service.request.MapFilterComponentRequest;
+import com.wizzdi.maps.service.request.StandardFilterComponentProvider;
 import com.wizzdi.maps.service.response.MapFilterComponent;
 import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
 @Extension
 @Component
 public class MapFilterComponentService implements Plugin {
+
+
     @Autowired
     private MapFilterComponentRepository mapFilterComponentRepository;
     @Autowired
@@ -30,12 +35,17 @@ public class MapFilterComponentService implements Plugin {
     private static final Logger logger= LoggerFactory.getLogger(MappedPOIRelatedService.class);
 
     public void validate(MapFilterComponentRequest mapFilterComponentRequest, SecurityContextBase securityContextBase){
-        if(mapFilterComponentRequest.getFilterComponentType()==null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"filter component type must be provided");
-        }
+
         if(mapFilterComponentRequest.getMappedPOIFilter()==null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"mapped poi filter must be provided");
         }
+        if(!mapFilterComponentRequest.isCustom()){
+            if(mapFilterComponentRequest.getFilterComponentType()==null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"filter component type must be provided");
+            }
+            mapFilterComponentRequest.setFilterComponentPropertyProvider(new StandardFilterComponentProvider());
+        }
+
         mappedPOIService.validate(mapFilterComponentRequest.getMappedPOIFilter(),securityContextBase);
     }
 

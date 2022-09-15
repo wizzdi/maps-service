@@ -21,7 +21,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.SingularAttribute;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,24 +41,17 @@ public class MapFilterComponentRepository implements Plugin {
      * @param securityContext
      * @return List of MappedPOI
      */
-    public <T> List<Tuple> listAllMapFilterComponents(MapFilterComponentRequest mapFilterComponentRequest, SecurityContextBase securityContext) {
-        List<Attribute> attributes = mapFilterComponentRequest.getFilterComponentType().getAttributes();
+    public List<Tuple> listAllMapFilterComponents(MapFilterComponentRequest mapFilterComponentRequest, SecurityContextBase securityContext) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Tuple> q = cb.createTupleQuery();
         Root<MappedPOI> r = q.from(MappedPOI.class);
         List<Predicate> preds = new ArrayList<>();
         addMapFilterComponentsPredicates(mapFilterComponentRequest, cb, q, r, preds, securityContext);
-        From<?,?> from=r;
-        for (int i = 0; i < attributes.size()-1; i++) {
-            Attribute attribute=attributes.get(i);
-            Join<?,?> join=from.join(attribute.getName());
-            from=join;
-        }
-        Attribute<?,?> lastOne=attributes.get(attributes.size()-1);
-        Path<T> objectPath = from.get(lastOne.getName());
+
+        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,q,preds,mapFilterComponentRequest);
         BasicPropertiesFilter basicPropertiesFilter = mapFilterComponentRequest.getBasicPropertiesFilter();
 
-        Class<?> entity = mapFilterComponentRequest.getFilterComponentType().getEntity();
+        Class<?> entity = mapFilterComponentRequest.getFilterComponentPropertyProvider().getType(mapFilterComponentRequest);
         boolean basic = Basic.class.isAssignableFrom(entity);
 
         if(basicPropertiesFilter!=null){
@@ -98,6 +90,9 @@ public class MapFilterComponentRepository implements Plugin {
             SecurityContextBase securityContext) {
         MappedPOIFilter mappedPOIFilter = mapFilterComponentRequest.getMappedPOIFilter();
         mappedPOIRepository.addMappedPOIPredicate(mappedPOIFilter,cb,q,r,preds,securityContext);
+        if(mapFilterComponentRequest.getPredicateAdder()!=null){
+            mapFilterComponentRequest.getPredicateAdder().addPredicates(mapFilterComponentRequest,cb,q,r,preds,securityContext);
+        }
 
 
     }
@@ -108,23 +103,15 @@ public class MapFilterComponentRepository implements Plugin {
      * @return count of MappedPOI
      */
     public <T> Long countAllMapFilterComponents(MapFilterComponentRequest mapFilterComponentRequest, SecurityContextBase securityContext) {
-        List<Attribute> attributes = mapFilterComponentRequest.getFilterComponentType().getAttributes();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> q = cb.createQuery(Long.class);
         Root<MappedPOI> r = q.from(MappedPOI.class);
         List<Predicate> preds = new ArrayList<>();
         addMapFilterComponentsPredicates(mapFilterComponentRequest, cb, q, r, preds, securityContext);
-        From<?,?> from=r;
-        for (int i = 0; i < attributes.size()-1; i++) {
-            Attribute attribute=attributes.get(i);
-            Join<?,?> join=from.join(attribute.getName());
-            from=join;
-        }
-        Attribute<?,?> lastOne=attributes.get(attributes.size()-1);
-        Path<T> objectPath = from.get(lastOne.getName());
+        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,q,preds,mapFilterComponentRequest);
         BasicPropertiesFilter basicPropertiesFilter = mapFilterComponentRequest.getBasicPropertiesFilter();
 
-        Class<?> entity = mapFilterComponentRequest.getFilterComponentType().getEntity();
+        Class<?> entity = mapFilterComponentRequest.getFilterComponentPropertyProvider().getType(mapFilterComponentRequest);
         boolean basic = Basic.class.isAssignableFrom(entity);
 
         if(basicPropertiesFilter!=null){

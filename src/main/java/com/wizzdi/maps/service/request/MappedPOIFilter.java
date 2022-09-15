@@ -68,6 +68,9 @@ public class MappedPOIFilter extends PaginationFilter {
 
   private Set<String> tenantIds=new HashSet<>();
 
+  @JsonIgnore
+  private PredicateAdder<MappedPOIFilter> predicateAdder;
+
 
 
 
@@ -279,6 +282,16 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setTenantsExclude(boolean tenantsExclude) {
     this.tenantsExclude = tenantsExclude;
+    return (T) this;
+  }
+
+  @JsonIgnore
+  public PredicateAdder<MappedPOIFilter> getPredicateAdder() {
+    return predicateAdder;
+  }
+
+  public <T extends MappedPOIFilter> T setPredicateAdder(PredicateAdder<MappedPOIFilter> predicateAdder) {
+    this.predicateAdder = predicateAdder;
     return (T) this;
   }
 }
