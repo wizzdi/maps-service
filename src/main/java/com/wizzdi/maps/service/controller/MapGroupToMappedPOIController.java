@@ -41,7 +41,7 @@ public class MapGroupToMappedPOIController implements Plugin {
   @PutMapping("updateMapGroupToMappedPOI")
   @Operation(summary = "updateMapGroupToMappedPOI", description = "Updates MapGroupToMappedPOI")
   public MapGroupToMappedPOI updateMapGroupToMappedPOI(
-      @Validated(Update.class) @RequestBody MapGroupToMappedPOIUpdate mapGroupToMappedPOIUpdate,
+      @Validated(MapGroupToMappedPOIUpdate.class) @RequestBody MapGroupToMappedPOIUpdate mapGroupToMappedPOIUpdate,
       @RequestAttribute SecurityContextBase securityContext) {
 
     return mapGroupToMappedPOIService.updateMapGroupToMappedPOI(
