@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexicore.model.territories.Address;
 import com.wizzdi.flexicore.security.request.BasicCreate;
 import com.wizzdi.flexicore.security.validation.IdValid;
+import com.wizzdi.maps.model.BuildingFloor;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.Room;
 
@@ -32,7 +33,15 @@ import com.wizzdi.maps.model.Room;
       groups = {
         com.wizzdi.flexicore.security.validation.Update.class,
         com.wizzdi.flexicore.security.validation.Create.class
-      })
+      }),
+        @IdValid(
+                targetField = "buildingFloor",
+                field = "buildingFloorId",
+                fieldType = BuildingFloor.class,
+                groups = {
+                        com.wizzdi.flexicore.security.validation.Update.class,
+                        com.wizzdi.flexicore.security.validation.Create.class
+                })
 })
 public class MappedPOICreate extends BasicCreate {
 
@@ -55,6 +64,9 @@ public class MappedPOICreate extends BasicCreate {
   private String relatedType;
   private String relatedId;
   private Boolean keepStatusHistory;
+  private String buildingFloorId;
+  @JsonIgnore
+  private BuildingFloor buildingFloor;
 
 
 
@@ -225,5 +237,21 @@ public class MappedPOICreate extends BasicCreate {
     return (T) this;
   }
 
+  public String getBuildingFloorId() {
+    return buildingFloorId;
+  }
 
+  public MappedPOICreate setBuildingFloorId(String buildingFloorId) {
+    this.buildingFloorId = buildingFloorId;
+    return this;
+  }
+
+  public BuildingFloor getBuildingFloor() {
+    return buildingFloor;
+  }
+
+  public MappedPOICreate setBuildingFloor(BuildingFloor buildingFloor) {
+    this.buildingFloor = buildingFloor;
+    return this;
+  }
 }

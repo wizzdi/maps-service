@@ -148,6 +148,12 @@ public class MappedPOIService implements Plugin {
       mappedPOI.setRoom(mappedPOICreate.getRoom());
       update = true;
     }
+    if (mappedPOICreate.getBuildingFloor() != null
+            && (mappedPOI.getBuildingFloor() == null
+            || !mappedPOICreate.getBuildingFloor().getId().equals(mappedPOI.getBuildingFloor().getId()))) {
+      mappedPOI.setBuildingFloor(mappedPOICreate.getBuildingFloor());
+      update = true;
+    }
     if (mappedPOICreate.getExternalId() != null
             && (!mappedPOICreate.getExternalId().equals(mappedPOI.getExternalId()))) {
       mappedPOI.setExternalId(mappedPOICreate.getExternalId());
