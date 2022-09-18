@@ -48,7 +48,7 @@ public class MapFilterComponentRepository implements Plugin {
         List<Predicate> preds = new ArrayList<>();
         addMapFilterComponentsPredicates(mapFilterComponentRequest, cb, q, r, preds, securityContext);
 
-        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,q,preds,mapFilterComponentRequest);
+        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,cb , q, preds, mapFilterComponentRequest);
         BasicPropertiesFilter basicPropertiesFilter = mapFilterComponentRequest.getBasicPropertiesFilter();
 
         Class<?> entity = mapFilterComponentRequest.getFilterComponentPropertyProvider().getType(mapFilterComponentRequest);
@@ -84,7 +84,7 @@ public class MapFilterComponentRepository implements Plugin {
     public <T extends MappedPOI> void addMapFilterComponentsPredicates(
             MapFilterComponentRequest mapFilterComponentRequest,
             CriteriaBuilder cb,
-            CommonAbstractCriteria q,
+            CriteriaQuery<?> q,
             From<?, T> r,
             List<Predicate> preds,
             SecurityContextBase securityContext) {
@@ -108,7 +108,7 @@ public class MapFilterComponentRepository implements Plugin {
         Root<MappedPOI> r = q.from(MappedPOI.class);
         List<Predicate> preds = new ArrayList<>();
         addMapFilterComponentsPredicates(mapFilterComponentRequest, cb, q, r, preds, securityContext);
-        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,q,preds,mapFilterComponentRequest);
+        Path<?> objectPath = mapFilterComponentRequest.getFilterComponentPropertyProvider().getPropertyPath(r,cb , q, preds, mapFilterComponentRequest);
         BasicPropertiesFilter basicPropertiesFilter = mapFilterComponentRequest.getBasicPropertiesFilter();
 
         Class<?> entity = mapFilterComponentRequest.getFilterComponentPropertyProvider().getType(mapFilterComponentRequest);

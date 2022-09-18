@@ -61,7 +61,7 @@ public class MappedPOIRepository implements Plugin {
     public <T extends MappedPOI> void addMappedPOIPredicate(
             MappedPOIFilter filtering,
             CriteriaBuilder cb,
-            CommonAbstractCriteria q,
+            CriteriaQuery<?> q,
             From<?, T> r,
             List<Predicate> preds,
             SecurityContextBase securityContext) {

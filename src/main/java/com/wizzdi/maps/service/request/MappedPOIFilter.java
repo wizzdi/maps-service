@@ -72,8 +72,34 @@ public class MappedPOIFilter extends PaginationFilter {
   private PredicateAdder<MappedPOIFilter> predicateAdder;
 
 
+  public MappedPOIFilter() {
+  }
 
-
+  public MappedPOIFilter(MappedPOIFilter other) {
+    this.addressIds = other.addressIds;
+    this.address = other.address;
+    this.addressExclude = other.addressExclude;
+    this.basicPropertiesFilter = other.basicPropertiesFilter;
+    this.locationArea = other.locationArea;
+    this.room = other.room;
+    this.roomExclude = other.roomExclude;
+    this.roomIds = other.roomIds;
+    this.mapGroupFilter = other.mapGroupFilter;
+    this.externalId = other.externalId;
+    this.externalIdExclude = other.externalIdExclude;
+    this.relatedType = other.relatedType;
+    this.relatedTypeExclude = other.relatedTypeExclude;
+    this.relatedId = other.relatedId;
+    this.relatedIdExclude = other.relatedIdExclude;
+    this.addressFilter = other.addressFilter;
+    this.mapIcons = other.mapIcons;
+    this.mapIconsExclude = other.mapIconsExclude;
+    this.mapIconsIds = other.mapIconsIds;
+    this.tenants = other.tenants;
+    this.tenantsExclude = other.tenantsExclude;
+    this.tenantIds = other.tenantIds;
+    this.predicateAdder = other.predicateAdder;
+  }
 
   public Set<String> getAddressIds() {
     return addressIds;

@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
 
+import javax.persistence.criteria.Root;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MapFilterComponentRequest extends PaginationFilter {
 
     private BasicPropertiesFilter basicPropertiesFilter;
@@ -73,4 +77,5 @@ public class MapFilterComponentRequest extends PaginationFilter {
         this.custom = custom;
         return (T) this;
     }
+
 }
