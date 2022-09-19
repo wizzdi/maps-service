@@ -1,12 +1,13 @@
 package com.wizzdi.maps.service;
 
+import com.flexicore.model.SecuredBasic;
 import com.wizzdi.maps.model.MappedPOI;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Light extends MappedPOI {
+public class Light extends SecuredBasic {
 
     @ManyToOne(targetEntity = LightOperator.class)
     private LightOperator lightOperator;

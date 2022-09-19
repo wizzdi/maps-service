@@ -14,7 +14,7 @@ public class StandardFilterComponentProvider implements FilterComponentPropertyP
     }
 
     @Override
-    public Path<?> getPropertyPath(Root<?> r, CriteriaBuilder cb, CriteriaQuery q, List<Predicate> predicates, MapFilterComponentRequest filter) {
+    public Path<?> getPropertyPath(Root<?> r, CriteriaBuilder cb, CriteriaQuery<?> q, List<Predicate> predicates, MapFilterComponentRequest filter) {
         List<Attribute> attributes=filter.getFilterComponentType().getAttributes();
         From<?,?> from=r;
         for (int i = 0; i < attributes.size()-1; i++) {
