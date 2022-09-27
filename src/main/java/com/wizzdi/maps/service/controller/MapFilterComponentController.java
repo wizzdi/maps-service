@@ -40,7 +40,7 @@ public class MapFilterComponentController implements Plugin {
         mappedPOIService.validate(mapFilterComponentRequest, securityContext);
         return mappedPOIService.getAllMapFilterComponents(mapFilterComponentRequest, securityContext);
     }
-    @Operation(summary = "get all possible values for FilterComponentType")
+    @Operation(summary = "get all possible values for , used with the getAllMapFilterComponents API")
     @GetMapping("getAllMapFilterComponentsTypes")
     public List<String> getAllMapFilterComponentsTypes(
             @RequestHeader("authenticationKey") String authenticationKey,
