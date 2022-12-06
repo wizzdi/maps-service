@@ -70,6 +70,7 @@ public class MappedPOIFilter extends PaginationFilter {
 
   @JsonIgnore
   private PredicateAdder<MappedPOIFilter> predicateAdder;
+  private String nameLike;
 
 
   public MappedPOIFilter() {
@@ -319,5 +320,14 @@ public class MappedPOIFilter extends PaginationFilter {
   public <T extends MappedPOIFilter> T setPredicateAdder(PredicateAdder<MappedPOIFilter> predicateAdder) {
     this.predicateAdder = predicateAdder;
     return (T) this;
+  }
+
+  public String getNameLike() {
+    return nameLike;
+  }
+
+  public MappedPOIFilter setNameLike(String nameLike) {
+    this.nameLike = nameLike;
+    return this;
   }
 }

@@ -6,27 +6,25 @@ import com.flexicore.security.SecurityContextBase;
 import com.flexicore.territories.data.AddressRepository;
 import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
-import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.*;
 import com.wizzdi.maps.service.request.LocationArea;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
+import org.pf4j.Extension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
-
-import org.pf4j.Extension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Extension
 @Component
@@ -68,7 +66,11 @@ public class MappedPOIRepository implements Plugin {
 
         this.securedBasicRepository.addSecuredBasicPredicates(
                 filtering.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
-
+        if (filtering.getNameLike()!=null && !filtering.getNameLike().isEmpty()) {
+            if (!filtering.getNameLike().startsWith("%")) filtering.setNameLike("%"+filtering.getNameLike());
+            if (!filtering.getNameLike().endsWith("%")) filtering.setNameLike(filtering.getNameLike()+"%");
+            preds.add(cb.like(r.get(MappedPOI_.name),filtering.getNameLike()));
+        }
         if (filtering.getAddress() != null && !filtering.getAddress().isEmpty()) {
             Set<String> ids =
                     filtering.getAddress().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
