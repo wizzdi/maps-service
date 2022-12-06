@@ -2,6 +2,7 @@ package com.wizzdi.maps.service;
 
 import com.flexicore.annotations.OperationsInside;
 import com.flexicore.security.SecurityContextBase;
+import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.request.GeoHashRequest;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Extension
 @Tag(name = "LightMappedPOIController")
 @OperationsInside
-public class LightMappedPOIController {
+public class LightMappedPOIController implements Plugin {
     @Autowired
     private LightMappedPOIService lightMappedPOIService;
 
