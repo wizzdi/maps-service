@@ -17,10 +17,10 @@ public class GeoHashResponse {
 	public GeoHashResponse(String geoHash, Long count) {
 		BoundingBox point = geoHash != null ? GeoHash
 				.fromGeohashString(geoHash).getBoundingBox() : null;
-		latMin = point != null ? point.getMinLat() : -1d;
-		lonMin = point != null ? point.getMinLon() : -1d;
-		latMax = point != null ? point.getMaxLat() : -1d;
-		lonMax = point != null ? point.getMaxLon() : -1d;
+		latMin = point != null ? point.getSouthLatitude() : -1d;
+		lonMin = point != null ? point.getWestLongitude() : -1d;
+		latMax = point != null ? point.getNorthLatitude() : -1d;
+		lonMax = point != null ? point.getEastLongitude() : -1d;
 		this.count = count;
 	}
 
