@@ -39,6 +39,7 @@ import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,6 +56,10 @@ public class MappedPOIService implements Plugin {
   private BasicService basicService;
   @Autowired
   private AddressService addressService;
+  @Value("${wizzdi.mapPoi.keepLocationHistoryDefault:false}")
+  private boolean keepLocationHistoryDefault;
+  @Value("${wizzdi.mapPoi.keepStatusHistoryDefault:false}")
+  private boolean keepStatusHistoryDefault;
   private static final Map<String, Method> setterCache = new ConcurrentHashMap<>();
 
 
@@ -81,6 +86,12 @@ public class MappedPOIService implements Plugin {
           MappedPOICreate mappedPOICreate, SecurityContextBase securityContext) {
     MappedPOI mappedPOI = new MappedPOI();
     mappedPOI.setId(UUID.randomUUID().toString());
+    if(mappedPOICreate.getKeepLocationHistory()==null){
+      mappedPOICreate.setKeepLocationHistory(keepLocationHistoryDefault);
+    }
+    if(mappedPOICreate.getKeepStatusHistory()==null){
+      mappedPOICreate.setKeepStatusHistory(keepStatusHistoryDefault);
+    }
     updateMappedPOINoMerge(mappedPOICreate, mappedPOI);
 
     BaseclassService.createSecurityObjectNoMerge(mappedPOI, securityContext);
