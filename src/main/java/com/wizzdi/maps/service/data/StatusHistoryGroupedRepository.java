@@ -4,6 +4,7 @@ import com.flexicore.model.SecurityTenant;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.maps.model.StatusHistory;
+import com.wizzdi.maps.service.request.StatusHistoryForDateRequest;
 import com.wizzdi.maps.service.request.StatusHistoryGroupedRequest;
 import com.wizzdi.maps.service.response.StatusHistoryGroupedEntry;
 import org.pf4j.Extension;
@@ -31,7 +32,7 @@ public class StatusHistoryGroupedRepository implements Plugin {
    * @return List of StatusHistory
    */
   public List<StatusHistory> listLastEventForMappedPOI(
-          StatusHistoryGroupedRequest statusHistoryGroupedRequest, SecurityContextBase securityContext) {
+          StatusHistoryForDateRequest statusHistoryGroupedRequest, SecurityContextBase securityContext) {
     List<? extends SecurityTenant> tenants = securityContext.getTenants();
     List<String> collect = new ArrayList<>(tenants.stream().map(f -> f.getId()).collect(Collectors.toSet()));
     List<String> listPlaceHolders=new ArrayList<>();

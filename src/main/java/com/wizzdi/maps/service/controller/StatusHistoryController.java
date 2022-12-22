@@ -9,6 +9,7 @@ import com.wizzdi.flexicore.security.validation.Update;
 import com.wizzdi.maps.model.StatusHistory;
 import com.wizzdi.maps.service.request.StatusHistoryCreate;
 import com.wizzdi.maps.service.request.StatusHistoryFilter;
+import com.wizzdi.maps.service.request.StatusHistoryForDateRequest;
 import com.wizzdi.maps.service.request.StatusHistoryUpdate;
 import com.wizzdi.maps.service.service.StatusHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,8 @@ public class StatusHistoryController implements Plugin {
 
     return statusHistoryService.getAllStatusHistories(statusHistoryFilter, securityContext);
   }
+
+
 
   @PutMapping("updateStatusHistory")
   @Operation(summary = "updateStatusHistory", description = "Updates StatusHistory")
