@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @Extension
@@ -25,8 +27,7 @@ public class LocationHistoryCreator implements Plugin {
     private LocationHistoryService locationHistoryService;
 
 
-    @EventListener
-    @Async
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
     public void onMappedPOICreated(BasicCreated<MappedPOI> mappedPoiCreated){
         MappedPOI mappedPOI = mappedPoiCreated.getBaseclass();
         if(mappedPOI.isKeepLocationHistory()){
@@ -42,8 +43,7 @@ public class LocationHistoryCreator implements Plugin {
 
     }
 
-    @EventListener
-    @Async
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
     public void onMappedPOIUpdated(BasicUpdated<MappedPOI> mappedPOIBasicUpdated){
         MappedPOI mappedPOI = mappedPOIBasicUpdated.getBaseclass();
         if(mappedPOI.isKeepLocationHistory()){

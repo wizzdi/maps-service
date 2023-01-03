@@ -130,6 +130,9 @@ public class MappedPOIRepository implements Plugin {
             mapGroupRepository.addMapGroupPredicate(filtering.getMapGroupFilter(), cb, q, join, preds, securityContext);
             preds.add(cb.isFalse(join1.get(Basic_.softDelete)));
         }
+        if(filtering.getExternalId()!=null&&!filtering.getExternalId().isEmpty()){
+            preds.add(r.get(MappedPOI_.externalId).in(filtering.getExternalId()));
+        }
         if(filtering.getPredicateAdder()!=null){
             filtering.getPredicateAdder().addPredicates(filtering,cb,q,r,preds,securityContext);
         }

@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.OffsetDateTime;
 
@@ -28,8 +30,7 @@ public class StatusHistoryCreator implements Plugin {
     private StatusHistoryService statusHistoryService;
 
 
-    @EventListener
-    @Async
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
     public void onMappedPOICreated(BasicCreated<MappedPOI> mappedPoiCreated){
         MappedPOI mappedPOI = mappedPoiCreated.getBaseclass();
         if(mappedPOI.isKeepStatusHistory()){
@@ -52,8 +53,7 @@ public class StatusHistoryCreator implements Plugin {
 
     }
 
-    @EventListener
-    @Async
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
     public void onMappedPOIUpdated(BasicUpdated<MappedPOI> mappedPOIBasicUpdated){
         MappedPOI mappedPOI = mappedPOIBasicUpdated.getBaseclass();
         if(mappedPOI.isKeepStatusHistory()){
