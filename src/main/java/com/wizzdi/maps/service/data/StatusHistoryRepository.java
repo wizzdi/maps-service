@@ -33,6 +33,8 @@ public class StatusHistoryRepository implements Plugin {
   @PersistenceContext private EntityManager em;
 
   @Autowired private SecuredBasicRepository securedBasicRepository;
+  @Autowired
+  private MappedPOIRepository mappedPOIRepository;
 
   /**
    * @param statusHistoryFilter Object Used to List StatusHistory
@@ -46,7 +48,7 @@ public class StatusHistoryRepository implements Plugin {
     Root<StatusHistory> r = q.from(StatusHistory.class);
     List<Predicate> preds = new ArrayList<>();
     addStatusHistoryPredicate(statusHistoryFilter, cb, q, r, preds, securityContext);
-    q.select(r).where(preds.toArray(new Predicate[0]));
+    q.select(r).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(StatusHistory_.dateAtStatus)));
     TypedQuery<StatusHistory> query = em.createQuery(q);
 
     BasicRepository.addPagination(statusHistoryFilter, query);
@@ -57,7 +59,7 @@ public class StatusHistoryRepository implements Plugin {
   public <T extends StatusHistory> void addStatusHistoryPredicate(
       StatusHistoryFilter statusHistoryFilter,
       CriteriaBuilder cb,
-      CommonAbstractCriteria q,
+      CriteriaQuery<?> q,
       From<?, T> r,
       List<Predicate> preds,
       SecurityContextBase securityContext) {
@@ -84,9 +86,20 @@ public class StatusHistoryRepository implements Plugin {
       preds.add(join.get(MapIcon_.id).in(ids));
     }
 
+
     if (statusHistoryFilter.getDateAtStatus() != null
         && !statusHistoryFilter.getDateAtStatus().isEmpty()) {
       preds.add(r.get(StatusHistory_.dateAtStatus).in(statusHistoryFilter.getDateAtStatus()));
+    }
+    if(statusHistoryFilter.getStartDate()!=null){
+      preds.add(cb.greaterThanOrEqualTo(r.get(StatusHistory_.dateAtStatus),statusHistoryFilter.getStartDate()));
+    }
+    if(statusHistoryFilter.getEndDate()!=null){
+      preds.add(cb.lessThanOrEqualTo(r.get(StatusHistory_.dateAtStatus),statusHistoryFilter.getEndDate()));
+    }
+    if(statusHistoryFilter.getMappedPOIFilter()!=null){
+      Join<T, MappedPOI> join = r.join(StatusHistory_.mappedPOI);
+      mappedPOIRepository.addMappedPOIPredicate(statusHistoryFilter.getMappedPOIFilter(),cb,q, join,preds,securityContext);
     }
   }
   /**

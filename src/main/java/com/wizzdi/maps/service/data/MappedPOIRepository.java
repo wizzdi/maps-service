@@ -133,6 +133,9 @@ public class MappedPOIRepository implements Plugin {
         if(filtering.getExternalId()!=null&&!filtering.getExternalId().isEmpty()){
             preds.add(r.get(MappedPOI_.externalId).in(filtering.getExternalId()));
         }
+        if(filtering.getExternalIdLike()!=null&&!filtering.getExternalIdLike().isEmpty()){
+            preds.add(cb.like(r.get(MappedPOI_.externalId),filtering.getExternalIdLike()));
+        }
         if(filtering.getPredicateAdder()!=null){
             filtering.getPredicateAdder().addPredicates(filtering,cb,q,r,preds,securityContext);
         }

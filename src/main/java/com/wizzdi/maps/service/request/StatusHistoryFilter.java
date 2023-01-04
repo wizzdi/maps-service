@@ -27,9 +27,14 @@ public class StatusHistoryFilter extends PaginationFilter {
 
   private Set<OffsetDateTime> dateAtStatus;
 
+  private OffsetDateTime startDate;
+  private OffsetDateTime endDate;
+
   @JsonIgnore private List<MapIcon> mapIcon;
 
   private Set<String> mapIconIds;
+
+  private MappedPOIFilter mappedPOIFilter;
 
   @JsonIgnore private List<MappedPOI> mappedPOI;
 
@@ -119,6 +124,33 @@ public class StatusHistoryFilter extends PaginationFilter {
    */
   public <T extends StatusHistoryFilter> T setMappedPOIIds(Set<String> mappedPOIIds) {
     this.mappedPOIIds = mappedPOIIds;
+    return (T) this;
+  }
+
+  public MappedPOIFilter getMappedPOIFilter() {
+    return mappedPOIFilter;
+  }
+
+  public <T extends StatusHistoryFilter> T setMappedPOIFilter(MappedPOIFilter mappedPOIFilter) {
+    this.mappedPOIFilter = mappedPOIFilter;
+    return (T) this;
+  }
+
+  public OffsetDateTime getStartDate() {
+    return startDate;
+  }
+
+  public <T extends StatusHistoryFilter> T setStartDate(OffsetDateTime startDate) {
+    this.startDate = startDate;
+    return (T) this;
+  }
+
+  public OffsetDateTime getEndDate() {
+    return endDate;
+  }
+
+  public <T extends StatusHistoryFilter> T setEndDate(OffsetDateTime endDate) {
+    this.endDate = endDate;
     return (T) this;
   }
 }

@@ -25,26 +25,23 @@ import java.util.List;
 @Extension
 @Tag(name = "StatusHistoryGrouped")
 @OperationsInside
-public class StatusHistoryGroupedController implements Plugin, Invoker {
+public class StatusHistoryForDateController implements Plugin, Invoker {
 
   @Autowired private StatusHistoryGroupedService statusHistoryGroupedService;
 
-  @PostMapping("listAllStatusHistoriesGrouped")
-  @Operation(summary = "listAllStatusHistoriesGrouped", description = "lists StatusHistories grouped")
-  public PaginationResponse<StatusHistoryGroupedEntry> listAllStatusHistoriesGrouped(
-      @RequestHeader("authenticationKey") String authenticationKey,
-      @RequestBody StatusHistoryGroupedRequest statusHistoryGroupedRequest,
-      @RequestAttribute SecurityContextBase securityContext) {
 
-    statusHistoryGroupedService.validate(statusHistoryGroupedRequest, securityContext);
-    StatusHistoryGroupedResponse statusHistoryGroupedResponse = statusHistoryGroupedService.listAllStatusHistoriesGrouped(statusHistoryGroupedRequest, securityContext);
-    List<StatusHistoryGroupedEntry> statusHistoryGroupedEntries = statusHistoryGroupedResponse.getStatusHistoryGroupedEntries();
-    return new PaginationResponse<>(statusHistoryGroupedEntries,statusHistoryGroupedEntries.size(),statusHistoryGroupedEntries.size());
+
+  @PostMapping("getAllStatusHistoriesForDate")
+  @Operation(summary = "getAllStatusHistoriesForDate", description = "lists StatusHistories for Date")
+  public PaginationResponse<StatusHistory> getAllStatusHistoriesForDate(
+          @Valid @RequestBody StatusHistoryForDateRequest statusHistoryFilter,
+          @RequestAttribute SecurityContextBase securityContext) {
+
+    return statusHistoryGroupedService.getAllStatusHistoriesForDate(statusHistoryFilter, securityContext);
   }
-
 
   @Override
   public Class<?> getHandlingClass() {
-    return StatusHistoryGroupedEntry.class;
+    return StatusHistory.class;
   }
 }

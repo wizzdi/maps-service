@@ -48,6 +48,7 @@ public class MappedPOIFilter extends PaginationFilter {
   private Set<String> roomIds=new HashSet<>();
   private MapGroupFilter mapGroupFilter;
   private Set<String> externalId;
+  private String externalIdLike;
   private boolean externalIdExclude;
 
   private Set<String> relatedType;
@@ -99,6 +100,7 @@ public class MappedPOIFilter extends PaginationFilter {
     this.tenantsExclude = other.tenantsExclude;
     this.tenantIds = other.tenantIds;
     this.predicateAdder = other.predicateAdder;
+    this.externalIdLike=other.externalIdLike;
   }
 
   public Set<String> getAddressIds() {
@@ -318,6 +320,15 @@ public class MappedPOIFilter extends PaginationFilter {
 
   public <T extends MappedPOIFilter> T setPredicateAdder(PredicateAdder<MappedPOIFilter> predicateAdder) {
     this.predicateAdder = predicateAdder;
+    return (T) this;
+  }
+
+  public String getExternalIdLike() {
+    return externalIdLike;
+  }
+
+  public <T extends MappedPOIFilter> T setExternalIdLike(String externalIdLike) {
+    this.externalIdLike = externalIdLike;
     return (T) this;
   }
 }
