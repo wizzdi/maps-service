@@ -22,7 +22,7 @@
         <maps-model.version>2.0.0</maps-model.version>
 
 
-        <flexicore-territories-service.version>5.0.0</flexicore-territories-service.version>
+        <flexicore-territories-service.version>5.0.1-SNAPSHOT</flexicore-territories-service.version>
         <spring-boot-dependencies.version>2.7.4</spring-boot-dependencies.version>
         <flexicore-boot-dependencies.version>3.0.5</flexicore-boot-dependencies.version>
         <swagger-jaxrs2.version>2.2.0</swagger-jaxrs2.version>
@@ -268,7 +268,7 @@
                                         <Plugin-Id>${artifactId}</Plugin-Id>
                                         <Plugin-Version>${version}</Plugin-Version>
                                         <!--suppress UnresolvedMavenProperty -->
-                                        <Plugin-Dependencies>flexicore-territories-service@&gt;=${flexicore-territories-service.version}</Plugin-Dependencies>
+                                        <Plugin-Dependencies>flexicore-territories-service@&gt;=5.0.0</Plugin-Dependencies>
 
                                     </manifestEntries>
                                 </transformer>
