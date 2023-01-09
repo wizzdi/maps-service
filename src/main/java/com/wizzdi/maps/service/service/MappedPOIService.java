@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,6 +62,13 @@ public class MappedPOIService implements Plugin {
   @Value("${wizzdi.mapPoi.keepStatusHistoryDefault:false}")
   private boolean keepStatusHistoryDefault;
   private static final Map<String, Method> setterCache = new ConcurrentHashMap<>();
+  @Autowired
+  @Lazy
+  private ReverseGeoHashService reverseGeoHashService;
+
+  @Autowired
+  @Lazy
+  private SecurityContextBase adminSecurityContext;
 
 
   /**
@@ -360,6 +368,15 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
     }
     mappedPOICreate.setRoom(room);
+    if(mappedPOICreate.getAddress()==null&&mappedPOICreate.getLat()!=null&&mappedPOICreate.getLon()!=null){
+      try{
+        Address reverseAddress = reverseGeoHashService.getAddress(mappedPOICreate.getLat(), mappedPOICreate.getLon(), adminSecurityContext);
+        mappedPOICreate.setAddress(reverseAddress);
+      }
+      catch (Throwable e){
+        logger.error("failed calculating reverse geohash",e);
+      }
+    }
   }
 
 

@@ -1,10 +1,14 @@
 package com.wizzdi.maps.service.service;
 
+import com.flexicore.model.territories.Address;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
+import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.data.GeoHashRepository;
 import com.wizzdi.maps.service.request.GeoHashRequest;
+import com.wizzdi.maps.service.request.MappedPOIFilter;
+import com.wizzdi.maps.service.request.MappedPOIUpdate;
 import com.wizzdi.maps.service.response.GeoHashResponse;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ public class GeoHashService implements Plugin {
     private MappedPOIService mappedPOIService;
     @Autowired
     private GeoHashRepository geoHashRepository;
+    @Autowired
+    private ReverseGeoHashService reverseGeoHashService;
 
     public void validate(GeoHashRequest geoHashRequest, SecurityContextBase securityContext) {
         if(geoHashRequest.getPrecision()==null){
@@ -45,5 +51,16 @@ public class GeoHashService implements Plugin {
 
     private List<GeoHashResponse> listAllGeoHashAreas(GeoHashRequest geoHashRequest, SecurityContextBase securityContext) {
         return geoHashRepository.listAllGeoHashAreas(geoHashRequest,securityContext);
+    }
+
+    public void calculateReverseGeoHash(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
+        List<MappedPOI> mappedPOIS = mappedPOIService.listAllMappedPOIs(mappedPOIFilter, securityContext);
+        for (MappedPOI pois : mappedPOIS) {
+            if(pois.getLat()!=null&&pois.getLon()!=null){
+                Address address = reverseGeoHashService.getAddress(pois.getLat(), pois.getLon(), securityContext);
+                mappedPOIService.updateMappedPOI(new MappedPOIUpdate().setMappedPOI(pois).setAddress(address),securityContext);
+
+            }
+        }
     }
 }

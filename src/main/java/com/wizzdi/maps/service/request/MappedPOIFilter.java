@@ -24,14 +24,10 @@ import java.util.Set;
       field = "addressIds",
       fieldType = com.flexicore.model.territories.Address.class),
   @IdValid(
-      targetField = "mapIcon",
-      field = "mapIconIds",
+      targetField = "mapIcons",
+      field = "mapIconsIds",
       fieldType = com.wizzdi.maps.model.MapIcon.class),
-  @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class),
-  @IdValid(
-      targetField = "mappedPOILocationHistories",
-      field = "mappedPOILocationHistoriesIds",
-      fieldType = com.wizzdi.maps.model.LocationHistory.class)
+  @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class)
 })
 public class MappedPOIFilter extends PaginationFilter {
 

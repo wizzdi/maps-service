@@ -3,6 +3,7 @@ package com.wizzdi.maps.service.controller;
 import com.flexicore.annotations.OperationsInside;
 import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
+import com.wizzdi.flexicore.boot.dynamic.invokers.annotations.Invoker;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.maps.service.response.MappedPOIRelated;
 import com.wizzdi.maps.service.service.MappedPOIRelatedService;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Extension
 @Tag(name = "MappedPOIRelated")
 @OperationsInside
-public class MappedPOIRelatedController implements Plugin {
+public class MappedPOIRelatedController implements Plugin, Invoker {
 
     @Autowired
     private MappedPOIRelatedService mappedPOIService;
@@ -32,5 +33,10 @@ public class MappedPOIRelatedController implements Plugin {
             @RequestAttribute SecurityContextBase securityContext) {
         mappedPOIService.validate(mappedPOIFilter, securityContext);
         return mappedPOIService.getAllMappedPOIRelated(mappedPOIFilter, securityContext);
+    }
+
+    @Override
+    public Class<?> getHandlingClass() {
+        return MappedPOIRelated.class;
     }
 }
