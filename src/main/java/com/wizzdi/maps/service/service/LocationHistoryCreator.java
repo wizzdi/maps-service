@@ -14,8 +14,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Component
 @Extension
@@ -27,27 +30,13 @@ public class LocationHistoryCreator implements Plugin {
     private LocationHistoryService locationHistoryService;
 
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
-    public void onMappedPOICreated(BasicCreated<MappedPOI> mappedPoiCreated){
-        MappedPOI mappedPOI = mappedPoiCreated.getBaseclass();
-        if(mappedPOI.isKeepLocationHistory()){
-
-            createLocationHistory(mappedPOI);
-        }
-    }
-
-    private LocationHistory createLocationHistory(MappedPOI mappedPOI) {
+    @Transactional(propagation = REQUIRES_NEW)
+    public LocationHistory createLocationHistory(MappedPOI mappedPOI) {
         SecurityContextBase securityContext = securityContextProvider.getSecurityContext(mappedPOI.getSecurity().getCreator());
         securityContext.setTenantToCreateIn(mappedPOI.getSecurity().getTenant());
         return locationHistoryService.createLocationHistory(new LocationHistoryCreate(mappedPOI),securityContext);
 
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT )
-    public void onMappedPOIUpdated(BasicUpdated<MappedPOI> mappedPOIBasicUpdated){
-        MappedPOI mappedPOI = mappedPOIBasicUpdated.getBaseclass();
-        if(mappedPOI.isKeepLocationHistory()){
-            createLocationHistory(mappedPOI);
-        }
-    }
+
 }
