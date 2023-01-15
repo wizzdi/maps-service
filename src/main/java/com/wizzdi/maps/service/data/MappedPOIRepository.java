@@ -52,7 +52,7 @@ public class MappedPOIRepository implements Plugin {
         Root<MappedPOI> r = q.from(MappedPOI.class);
         List<Predicate> preds = new ArrayList<>();
         addMappedPOIPredicate(filtering, cb, q, r, preds, securityContext);
-        q.select(r).where(preds.toArray(new Predicate[0]));
+        q.select(r).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MappedPOI_.externalId)));
         TypedQuery<MappedPOI> query = em.createQuery(q);
         BasicRepository.addPagination(filtering, query);
         return query.getResultList();
