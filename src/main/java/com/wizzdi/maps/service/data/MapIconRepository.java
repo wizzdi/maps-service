@@ -48,7 +48,7 @@ public class MapIconRepository implements Plugin {
     Root<MapIcon> r = q.from(MapIcon.class);
     List<Predicate> preds = new ArrayList<>();
     addMapIconPredicate(mapIconFilter, cb, q, r, preds, securityContext);
-    q.select(r).where(preds.toArray(new Predicate[0]));
+    q.select(r).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MapIcon_.name)));
     TypedQuery<MapIcon> query = em.createQuery(q);
 
     BasicRepository.addPagination(mapIconFilter, query);
