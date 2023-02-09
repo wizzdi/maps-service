@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wizzdi.flexicore.security.request.BasicCreate;
 import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.BuildingFloor;
 
 /** Object Used to Create Room */
 @com.wizzdi.flexicore.security.validation.IdValid.List({
   @IdValid(
-      targetField = "building",
-      field = "buildingId",
-      fieldType = com.wizzdi.maps.model.Building.class,
+      targetField = "buildingFloor",
+      field = "buildingFloorId",
+      fieldType = com.wizzdi.maps.model.BuildingFloor.class,
       groups = {
         com.wizzdi.flexicore.security.validation.Update.class,
         com.wizzdi.flexicore.security.validation.Create.class
@@ -18,9 +19,9 @@ import com.wizzdi.maps.model.Building;
 })
 public class RoomCreate extends BasicCreate {
 
-  @JsonIgnore private Building building;
+  @JsonIgnore private BuildingFloor buildingFloor;
 
-  private String buildingId;
+  private String buildingFloorId;
 
   private String externalId;
 
@@ -30,34 +31,6 @@ public class RoomCreate extends BasicCreate {
 
   private Double z;
 
-  /** @return building */
-  @JsonIgnore
-  public Building getBuilding() {
-    return this.building;
-  }
-
-  /**
-   * @param building building to set
-   * @return RoomCreate
-   */
-  public <T extends RoomCreate> T setBuilding(Building building) {
-    this.building = building;
-    return (T) this;
-  }
-
-  /** @return buildingId */
-  public String getBuildingId() {
-    return this.buildingId;
-  }
-
-  /**
-   * @param buildingId buildingId to set
-   * @return RoomCreate
-   */
-  public <T extends RoomCreate> T setBuildingId(String buildingId) {
-    this.buildingId = buildingId;
-    return (T) this;
-  }
 
   /** @return externalId */
   public String getExternalId() {
@@ -113,5 +86,23 @@ public class RoomCreate extends BasicCreate {
   public <T extends RoomCreate> T setZ(Double z) {
     this.z = z;
     return (T) this;
+  }
+
+  public BuildingFloor getBuildingFloor() {
+    return buildingFloor;
+  }
+
+  public RoomCreate setBuildingFloor(BuildingFloor buildingFloor) {
+    this.buildingFloor = buildingFloor;
+    return this;
+  }
+
+  public String getBuildingFloorId() {
+    return buildingFloorId;
+  }
+
+  public RoomCreate setBuildingFloorId(String buildingFloorId) {
+    this.buildingFloorId = buildingFloorId;
+    return this;
   }
 }

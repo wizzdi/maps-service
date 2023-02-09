@@ -5,6 +5,7 @@ import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
 import com.wizzdi.flexicore.security.validation.IdValid;
 import com.wizzdi.maps.model.Building;
+import com.wizzdi.maps.model.BuildingFloor;
 import com.wizzdi.maps.model.LocationHistory;
 import com.wizzdi.maps.model.MappedPOI;
 import java.util.List;
@@ -13,9 +14,9 @@ import java.util.Set;
 /** Object Used to List Room */
 @com.wizzdi.flexicore.security.validation.IdValid.List({
   @IdValid(
-      targetField = "building",
-      field = "buildingIds",
-      fieldType = com.wizzdi.maps.model.Building.class),
+      targetField = "buildingFloors",
+      field = "buildingFloorIds",
+      fieldType = com.wizzdi.maps.model.BuildingFloor.class),
   @IdValid(
       targetField = "roomMappedPOIs",
       field = "roomMappedPOIsIds",
@@ -29,9 +30,9 @@ public class RoomFilter extends PaginationFilter {
 
   private BasicPropertiesFilter basicPropertiesFilter;
 
-  @JsonIgnore private List<Building> building;
+  @JsonIgnore private List<BuildingFloor> buildingFloors;
 
-  private Set<String> buildingIds;
+  private Set<String> buildingFloorIds;
 
   private Set<String> externalId;
 
@@ -64,33 +65,22 @@ public class RoomFilter extends PaginationFilter {
     return (T) this;
   }
 
-  /** @return building */
-  @JsonIgnore
-  public List<Building> getBuilding() {
-    return this.building;
+  public List<BuildingFloor> getBuildingFloors() {
+    return buildingFloors;
   }
 
-  /**
-   * @param building building to set
-   * @return RoomFilter
-   */
-  public <T extends RoomFilter> T setBuilding(List<Building> building) {
-    this.building = building;
-    return (T) this;
+  public RoomFilter setBuildingFloors(List<BuildingFloor> buildingFloors) {
+    this.buildingFloors = buildingFloors;
+    return this;
   }
 
-  /** @return buildingIds */
-  public Set<String> getBuildingIds() {
-    return this.buildingIds;
+  public Set<String> getBuildingFloorIds() {
+    return buildingFloorIds;
   }
 
-  /**
-   * @param buildingIds buildingIds to set
-   * @return RoomFilter
-   */
-  public <T extends RoomFilter> T setBuildingIds(Set<String> buildingIds) {
-    this.buildingIds = buildingIds;
-    return (T) this;
+  public RoomFilter setBuildingFloorIds(Set<String> buildingFloorIds) {
+    this.buildingFloorIds = buildingFloorIds;
+    return this;
   }
 
   /** @return externalId */

@@ -6,14 +6,7 @@ import com.flexicore.security.SecurityContextBase;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
-import com.wizzdi.maps.model.Building;
-import com.wizzdi.maps.model.Building_;
-import com.wizzdi.maps.model.LocationHistory;
-import com.wizzdi.maps.model.LocationHistory_;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.MappedPOI_;
-import com.wizzdi.maps.model.Room;
-import com.wizzdi.maps.model.Room_;
+import com.wizzdi.maps.model.*;
 import com.wizzdi.maps.service.request.RoomFilter;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +59,11 @@ public class RoomRepository implements Plugin {
     this.securedBasicRepository.addSecuredBasicPredicates(
         roomFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (roomFilter.getBuilding() != null && !roomFilter.getBuilding().isEmpty()) {
+    if (roomFilter.getBuildingFloors() != null && !roomFilter.getBuildingFloors().isEmpty()) {
       Set<String> ids =
-          roomFilter.getBuilding().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, Building> join = r.join(Room_.building);
-      preds.add(join.get(Building_.id).in(ids));
+          roomFilter.getBuildingFloors().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+      Join<T, BuildingFloor> join = r.join(Room_.buildingFloor);
+      preds.add(join.get(BuildingFloor_.id).in(ids));
     }
 
     if (roomFilter.getRoomLocationHistories() != null
@@ -92,7 +85,7 @@ public class RoomRepository implements Plugin {
           roomFilter.getRoomMappedPOIs().parallelStream()
               .map(f -> f.getId())
               .collect(Collectors.toSet());
-      Join<T, MappedPOI> join = r.join(Room_.roomMappedPOIs);
+      ListJoin<BuildingFloor, MappedPOI> join = r.join(Room_.buildingFloor).join(BuildingFloor_.mappedPOIS);
       preds.add(join.get(MappedPOI_.id).in(ids));
     }
 

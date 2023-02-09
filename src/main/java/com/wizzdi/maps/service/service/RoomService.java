@@ -62,10 +62,10 @@ public class RoomService implements Plugin {
   public boolean updateRoomNoMerge(Room room, RoomCreate roomCreate) {
     boolean update = basicService.updateBasicNoMerge(roomCreate, room);
 
-    if (roomCreate.getBuilding() != null
-        && (room.getBuilding() == null
-            || !roomCreate.getBuilding().getId().equals(room.getBuilding().getId()))) {
-      room.setBuilding(roomCreate.getBuilding());
+    if (roomCreate.getBuildingFloor() != null
+        && (room.getBuildingFloor() == null
+            || !roomCreate.getBuildingFloor().getId().equals(room.getBuildingFloor().getId()))) {
+      room.setBuildingFloor(roomCreate.getBuildingFloor());
       update = true;
     }
 
