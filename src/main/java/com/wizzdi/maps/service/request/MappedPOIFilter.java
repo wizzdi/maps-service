@@ -1,6 +1,7 @@
 package com.wizzdi.maps.service.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.flexicore.annotations.TypeRetention;
 import com.flexicore.model.SecurityTenant;
 import com.flexicore.model.territories.Address;
 import com.flexicore.territories.request.AddressFilter;
@@ -8,6 +9,7 @@ import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
 import com.wizzdi.flexicore.security.validation.IdValid;
+import com.wizzdi.maps.model.BuildingFloor;
 import com.wizzdi.maps.model.Room;
 
 import com.wizzdi.maps.model.MapIcon;
@@ -28,6 +30,7 @@ import java.util.Set;
       field = "mapIconsIds",
       fieldType = com.wizzdi.maps.model.MapIcon.class),
   @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class)
+        ,  @IdValid(targetField = "buildingFloors", field = "buildingFloorIds", fieldType = com.wizzdi.maps.model.BuildingFloor.class)
 })
 public class MappedPOIFilter extends PaginationFilter {
 
@@ -40,7 +43,11 @@ public class MappedPOIFilter extends PaginationFilter {
   @JsonIgnore
   private List<Room> room;
   private boolean roomExclude;
-
+  private boolean buildingFloorExclude;
+  private Set<String> buildingFloorId;
+  @JsonIgnore
+  @TypeRetention(BuildingFloor.class)
+  private List<BuildingFloor> buildingFloors;
   private Set<String> roomIds=new HashSet<>();
   private MapGroupFilter mapGroupFilter;
   private Set<String> externalId;
@@ -326,5 +333,32 @@ public class MappedPOIFilter extends PaginationFilter {
   public <T extends MappedPOIFilter> T setExternalIdLike(String externalIdLike) {
     this.externalIdLike = externalIdLike;
     return (T) this;
+  }
+
+  public Set<String> getBuildingFloorId() {
+    return buildingFloorId;
+  }
+
+  public MappedPOIFilter setBuildingFloorId(Set<String> buildingFloorId) {
+    this.buildingFloorId = buildingFloorId;
+    return this;
+  }
+
+  public List<BuildingFloor> getBuildingFloors() {
+    return buildingFloors;
+  }
+
+  public MappedPOIFilter setBuildingFloors(List<BuildingFloor> buildingFloors) {
+    this.buildingFloors = buildingFloors;
+    return this;
+  }
+
+  public boolean isBuildingFloorExclude() {
+    return buildingFloorExclude;
+  }
+
+  public MappedPOIFilter setBuildingFloorExclude(boolean buildingFloorExclude) {
+    this.buildingFloorExclude = buildingFloorExclude;
+    return this;
   }
 }

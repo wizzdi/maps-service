@@ -66,4 +66,5 @@ public class MappedPOIController implements Plugin {
         mappedPOIService.validate(mappedPOIFilter, securityContext);
         return mappedPOIService.getAllMappedPOIs(mappedPOIFilter, securityContext);
     }
+
 }

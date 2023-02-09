@@ -76,7 +76,13 @@ public class MappedPOIRepository implements Plugin {
             Predicate in = join.get(Basic_.id).in(ids);
             preds.add(filtering.isAddressExclude()?cb.not(in):in);
         }
-
+        if (filtering.getBuildingFloors()!=null && !filtering.getBuildingFloors().isEmpty()) {
+            Set<String> ids =
+                    filtering.getBuildingFloors().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+            Join<T, BuildingFloor> join = r.join(MappedPOI_.buildingFloor);
+            Predicate in = join.get(Basic_.id).in(ids);
+            preds.add(filtering.isBuildingFloorExclude()?cb.not(in):in);
+        }
         if (filtering.getRoom() != null && !filtering.getRoom().isEmpty()) {
             Set<String> ids =
                     filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
@@ -214,4 +220,6 @@ public class MappedPOIRepository implements Plugin {
     public void massMerge(List<?> toMerge) {
         securedBasicRepository.massMerge(toMerge);
     }
+
+
 }
