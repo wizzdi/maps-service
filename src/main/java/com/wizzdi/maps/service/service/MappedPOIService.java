@@ -12,6 +12,7 @@ import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
+import com.wizzdi.maps.model.BuildingFloor;
 import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.model.Room;
@@ -304,6 +305,15 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with ids " + roomIds);
     }
     mappedPOIFilter.setRoom(new ArrayList<>(room.values()));
+
+    Set<String> buildingFloorIds = mappedPOIFilter.getBuildingFloorIds() == null ? new HashSet<>() : mappedPOIFilter.getBuildingFloorIds();
+    Map<String, BuildingFloor> buildingFloorMap = buildingFloorIds.isEmpty() ? new HashMap<>() : this.repository.listByIds(BuildingFloor.class, buildingFloorIds, SecuredBasic_.security, securityContext).parallelStream().collect(Collectors.toMap(f -> f.getId(), f -> f));
+    buildingFloorIds.removeAll(buildingFloorMap.keySet());
+    if (!buildingFloorIds.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No building floors with ids " + buildingFloorIds);
+    }
+    mappedPOIFilter.setBuildingFloors(new ArrayList<>(buildingFloorMap.values()));
+
     if(mappedPOIFilter.getAddressFilter()!=null){
       addressService.validate(mappedPOIFilter.getAddressFilter(),securityContext);
     }
@@ -368,6 +378,18 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
     }
     mappedPOICreate.setRoom(room);
+
+    String buildingFloorId = mappedPOICreate.getBuildingFloorId();
+    BuildingFloor buildingFloor =
+            buildingFloorId == null
+                    ? null
+                    : this.repository.getByIdOrNull(
+                    buildingFloorId, BuildingFloor.class, SecuredBasic_.security, securityContext);
+    if (buildingFloorId != null && buildingFloor == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Building Floor with id " + buildingFloorId);
+    }
+    mappedPOICreate.setBuildingFloor(buildingFloor);
+
     if(mappedPOICreate.getAddress()==null&&mappedPOICreate.getLat()!=null&&mappedPOICreate.getLon()!=null){
       try{
         Address reverseAddress = reverseGeoHashService.getAddress(mappedPOICreate.getLat(), mappedPOICreate.getLon(), adminSecurityContext);
