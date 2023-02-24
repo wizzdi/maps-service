@@ -174,6 +174,10 @@ public class MappedPOIService implements Plugin {
       mappedPOI.setBuildingFloor(mappedPOICreate.getBuildingFloor());
       update = true;
     }
+    if (mappedPOICreate.getBuildingFloorId()!=null && mappedPOICreate.getBuildingFloorId().isEmpty()) {
+      mappedPOI.setBuildingFloor(null);
+      update=true;
+    }
     if (mappedPOICreate.getExternalId() != null
             && (!mappedPOICreate.getExternalId().equals(mappedPOI.getExternalId()))) {
       mappedPOI.setExternalId(mappedPOICreate.getExternalId());
@@ -378,18 +382,18 @@ public class MappedPOIService implements Plugin {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
     }
     mappedPOICreate.setRoom(room);
-
-    String buildingFloorId = mappedPOICreate.getBuildingFloorId();
-    BuildingFloor buildingFloor =
-            buildingFloorId == null
-                    ? null
-                    : this.repository.getByIdOrNull(
-                    buildingFloorId, BuildingFloor.class, SecuredBasic_.security, securityContext);
-    if (buildingFloorId != null && buildingFloor == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Building Floor with id " + buildingFloorId);
+    if (mappedPOICreate.getBuildingFloorId()!=null && !mappedPOICreate.getBuildingFloorId().isEmpty()) {
+      String buildingFloorId = mappedPOICreate.getBuildingFloorId();
+      BuildingFloor buildingFloor =
+              buildingFloorId == null
+                      ? null
+                      : this.repository.getByIdOrNull(
+                      buildingFloorId, BuildingFloor.class, SecuredBasic_.security, securityContext);
+      if (buildingFloorId != null && buildingFloor == null) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Building Floor with id " + buildingFloorId);
+      }
+      mappedPOICreate.setBuildingFloor(buildingFloor);
     }
-    mappedPOICreate.setBuildingFloor(buildingFloor);
-
     if(mappedPOICreate.getAddress()==null&&mappedPOICreate.getLat()!=null&&mappedPOICreate.getLon()!=null){
       try{
         Address reverseAddress = reverseGeoHashService.getAddress(mappedPOICreate.getLat(), mappedPOICreate.getLon(), adminSecurityContext);

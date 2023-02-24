@@ -71,6 +71,7 @@ public class MappedPOICreate extends BasicCreate {
 
 
 
+
   public String getMapIconId() {
     return this.mapIconId;
   }
