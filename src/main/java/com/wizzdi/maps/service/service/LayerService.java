@@ -71,6 +71,12 @@ public class LayerService implements Plugin {
       layer.setLayerType(layerCreate.getLayerType());
       update = true;
     }
+    if (layerCreate.getExternalId() != null
+            && (layer.getExternalId() == null
+            || !layerCreate.getExternalId().equals(layer.getExternalId()))) {
+      layer.setExternalId(layerCreate.getExternalId());
+      update = true;
+    }
 
 
 

@@ -67,6 +67,10 @@ public class LayerRepository implements Plugin {
       Join<T, LayerType> join = r.join(Layer_.layerType);
       preds.add(join.get(LayerType_.id).in(ids));
     }
+    if (layerFilter.getExternalIds() != null && !layerFilter.getExternalIds().isEmpty()) {
+
+      preds.add(r.get(Layer_.externalId).in(layerFilter.getExternalIds()));
+    }
 
 
   }

@@ -26,7 +26,7 @@ public class LayerFilter extends PaginationFilter {
   @JsonIgnore
   private List<LayerType> layerTypes;
 
-
+  private Set<String> externalIds;
 
 
   /** @return basicPropertiesFilter */
@@ -59,6 +59,15 @@ public class LayerFilter extends PaginationFilter {
 
   public LayerFilter setLayerTypes(List<LayerType> layerTypes) {
     this.layerTypes = layerTypes;
+    return this;
+  }
+
+  public Set<String> getExternalIds() {
+    return externalIds;
+  }
+
+  public LayerFilter setExternalIds(Set<String> externalIds) {
+    this.externalIds = externalIds;
     return this;
   }
 }
