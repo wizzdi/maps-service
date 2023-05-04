@@ -135,7 +135,7 @@ public class MappedPOIService implements Plugin {
 
         if (mappedPOICreate.getY() != null && (!mappedPOICreate.getY().equals(mappedPOI.getY()))) {
             mappedPOI.setY(mappedPOICreate.getY());
-            updateMapLocation(mappedPOICreate,mappedPOI);
+            updateMapLocation(mappedPOICreate, mappedPOI);
             update = true;
         }
 
@@ -210,21 +210,32 @@ public class MappedPOIService implements Plugin {
     }
 
     private void updateMapLocation(MappedPOICreate mappedPOICreate, MappedPOI mappedPOI) {
-        Double lon,lat;
-       lon= Optional.ofNullable(mappedPOICreate.getBuildingFloor().getBuilding().getMappedPOI().getLon()).orElse(null);
-       if (lon==null) {
-           lon= Optional.ofNullable(mappedPOI.getBuildingFloor().getBuilding().getMappedPOI().getLon()).orElse(null);
-       }
-        lat= Optional.ofNullable(mappedPOICreate.getBuildingFloor().getBuilding().getMappedPOI().getLat()).orElse(null);
-        if (lat==null) {
-            lat= Optional.ofNullable(mappedPOI.getBuildingFloor().getBuilding().getMappedPOI().getLat()).orElse(null);
+        try {
+            Double lon, lat;
+            lon = Optional.ofNullable(mappedPOICreate.getBuildingFloor().getBuilding().getMappedPOI().getLon()).orElse(null);
+            if (lon == null) {
+                lon = Optional.ofNullable(mappedPOI.getBuildingFloor().getBuilding().getMappedPOI().getLon()).orElse(null);
+            }
+            lat = Optional.ofNullable(mappedPOICreate.getBuildingFloor().getBuilding().getMappedPOI().getLat()).orElse(null);
+            if (lat == null) {
+                lat = Optional.ofNullable(mappedPOI.getBuildingFloor().getBuilding().getMappedPOI().getLat()).orElse(null);
+            }
+            if (getDistance(mappedPOI, lon, lat) > 3.00) {
+                if (lon != null) {
+                    mappedPOI.setLon(Math.random() * 0.01 + lon);
+                }
+                if (lat != null) {
+                    mappedPOI.setLat(Math.random() * 0.01 + lat);
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("Error while updating location on a building floor");
         }
-        if (lon!=null) {
-            mappedPOI.setLon(Math.random() * 0.01 + lon);
-        }
-        if (lat!=null) {
-            mappedPOI.setLat(Math.random() * 0.01 + lat);
-        }
+    }
+
+    private double getDistance(MappedPOI mappedPOI, Double lon, Double lat) {
+        double distance = Math.acos(Math.sin(mappedPOI.getLat()) * Math.sin(lat) + Math.cos(mappedPOI.getLat()) * Math.cos(lat) * Math.cos(mappedPOI.getLon() - lon)) * 6371;
+        return distance;
     }
 
     public void generateGeoHash(MappedPOI mappedPOI) {

@@ -59,12 +59,12 @@ public class RoomRepository implements Plugin {
     this.securedBasicRepository.addSecuredBasicPredicates(
         roomFilter.getBasicPropertiesFilter(), cb, q, r, preds, securityContext);
 
-    if (roomFilter.getBuildingFloors() != null && !roomFilter.getBuildingFloors().isEmpty()) {
-      Set<String> ids =
-          roomFilter.getBuildingFloors().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
-      Join<T, BuildingFloor> join = r.join(Room_.buildingFloor);
-      preds.add(join.get(BuildingFloor_.id).in(ids));
-    }
+//    if (roomFilter.getBuildingFloors() != null && !roomFilter.getBuildingFloors().isEmpty()) {
+//      Set<String> ids =
+//          roomFilter.getBuildingFloors().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+//      Join<T, BuildingFloor> join = r.join(Room_.buildingFloor);
+//      preds.add(join.get(BuildingFloor_.id).in(ids));
+//    }
 
     if (roomFilter.getRoomLocationHistories() != null
         && !roomFilter.getRoomLocationHistories().isEmpty()) {
@@ -80,14 +80,14 @@ public class RoomRepository implements Plugin {
       preds.add(r.get(Room_.z).in(roomFilter.getZ()));
     }
 
-    if (roomFilter.getRoomMappedPOIs() != null && !roomFilter.getRoomMappedPOIs().isEmpty()) {
-      Set<String> ids =
-          roomFilter.getRoomMappedPOIs().parallelStream()
-              .map(f -> f.getId())
-              .collect(Collectors.toSet());
-      ListJoin<BuildingFloor, MappedPOI> join = r.join(Room_.buildingFloor).join(BuildingFloor_.mappedPOIS);
-      preds.add(join.get(MappedPOI_.id).in(ids));
-    }
+//    if (roomFilter.getRoomMappedPOIs() != null && !roomFilter.getRoomMappedPOIs().isEmpty()) {
+//      Set<String> ids =
+//          roomFilter.getRoomMappedPOIs().parallelStream()
+//              .map(f -> f.getId())
+//              .collect(Collectors.toSet());
+//      ListJoin<BuildingFloor, MappedPOI> join = r.join(Room_.buildingFloor).join(BuildingFloor_.mappedPOIS);
+//      preds.add(join.get(MappedPOI_.id).in(ids));
+//    }
 
     if (roomFilter.getX() != null && !roomFilter.getX().isEmpty()) {
       preds.add(r.get(Room_.x).in(roomFilter.getX()));
