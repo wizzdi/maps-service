@@ -83,6 +83,13 @@ public class MappedPOIRepository implements Plugin {
             Predicate in = join.get(Basic_.id).in(ids);
             preds.add(filtering.isBuildingFloorExclude()?cb.not(in):in);
         }
+        if (filtering.getLayers()!=null && !filtering.getLayers().isEmpty()) {
+            Set<String> ids =
+                    filtering.getLayers().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());
+            Join<T, Layer> join = r.join(MappedPOI_.layer);
+            Predicate in = join.get(Layer_.id).in(ids);
+            preds.add(filtering.isLayerExclude()?cb.not(in):in);
+        }
         if (filtering.getRoom() != null && !filtering.getRoom().isEmpty()) {
             Set<String> ids =
                     filtering.getRoom().parallelStream().map(f -> f.getId()).collect(Collectors.toSet());

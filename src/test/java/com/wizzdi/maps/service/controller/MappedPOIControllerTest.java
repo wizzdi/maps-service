@@ -3,9 +3,7 @@ package com.wizzdi.maps.service.controller;
 import com.flexicore.request.AuthenticationRequest;
 import com.flexicore.response.AuthenticationResponse;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
-import com.wizzdi.maps.model.MapIcon;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.*;
 import com.wizzdi.maps.service.App;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
@@ -45,7 +43,8 @@ public class MappedPOIControllerTest {
   @Autowired private Room room;
 
   @Autowired private MapIcon mapIcon;
-
+  @Autowired private LayerType layerType1;
+  @Autowired private Layer layer1;
   @BeforeAll
   private void init() {
     ResponseEntity<AuthenticationResponse> authenticationResponse =
@@ -67,10 +66,7 @@ public class MappedPOIControllerTest {
   @Test
   @Order(1)
   public void testMappedPOICreate() {
-    MappedPOICreate request = new MappedPOICreate().setName(UUID.randomUUID().toString());
-
-
-
+    MappedPOICreate request = new MappedPOICreate().setLayerId(layer1.getId()).setName(UUID.randomUUID().toString());
     request.setRelatedId("test-string");
 
     request.setY(10D);
@@ -123,7 +119,8 @@ public class MappedPOIControllerTest {
 
   public void assertMappedPOI(MappedPOICreate request, MappedPOI testMappedPOI) {
     Assertions.assertNotNull(testMappedPOI);
-
+    Assertions.assertNotNull(testMappedPOI.getLayer());
+    Assertions.assertEquals(layer1.getName(),testMappedPOI.getLayer().getName());
 
     if (request.getRelatedId() != null) {
       Assertions.assertEquals(request.getRelatedId(), testMappedPOI.getRelatedId());

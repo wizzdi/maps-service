@@ -4,24 +4,13 @@ import com.flexicore.model.territories.*;
 import com.flexicore.security.SecurityContextBase;
 import com.flexicore.territories.request.*;
 import com.flexicore.territories.service.*;
-import com.wizzdi.maps.model.Building;
-import com.wizzdi.maps.model.MapGroup;
-import com.wizzdi.maps.model.MapIcon;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.Room;
-import com.wizzdi.maps.service.request.BuildingCreate;
-import com.wizzdi.maps.service.request.MapGroupCreate;
-import com.wizzdi.maps.service.request.MapIconCreate;
-import com.wizzdi.maps.service.request.MappedPOICreate;
-import com.wizzdi.maps.service.request.RoomCreate;
-import com.wizzdi.maps.service.service.BuildingService;
-import com.wizzdi.maps.service.service.MapGroupService;
-import com.wizzdi.maps.service.service.MapIconService;
+import com.wizzdi.maps.model.*;
+import com.wizzdi.maps.service.request.*;
+import com.wizzdi.maps.service.service.*;
 import com.wizzdi.maps.model.MappedPOI;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.service.MappedPOIService;
-import com.wizzdi.maps.service.service.MappedPOIService;
-import com.wizzdi.maps.service.service.RoomService;
+import net.bytebuddy.utility.nullability.MaybeNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +31,11 @@ public class AppConfig {
 
     @Autowired
     private MappedPOIService mappedPOIService;
+    @Autowired
+    private LayerService layerService;
+
+    @Autowired
+    private LayerTypeService layerTypeService;
 
     @Autowired
     private BuildingService buildingService;
@@ -68,7 +62,14 @@ public class AppConfig {
     private NeighbourhoodService neighbourhoodService;
     @Autowired
     private StateService stateService;
-
+    @Bean
+    public LayerType layerType1(SecurityContextBase securityContext) {
+        return layerTypeService.createLayerType(new LayerTypeCreate().setName("Layer type 1"),securityContext);
+    }
+    @Bean
+    public Layer layer1(LayerType layerType1,SecurityContextBase securityContext) {
+        return layerService.createLayer(new LayerCreate().setLayerType(layerType1).setName("Layer 1"),securityContext);
+    }
     @Bean
     public MappedPOI first() {
         return mappedPOIService.createMappedPOI(new MappedPOICreate().setLat(32.06121634257458).setLon(34.77602769776043).setName("first"), securityContext);

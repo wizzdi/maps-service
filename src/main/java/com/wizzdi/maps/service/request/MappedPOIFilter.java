@@ -9,10 +9,8 @@ import com.wizzdi.flexicore.file.model.FileResource;
 import com.wizzdi.flexicore.security.request.BasicPropertiesFilter;
 import com.wizzdi.flexicore.security.request.PaginationFilter;
 import com.wizzdi.flexicore.security.validation.IdValid;
-import com.wizzdi.maps.model.BuildingFloor;
-import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.*;
 
-import com.wizzdi.maps.model.MapIcon;
 import com.wizzdi.maps.model.Room;
 
 import java.util.HashSet;
@@ -22,21 +20,25 @@ import java.util.Set;
 /**
  * Object Used to List MappedPOI
  */
-@com.wizzdi.flexicore.security.validation.IdValid.List({
-        @IdValid(
-                targetField = "address",
-                field = "addressIds",
-                fieldType = com.flexicore.model.territories.Address.class),
-        @IdValid(
-                targetField = "mapIcons",
-                field = "mapIconsIds",
-                fieldType = com.wizzdi.maps.model.MapIcon.class),
-        @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class),
-         @IdValid(
-                 targetField = "buildingFloors",
-                 field = "buildingFloorIds",
-                 fieldType = com.wizzdi.maps.model.BuildingFloor.class)
-})
+//@com.wizzdi.flexicore.security.validation.IdValid.List({
+//        @IdValid(
+//                targetField = "address",
+//                field = "addressIds",
+//                fieldType = com.flexicore.model.territories.Address.class),
+//        @IdValid(
+//                targetField = "mapIcons",
+//                field = "mapIconsIds",
+//                fieldType = com.wizzdi.maps.model.MapIcon.class),
+//        @IdValid(targetField = "room", field = "roomIds", fieldType = com.wizzdi.maps.model.Room.class),
+//         @IdValid(
+//                 targetField = "buildingFloors",
+//                 field = "buildingFloorIds",
+//                 fieldType = com.wizzdi.maps.model.BuildingFloor.class),
+//        @IdValid(
+//                targetField = "layers",
+//                field = "layerIds",
+//                fieldType = com.wizzdi.maps.model.Layer.class)
+//})
 public class MappedPOIFilter extends PaginationFilter {
 
     private Set<String> addressIds = new HashSet<>();
@@ -79,7 +81,11 @@ public class MappedPOIFilter extends PaginationFilter {
 
     @JsonIgnore
     private PredicateAdder<MappedPOIFilter> predicateAdder;
-
+    private Set<String> layerIds;
+    @JsonIgnore
+    @TypeRetention(Layer.class)
+    private List<Layer> layers;
+    private boolean layerExclude;
 
     public MappedPOIFilter() {
     }
@@ -370,6 +376,33 @@ public class MappedPOIFilter extends PaginationFilter {
 
     public MappedPOIFilter setBuildingFloorExclude(boolean buildingFloorExclude) {
         this.buildingFloorExclude = buildingFloorExclude;
+        return this;
+    }
+
+    public Set<String> getLayerIds() {
+        return layerIds;
+    }
+
+    public MappedPOIFilter setLayerIds(Set<String> layerIds) {
+        this.layerIds = layerIds;
+        return this;
+    }
+
+    public List<Layer> getLayers() {
+        return layers;
+    }
+
+    public MappedPOIFilter setLayers(List<Layer> layers) {
+        this.layers = layers;
+        return this;
+    }
+
+    public boolean isLayerExclude() {
+        return layerExclude;
+    }
+
+    public MappedPOIFilter setLayerExclude(boolean layerExclude) {
+        this.layerExclude = layerExclude;
         return this;
     }
 }

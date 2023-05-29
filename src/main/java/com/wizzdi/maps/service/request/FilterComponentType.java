@@ -4,6 +4,7 @@ import com.flexicore.model.Baseclass_;
 import com.flexicore.model.SecurityTenant;
 import com.flexicore.model.territories.*;
 import com.wizzdi.maps.model.*;
+import org.apache.catalina.valves.rewrite.Substitution;
 
 import javax.persistence.metamodel.Attribute;
 import java.util.Arrays;
@@ -20,7 +21,9 @@ public enum FilterComponentType {
     TENANTS(SecurityTenant.class, Arrays.asList(MappedPOI_.security, Baseclass_.tenant)),
     ROOM(Room.class, Arrays.asList(MappedPOI_.room)),
     RELATED_TYPE(String.class, Arrays.asList(MappedPOI_.relatedType)),
-    EXTERNAL_ID(String.class, Arrays.asList(MappedPOI_.externalId));
+    EXTERNAL_ID(String.class, Arrays.asList(MappedPOI_.externalId)),
+    LAYER(Layer.class,Arrays.asList(MappedPOI_.layer)),
+    BUILDING_FLOOR(BuildingFloor.class,Arrays.asList(MappedPOI_.buildingFloor));
 
     private final Class<?> entity;
     private final List<Attribute> attributes;

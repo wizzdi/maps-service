@@ -12,10 +12,7 @@ import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.security.response.PaginationResponse;
 import com.wizzdi.flexicore.security.service.BaseclassService;
 import com.wizzdi.flexicore.security.service.BasicService;
-import com.wizzdi.maps.model.BuildingFloor;
-import com.wizzdi.maps.model.MapIcon;
-import com.wizzdi.maps.model.MappedPOI;
-import com.wizzdi.maps.model.Room;
+import com.wizzdi.maps.model.*;
 import com.wizzdi.maps.service.data.MappedPOIRepository;
 import com.wizzdi.maps.service.request.GeoHashRequest;
 import com.wizzdi.maps.service.request.MappedPOICreate;
@@ -168,6 +165,13 @@ public class MappedPOIService implements Plugin {
                 || !mappedPOICreate.getBuildingFloor().getId().equals(mappedPOI.getBuildingFloor().getId()))) {
             mappedPOI.setBuildingFloor(mappedPOICreate.getBuildingFloor());
             updateMapLocation(mappedPOICreate, mappedPOI);
+            update = true;
+        }
+        if (mappedPOICreate.getLayer() != null
+                && (mappedPOI.getLayer() == null
+                || !mappedPOICreate.getLayer().getId().equals(mappedPOI.getLayer().getId()))) {
+            mappedPOI.setLayer(mappedPOICreate.getLayer());
+
             update = true;
         }
         if (mappedPOICreate.getBuildingFloorId() != null && mappedPOICreate.getBuildingFloorId().isEmpty()) {
@@ -327,7 +331,13 @@ public class MappedPOIService implements Plugin {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with ids " + addressIds);
         }
         mappedPOIFilter.setAddress(new ArrayList<>(address.values()));
-
+        Set<String> layerIds = mappedPOIFilter.getLayerIds() == null ? new HashSet<>() : mappedPOIFilter.getLayerIds();
+        Map<String, Layer> layerMap = layerIds.isEmpty() ? new HashMap<>() : repository.listByIds(Layer.class, layerIds, SecuredBasic_.security, securityContext).parallelStream().collect(Collectors.toMap(f -> f.getId(), f -> f));
+        layerIds.removeAll(layerMap.keySet());
+        if (!layerIds.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Layers with ids " + layerIds);
+        }
+        mappedPOIFilter.setLayers(new ArrayList<>(layerMap.values()));
         Set<String> roomIds = mappedPOIFilter.getRoomIds() == null ? new HashSet<>() : mappedPOIFilter.getRoomIds();
         Map<String, Room> room = roomIds.isEmpty() ? new HashMap<>() : this.repository.listByIds(Room.class, roomIds, SecuredBasic_.security, securityContext).parallelStream().collect(Collectors.toMap(f -> f.getId(), f -> f));
         roomIds.removeAll(room.keySet());
@@ -377,37 +387,55 @@ public class MappedPOIService implements Plugin {
         basicService.validate(mappedPOICreate, securityContext);
 
         String mapIconId = mappedPOICreate.getMapIconId();
-        MapIcon mapIcon =
-                mapIconId == null
-                        ? null
-                        : this.repository.getByIdOrNull(
-                        mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
-        if (mapIconId != null && mapIcon == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
+        if (mapIconId!=null) {
+            MapIcon mapIcon =
+                    mapIconId == null
+                            ? null
+                            : this.repository.getByIdOrNull(
+                            mapIconId, MapIcon.class, SecuredBasic_.security, securityContext);
+            if (mapIcon == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No MapIcon with id " + mapIconId);
+            }
+            mappedPOICreate.setMapIcon(mapIcon);
         }
-        mappedPOICreate.setMapIcon(mapIcon);
+        String layerId = mappedPOICreate.getLayerId();
+        if (layerId!=null) {
+            Layer layer =
+                    layerId == null
+                            ? null
+                            : this.repository.getByIdOrNull(
+                            layerId, Layer.class, SecuredBasic_.security, securityContext);
+            if (layer == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Layer with id " + layerId);
+            }
+            mappedPOICreate.setLayer(layer);
+        }
 
         String addressId = mappedPOICreate.getAddressId();
-        Address address =
-                addressId == null
-                        ? null
-                        : repository.getByIdOrNull(
-                        addressId, Address.class, SecuredBasic_.security, securityContext);
-        if (addressId != null && address == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with id " + addressId);
+        if (addressId!=null) {
+            Address address =
+                    addressId == null
+                            ? null
+                            : repository.getByIdOrNull(
+                            addressId, Address.class, SecuredBasic_.security, securityContext);
+            if (address == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Address with id " + addressId);
+            }
+            mappedPOICreate.setAddress(address);
         }
-        mappedPOICreate.setAddress(address);
 
         String roomId = mappedPOICreate.getRoomId();
-        Room room =
-                roomId == null
-                        ? null
-                        : this.repository.getByIdOrNull(
-                        roomId, Room.class, SecuredBasic_.security, securityContext);
-        if (roomId != null && room == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
+        if (roomId!=null) {
+            Room room =
+                    roomId == null
+                            ? null
+                            : this.repository.getByIdOrNull(
+                            roomId, Room.class, SecuredBasic_.security, securityContext);
+            if (room == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Room with id " + roomId);
+            }
+            mappedPOICreate.setRoom(room);
         }
-        mappedPOICreate.setRoom(room);
         if (mappedPOICreate.getBuildingFloorId() != null && !mappedPOICreate.getBuildingFloorId().isEmpty()) {
             String buildingFloorId = mappedPOICreate.getBuildingFloorId();
             BuildingFloor buildingFloor =
