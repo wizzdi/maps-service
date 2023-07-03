@@ -23,6 +23,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
 
+import com.wizzdi.maps.service.response.MappedPoiDTO;
 import org.pf4j.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,19 @@ public class MappedPOIRepository implements Plugin {
         q.select(r).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MappedPOI_.externalId)));
         TypedQuery<MappedPOI> query = em.createQuery(q);
         BasicRepository.addPagination(filtering, query);
+        return query.getResultList();
+    }
+
+    public List<MappedPoiDTO> listAllMappedPOIDTOs(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<MappedPoiDTO> q = cb.createQuery(MappedPoiDTO.class);
+        Root<MappedPOI> r = q.from(MappedPOI.class);
+        List<Predicate> preds = new ArrayList<>();
+        addMappedPOIPredicate(mappedPOIFilter, cb, q, r, preds, securityContext);
+        Join<MappedPOI,MapIcon> join=r.join(MappedPOI_.mapIcon,JoinType.LEFT);
+        q.select(cb.construct(MappedPoiDTO.class,r.get(MappedPOI_.id),join.get(MapIcon_.id),r.get(MappedPOI_.lat),r.get(MappedPOI_.lon))).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MappedPOI_.externalId)));
+        TypedQuery<MappedPoiDTO> query = em.createQuery(q);
+        BasicRepository.addPagination(mappedPOIFilter, query);
         return query.getResultList();
     }
 
@@ -227,6 +241,7 @@ public class MappedPOIRepository implements Plugin {
     public void massMerge(List<?> toMerge) {
         securedBasicRepository.massMerge(toMerge);
     }
+
 
 
 }

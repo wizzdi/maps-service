@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.persistence.metamodel.SingularAttribute;
 
 import com.wizzdi.maps.service.response.GeoHashResponse;
+import com.wizzdi.maps.service.response.MappedPoiDTO;
 import org.pf4j.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -515,4 +516,9 @@ public class MappedPOIService implements Plugin {
     }
 
 
+    public PaginationResponse<MappedPoiDTO> getAllMappedPOIDTOs(MappedPOIFilter mappedPOIFilter, SecurityContextBase securityContext) {
+        List<MappedPoiDTO> mappedPoiDTOS= repository.listAllMappedPOIDTOs(mappedPOIFilter, securityContext);
+        long count = repository.countAllMappedPOIs(mappedPOIFilter, securityContext);
+        return new PaginationResponse<>(mappedPoiDTOS, mappedPOIFilter, count);
+    }
 }

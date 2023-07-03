@@ -9,6 +9,7 @@ import com.wizzdi.maps.model.MappedPOI_;
 import com.wizzdi.maps.service.request.MappedPOICreate;
 import com.wizzdi.maps.service.request.MappedPOIFilter;
 import com.wizzdi.maps.service.request.MappedPOIUpdate;
+import com.wizzdi.maps.service.response.MappedPoiDTO;
 import com.wizzdi.maps.service.service.MappedPOIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -65,6 +66,16 @@ public class MappedPOIController implements Plugin {
             @RequestAttribute SecurityContextBase securityContext) {
         mappedPOIService.validate(mappedPOIFilter, securityContext);
         return mappedPOIService.getAllMappedPOIs(mappedPOIFilter, securityContext);
+    }
+
+    @Operation(summary = "getAllMappedPOIDTOs", description = "Gets All MappedPOIDTOs Filtered")
+    @PostMapping("getAllMappedPOIDTOs")
+    public PaginationResponse<MappedPoiDTO> getAllMappedPOIDTOs(
+            @RequestHeader("authenticationKey") String authenticationKey,
+            @RequestBody MappedPOIFilter mappedPOIFilter,
+            @RequestAttribute SecurityContextBase securityContext) {
+        mappedPOIService.validate(mappedPOIFilter, securityContext);
+        return mappedPOIService.getAllMappedPOIDTOs(mappedPOIFilter, securityContext);
     }
 
 }
