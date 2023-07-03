@@ -7,6 +7,7 @@ import com.flexicore.territories.data.AddressRepository;
 import com.flexicore.territories.request.AddressFilter;
 import com.wizzdi.flexicore.boot.base.interfaces.Plugin;
 import com.wizzdi.flexicore.file.model.FileResource;
+import com.wizzdi.flexicore.file.model.FileResource_;
 import com.wizzdi.flexicore.security.data.BasicRepository;
 import com.wizzdi.flexicore.security.data.SecuredBasicRepository;
 import com.wizzdi.maps.model.*;
@@ -66,7 +67,10 @@ public class MappedPOIRepository implements Plugin {
         List<Predicate> preds = new ArrayList<>();
         addMappedPOIPredicate(mappedPOIFilter, cb, q, r, preds, securityContext);
         Join<MappedPOI,MapIcon> join=r.join(MappedPOI_.mapIcon,JoinType.LEFT);
-        q.select(cb.construct(MappedPoiDTO.class,r.get(MappedPOI_.id),join.get(MapIcon_.id),r.get(MappedPOI_.lat),r.get(MappedPOI_.lon))).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MappedPOI_.externalId)));
+        Join<MapIcon,FileResource> joinFr=join.join(MapIcon_.fileResource,JoinType.LEFT);
+
+        CompoundSelection<MappedPoiDTO> construct = cb.construct(MappedPoiDTO.class, r.get(MappedPOI_.id), r.get(MappedPOI_.name), join.get(MapIcon_.id),joinFr.get(FileResource_.id), r.get(MappedPOI_.lat), r.get(MappedPOI_.lon));
+        q.select(construct).where(preds.toArray(new Predicate[0])).orderBy(cb.asc(r.get(MappedPOI_.externalId)));
         TypedQuery<MappedPoiDTO> query = em.createQuery(q);
         BasicRepository.addPagination(mappedPOIFilter, query);
         return query.getResultList();
